@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 //*screen imports
 import './screens/login_screen.dart';
-import './screens/home_screen.dart';
+import 'screens/student_faculty_screens/tab_screen.dart';
 import './screens/splash_screen.dart';
 
 //*utils imports
@@ -34,14 +34,13 @@ class MyApp extends StatelessWidget {
         builder: (ctx, auth, _) => MaterialApp(
           title: 'SISAC',
           theme: ThemeData(
-            appBarTheme:
-                const AppBarTheme(backgroundColor: Palette.senaryDefault),
-            scaffoldBackgroundColor: Palette.primaryDefault,
-            textTheme: TextThemes.customText,
-            elevatedButtonTheme: ButtonThemes.elevatedButton,
-          ),
+              appBarTheme: AppBarThemes.appBarTheme(),
+              scaffoldBackgroundColor: Palette.primaryDefault,
+              textTheme: TextThemes.customText,
+              elevatedButtonTheme: ButtonThemes.elevatedButton,
+              bottomAppBarTheme: AppBarThemes.bottomNav()),
           home: auth.isAuth
-              ? HomeScreen()
+              ? TabScreen()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapShot) =>
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
                           : LoginScreen(),
                 ),
           routes: {
-            HomeScreen.routeName: (ctx) => HomeScreen(),
+            TabScreen.routeName: (ctx) => TabScreen(),
             LoginScreen.routeName: (ctx) => LoginScreen(),
           },
         ),

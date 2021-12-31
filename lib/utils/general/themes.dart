@@ -17,6 +17,12 @@ class TextThemes {
       fontWeight: FontWeight.bold,
       color: Palette.quinaryDefault,
     ),
+    headline4: TextStyle(
+      fontFamily: "Montserrat",
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      color: Palette.quinaryDefault,
+    ),
     bodyText1: TextStyle(
       fontFamily: "Karla",
       fontSize: 20,
@@ -51,4 +57,26 @@ class ButtonThemes {
       ),
     ),
   );
+}
+
+class AppBarThemes {
+  static AppBarTheme appBarTheme() {
+    return AppBarTheme(
+      iconTheme: const IconThemeData(color: Palette.quinaryDefault, size: 24),
+      titleTextStyle: TextThemes.customText.headline4,
+      backgroundColor: Palette.senaryDefault,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(20),
+        ),
+      ),
+      centerTitle: false,
+    );
+  }
+
+  static BottomAppBarTheme bottomNav() {
+    return BottomAppBarTheme(
+      color: Palette.senaryDefault,
+    );
+  }
 }

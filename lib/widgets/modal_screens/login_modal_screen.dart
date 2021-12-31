@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/home_screen.dart';
+import '../../screens/student_faculty_screens/tab_screen.dart';
+
+import '../../utils/helpers/error_dialog.dart';
 
 import '../../providers/user_provider.dart';
 
 import '../../utils/general/customColor.dart';
 import '../../utils/general/screen_size.dart' show ScreenSize;
+import '../../utils/helpers/http_exception.dart';
 
 class LoginModalScreen extends StatelessWidget {
   const LoginModalScreen({Key? key}) : super(key: key);
@@ -24,7 +27,7 @@ class LoginModalScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            RoleRow(),
+            const RoleRow(),
             InputColumn(),
           ],
         ),
@@ -45,9 +48,39 @@ class _InputColumnState extends State<InputColumn> {
 
   String? _password;
 
+  bool _isLoading = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _isLoading = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<Auth>(context);
+    Future<void> submitCred() async {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        InputColumn._formKey.currentState?.save();
+        await authProvider.login(_username, _password);
+        setState(
+          () {
+            _isLoading = false;
+            Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
+          },
+        );
+      } on HttpException catch (error) {
+        var errorMessage = error.toString();
+        await dialog(context, errorMessage);
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -148,20 +181,13 @@ class _InputColumnState extends State<InputColumn> {
         ),
         const SizedBox(height: 30),
         ElevatedButton(
-          onPressed: () async {
-            InputColumn._formKey.currentState?.save();
-            await authProvider.login(_username, _password);
-            setState(
-              () {
-                Navigator.of(context)
-                    .pushReplacementNamed(HomeScreen.routeName);
-              },
-            );
-          },
-          child: Text("Sign In"),
+          onPressed: submitCred,
+          child: _isLoading
+              ? const CircularProgressIndicator(color: SecondaryPallete.primary)
+              : const Text("Sign In"),
         ),
         const SizedBox(height: 5),
-        Text("Forgot Password?"),
+        const Text("Forgot Password?"),
       ],
     );
   }
@@ -177,7 +203,7 @@ class RoleRow extends StatefulWidget {
 }
 
 class _RoleRowState extends State<RoleRow> {
-  List<bool> _toggleSelections = List.generate(3, (_) => false);
+  final List<bool> _toggleSelections = List.generate(3, (_) => false);
   final List<String> _roleList = List.generate(
       Roles.values.length, (index) => Roles.values[index].enumToString());
   Roles _selectedRole = Roles.Student;

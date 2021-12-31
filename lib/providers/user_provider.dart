@@ -33,9 +33,15 @@ class Auth with ChangeNotifier {
     return [..._user];
   }
 
+  Uri url(String endPoint) {
+    final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
+    return url;
+  }
+
 //below is the method for logging in the user from our API
   Future<void> login(String? username, String? password) async {
-    final url = Uri.parse('http://172.20.10.3:3000/login');
+    final url = this.url('login');
+
     try {
       final response = await http.post(
         url,
@@ -51,6 +57,11 @@ class Auth with ChangeNotifier {
       );
       //below the data is being decoded from the response
       final decodedData = json.decode(response.body);
+      //print(decodedData);
+      if (decodedData['error'] != null) {
+        // print(decodedData['error']['message']);
+        throw HttpException(decodedData['error']['message']);
+      }
       //creating a new user to store it locally in the list to access the role and token
       final newUser = User(
         id: decodedData['id'],
@@ -79,7 +90,8 @@ class Auth with ChangeNotifier {
         'expiryDate': _expiryDate?.toIso8601String(),
         'role': _role
       });
-      prefs.setString('userData', userData);
+      print(userData);
+      await prefs.setString('userData', userData);
     } catch (error) {
       rethrow;
     }
@@ -101,7 +113,7 @@ class Auth with ChangeNotifier {
     //   return true;
     // }
     // return false;
-    return _token != null ? true : false;
+    return _token != null;
   }
 
   //to try autologging in if the token is stored in the memory
@@ -123,7 +135,7 @@ class Auth with ChangeNotifier {
     _role = extractedData['role'] as String;
     _expiryDate = expiryDate;
     notifyListeners();
-    print("${_token} ${_userId} ${_role}");
+    //print("$_token $_userId $_role");
     _autoLogout();
     return true;
   }
