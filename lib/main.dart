@@ -7,6 +7,7 @@ import 'package:sisac/providers/cafetaria/cafataria_providers.dart';
 import './screens/login_screen.dart';
 import 'screens/student_faculty_screens/tab_screen.dart';
 import './screens/splash_screen.dart';
+import './screens/student_faculty_screens/cafetaria_screens/cafetaria_menu.dart';
 
 //*utils imports
 import './utils/general/customColor.dart';
@@ -52,12 +53,13 @@ class MyApp extends StatelessWidget {
                   builder: (ctx, authResultSnapShot) =>
                       authResultSnapShot.connectionState ==
                               ConnectionState.waiting
-                          ? SplashScreen()
-                          : LoginScreen(),
+                          ? const SplashScreen()
+                          : const LoginScreen(),
                 ),
           routes: {
-            TabScreen.routeName: (ctx) => TabScreen(),
-            LoginScreen.routeName: (ctx) => LoginScreen(),
+            TabScreen.routeName: (ctx) => const TabScreen(),
+            LoginScreen.routeName: (ctx) => const LoginScreen(),
+            CafetariaMenu.routeName: (ctx) => const CafetariaMenu(),
           },
         ),
       ),

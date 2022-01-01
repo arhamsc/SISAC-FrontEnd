@@ -43,7 +43,7 @@ class _TabScreenState extends State<TabScreen> {
     return Scaffold(
       drawer: Drawer(),
       appBar:
-          BaseAppBar.getAppBar(_pages![_selectedPageIndex]['title'], context),
+          BaseAppBar.getAppBar(title: _pages![_selectedPageIndex]['title'], context: context),
       body: _pages![_selectedPageIndex]['page'],
       extendBody: true,
       bottomNavigationBar: BottomNavBar(

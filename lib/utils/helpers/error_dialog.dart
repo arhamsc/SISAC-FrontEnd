@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import '../general/customColor.dart';
 
-Future<dynamic> dialog(BuildContext ctx, String errorMessage) {
+Future<dynamic> dialog(
+    {required BuildContext ctx,
+    required String errorMessage,
+    Function()? tryAgainFunc}) {
   return showDialog(
     context: ctx,
     builder: (context) {
@@ -12,15 +15,31 @@ Future<dynamic> dialog(BuildContext ctx, String errorMessage) {
                 )),
         content: Text(errorMessage),
         actions: [
+          tryAgainFunc != null
+              ? TextButton(
+                  onPressed: () {
+                    tryAgainFunc != null
+                        ? tryAgainFunc
+                        : Navigator.of(context).pop();
+                  },
+                  child: Text('Try Again',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          ?.copyWith(color: SecondaryPallete.primary)),
+                )
+              : const SizedBox(),
           TextButton(
+            child: Text(
+              'Quit',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  ?.copyWith(color: SecondaryPallete.primary),
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Try Again',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    ?.copyWith(color: SecondaryPallete.primary)),
           ),
         ],
         backgroundColor: Palette.tertiaryDefault,

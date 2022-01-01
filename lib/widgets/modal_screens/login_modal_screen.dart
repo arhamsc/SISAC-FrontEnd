@@ -74,7 +74,7 @@ class _InputColumnState extends State<InputColumn> {
         );
       } on HttpException catch (error) {
         var errorMessage = error.toString();
-        await dialog(context, errorMessage);
+        await dialog(ctx: context, errorMessage: errorMessage);
         setState(() {
           _isLoading = false;
         });

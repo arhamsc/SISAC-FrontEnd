@@ -57,6 +57,25 @@ class ButtonThemes {
       ),
     ),
   );
+  static ButtonStyle elevatedButtonSmall = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(Palette.secondaryDefault),
+    foregroundColor: MaterialStateProperty.all(Palette.tertiaryDefault),
+    textStyle: MaterialStateProperty.all(
+      TextThemes.customText.bodyText2!.copyWith(fontSize: 11),
+    ),
+    padding: MaterialStateProperty.all(
+      const EdgeInsets.symmetric(
+        vertical: 0,
+        horizontal: 15,
+      ),
+    ),
+    shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+    ),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
 }
 
 class AppBarThemes {

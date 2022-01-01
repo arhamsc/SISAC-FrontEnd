@@ -48,14 +48,14 @@ class MenuItemProvider with ChangeNotifier {
 
   Uri cafetariaUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    //return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
-    return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
+    return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
+    //return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
   }
 
   Map<String, String> get _headers {
     return {
       'Content-Type': 'application/json; charset=UTF-8',
-      'secret_token': '$_authToken 122',
+      'secret_token': _authToken,
     };
   }
 
@@ -70,16 +70,21 @@ class MenuItemProvider with ChangeNotifier {
       List<MenuItem> loadedItems = [];
       //print(decodedData);
       //print(decodedData['items']);
-      decodedData.forEach((key, value) {
-        loadedItems.add(MenuItem(
-            id: value['_id'],
-            name: value['name'],
-            description: value['description'],
-            rating: value['rating'],
-            price: value['price'],
-            imageUrl: value['imageUrl'],
-            isAvailable: value['isAvailable']));
-      });
+      decodedData.forEach(
+        (key, value) {
+          loadedItems.add(
+            MenuItem(
+              id: value['_id'],
+              name: value['name'],
+              description: value['description'],
+              rating: value['rating'],
+              price: value['price'],
+              imageUrl: value['imageUrl'],
+              isAvailable: value['isAvailable'],
+            ),
+          );
+        },
+      );
       //decodedData['items'];
       _menuItems = loadedItems;
       //print(_menuItems);

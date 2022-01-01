@@ -6,6 +6,8 @@ import '../../providers/cafetaria/cafataria_providers.dart';
 import '../../utils/general/screen_size.dart';
 import '../../utils/general/customColor.dart';
 
+import './cafetaria_screens/cafetaria_menu.dart';
+
 import '../../widgets/home/home_main_card.dart';
 
 class CafetariaScreen extends StatelessWidget {
@@ -23,7 +25,9 @@ class CafetariaScreen extends StatelessWidget {
             HomeMainCard(
               mainTitle: "Menu",
               buttonTitle: "Click to visit",
-              buttonFunction: () {},
+              buttonFunction: () {
+                Navigator.of(context).pushNamed(CafetariaMenu.routeName);
+              },
               bgColor: SecondaryPallete.primary,
             ),
             HomeMainCard(
@@ -38,10 +42,19 @@ class CafetariaScreen extends StatelessWidget {
               buttonFunction: () {},
               bgColor: SecondaryPallete.primary,
             ),
-            ElevatedButton(onPressed: menuItem.fetchMenu, child: Text("Click"))
           ],
         ),
       ),
     );
   }
 }
+/** 
+ * Navigation while keeping the bottom bar.
+ * return Navigator(
+      onGenerateRoute: (settings) {
+        Widget mainScreen = MainScreen();
+        if (settings.name == 'menu') mainScreen = CafetariaMenu();
+        return MaterialPageRoute(builder: (_) => mainScreen);
+      },
+    );
+ * **/
