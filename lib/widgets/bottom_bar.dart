@@ -19,6 +19,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.all(0),
       height: ScreenSize.screenHeight(context) * 0.1,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -28,8 +29,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
         child: Column(
           children: [
             Container(
-                padding: const EdgeInsets.only(bottom: 25),
-                color: Palette.senaryDefault),
+              margin: const EdgeInsets.all(0),
+              padding: const EdgeInsets.only(bottom: 25),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 0,
+                  color: Palette.senaryDefault,
+                ),
+                color: Palette.senaryDefault,
+              ),
+            ),
             BottomNavigationBar(
               items: const [
                 BottomNavigationBarItem(
@@ -69,7 +78,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             Expanded(
               child: Container(
-                color: Palette.senaryDefault,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 0,
+                    color: Palette.senaryDefault,
+                  ),
+                  color: Palette.senaryDefault,
+                ),
+                margin: const EdgeInsets.all(0),
               ),
             )
           ],

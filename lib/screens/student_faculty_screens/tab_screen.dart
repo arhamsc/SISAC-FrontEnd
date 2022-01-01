@@ -19,13 +19,13 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   List<Map<String, dynamic>>? _pages;
-  int _selectedPageIndex = 0;
+  int _selectedPageIndex = 2;
   @override
   void initState() {
     _pages = [
       {'page': const TimeTableScreen(), 'title': 'TimeTable'},
       {'page': const AnnouncementScreen(), 'title': 'Announcements'},
-      {'page': const HomeScreen(), 'title': 'Home Screen'},
+      {'page': HomeScreen(), 'title': 'Home'},
       {'page': const StationaryScreen(), 'title': 'Stationary'},
       {'page': const CafetariaScreen(), 'title': 'Cafetaria'},
     ];
@@ -42,7 +42,8 @@ class _TabScreenState extends State<TabScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(),
-      appBar: BaseAppBar.getAppBar("Home", context),
+      appBar:
+          BaseAppBar.getAppBar(_pages![_selectedPageIndex]['title'], context),
       body: _pages![_selectedPageIndex]['page'],
       extendBody: true,
       bottomNavigationBar: BottomNavBar(

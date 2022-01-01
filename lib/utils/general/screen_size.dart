@@ -14,4 +14,12 @@ class ScreenSize {
     final mediaQ = ScreenSize.mediaQ(ctx);
     return mediaQ.size.width;
   }
+
+  static usableHeight(BuildContext context) {
+    final appBarHeight = AppBar().preferredSize.height;
+    final bottomHeight = ScreenSize.screenHeight(context) * 0.17;
+    final screenHeight =
+        MediaQuery.of(context).size.height - appBarHeight - bottomHeight;
+    return screenHeight;
+  }
 }

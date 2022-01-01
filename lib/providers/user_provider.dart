@@ -12,10 +12,12 @@ class User {
   final String id;
   final String username;
   final String role;
+  final String name;
   User({
     required this.id,
     required this.username,
     required this.role,
+    required this.name,
   });
 }
 
@@ -26,6 +28,7 @@ class Auth with ChangeNotifier {
   String? _userId;
   Timer? _authTimer;
   String? _role;
+  String? _name;
 
   List<User> _user = [];
 
@@ -34,7 +37,8 @@ class Auth with ChangeNotifier {
   }
 
   Uri url(String endPoint) {
-    final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
+    // final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
+    final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
     return url;
   }
 
@@ -67,6 +71,7 @@ class Auth with ChangeNotifier {
         id: decodedData['id'],
         username: decodedData['username'],
         role: decodedData['role'],
+        name: decodedData['name'],
       );
       _user.add(newUser);
       //if there is an error then it is thrown here
@@ -76,6 +81,7 @@ class Auth with ChangeNotifier {
       _token = decodedData['token'];
       _userId = decodedData['id'];
       _role = decodedData['role'];
+      _name = decodedData['name'];
       _expiryDate = DateTime.now().add(
         Duration(
           milliseconds: decodedData['expiresIn'],
@@ -88,7 +94,8 @@ class Auth with ChangeNotifier {
         'token': _token,
         'userId': _userId,
         'expiryDate': _expiryDate?.toIso8601String(),
-        'role': _role
+        'role': _role,
+        'name': _name,
       });
       print(userData);
       await prefs.setString('userData', userData);
@@ -109,10 +116,6 @@ class Auth with ChangeNotifier {
 
   //if the token exists then the user is authenticated
   bool get isAuth {
-    // if (tryAutoLogin() == true && _token != null) {
-    //   return true;
-    // }
-    // return false;
     return _token != null;
   }
 
@@ -133,6 +136,7 @@ class Auth with ChangeNotifier {
     _token = extractedData['token'] as String;
     _userId = extractedData['userId'] as String;
     _role = extractedData['role'] as String;
+    _name = extractedData['name'] as String;
     _expiryDate = expiryDate;
     notifyListeners();
     //print("$_token $_userId $_role");
@@ -167,5 +171,8 @@ class Auth with ChangeNotifier {
 
   String? get getRole {
     return _role;
+  }
+  String? get getUserId {
+    return _userId;
   }
 }
