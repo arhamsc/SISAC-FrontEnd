@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../general/customColor.dart';
 
-Future<dynamic> dialog(
-    {required BuildContext ctx,
-    required String errorMessage,
-    Function()? tryAgainFunc,
-    String? title}) {
+Future<dynamic> dialog({
+  required BuildContext ctx,
+  required String errorMessage,
+  Function()? tryAgainFunc,
+  String? title,
+  bool? pop2Pages,
+}) {
   return showDialog(
     context: ctx,
     builder: (context) {
@@ -39,7 +41,13 @@ Future<dynamic> dialog(
                   ?.copyWith(color: SecondaryPallete.primary),
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              if (pop2Pages != null && pop2Pages) {
+                var popping = Navigator.of(context);
+                popping.pop();
+                popping.pop();
+              } else {
+                Navigator.of(context).pop();
+              }
             },
           ),
         ],

@@ -51,6 +51,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
                 tryAgainFunc: () => _refreshItems(context),
+                pop2Pages: true,
               ),
             );
             return RefreshIndicator(

@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/cafetaria/cafataria_providers.dart';
 
+import './cafetaria_menu.dart';
+
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/cafetaria/bottom_nav.dart';
 import '../../../widgets/cafetaria/rating_card.dart';
@@ -39,6 +41,7 @@ class RatingScreen extends StatelessWidget {
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
                 tryAgainFunc: () => _refreshItems(context),
+                pop2Pages: true,
               );
             });
 

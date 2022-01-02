@@ -38,6 +38,7 @@ class OrderScreen extends StatelessWidget {
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
                 tryAgainFunc: () => _refreshItems(context),
+                pop2Pages: true,
               ),
             );
             return RefreshIndicator(
