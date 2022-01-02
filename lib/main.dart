@@ -8,6 +8,9 @@ import './screens/login_screen.dart';
 import 'screens/student_faculty_screens/tab_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/student_faculty_screens/cafetaria_screens/cafetaria_menu.dart';
+import './screens/student_faculty_screens/cafetaria_screens/place_order_screen.dart';
+import './screens/student_faculty_screens/cafetaria_screens/order_screen.dart';
+import './screens/student_faculty_screens/cafetaria_screens/rating_screen.dart';
 
 //*utils imports
 import './utils/general/customColor.dart';
@@ -16,6 +19,7 @@ import './utils/general/themes.dart';
 //*provider imports
 import './providers/user_provider.dart';
 import './providers/cafetaria/cafataria_providers.dart';
+import './providers/cafetaria/order_providers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,9 +37,18 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, MenuItemProvider>(
-            create: (context) => MenuItemProvider(),
-            update: (ctx, authProvider, menuItemProvider) => menuItemProvider!
-              ..update(authProvider.token, authProvider.getUserId)),
+          create: (context) => MenuItemProvider(),
+          update: (ctx, authProvider, menuItemProvider) => menuItemProvider!
+            ..update(
+              authProvider.token,
+              authProvider.getUserId,
+            ),
+        ),
+        ChangeNotifierProxyProvider<Auth, OrderProvider>(
+          create: (context) => OrderProvider(),
+          update: (ctx, authProvider, orderProvider) => orderProvider!
+            ..update(authProvider.token, authProvider.getUserId),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -60,6 +73,9 @@ class MyApp extends StatelessWidget {
             TabScreen.routeName: (ctx) => const TabScreen(),
             LoginScreen.routeName: (ctx) => const LoginScreen(),
             CafetariaMenu.routeName: (ctx) => const CafetariaMenu(),
+            PlaceOrderScreen.routeName: (ctx) => const PlaceOrderScreen(),
+            OrderScreen.routeName: (ctx) => const OrderScreen(),
+            RatingScreen.routeName: (ctx) => const RatingScreen(),
           },
         ),
       ),

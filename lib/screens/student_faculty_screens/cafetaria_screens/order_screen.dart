@@ -1,46 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../providers/cafetaria/order_providers.dart';
 
 import '../../../widgets/app_bar.dart';
-import '../../../widgets/cafetaria/menu_card.dart';
 import '../../../widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/cafetaria/order_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
-class CafetariaMenu extends StatefulWidget {
-  const CafetariaMenu({Key? key}) : super(key: key);
-  static const routeName = '/cafetaria/menu';
-
-  @override
-  State<CafetariaMenu> createState() => _CafetariaMenuState();
-}
-
-class _CafetariaMenuState extends State<CafetariaMenu> {
-  var _expanded = false;
+class OrderScreen extends StatelessWidget {
+  static const routeName = '/cafetaria/orders';
+  const OrderScreen({Key? key}) : super(key: key);
 
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MenuItemProvider>(context, listen: false)
-        .fetchMenu();
+    return await Provider.of<OrderProvider>(context, listen: false)
+        .fetchUserOrders();
   }
 
   @override
   Widget build(BuildContext context) {
+    //final orderP = Provider.of<OrderProvider>(context);
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
-        title: "Cafetaria",
-        context: context,
-        subtitle: "Menu",
-        // TODO: Implement time range
-        available: true,
-        availabilityText: "PreOrder",
-      ),
+          title: "Cafetaria", context: context, subtitle: "Orders"),
       body: FutureBuilder(
-        future:
-            Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
+        future: Provider.of<OrderProvider>(context, listen: false)
+            .fetchUserOrders(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -64,15 +51,15 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
               onRefresh: () => _refreshItems(context),
               child: Column(
                 children: [
-                  Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => Container(
+                  Consumer<OrderProvider>(
+                    builder: (ctx, orderData, child) => Container(
                       child: SingleChildScrollView(
                         child: Container(
                           height: ScreenSize.usableHeight(context),
                           child: ListView.builder(
-                            itemBuilder: (ctx, i) =>
-                                MenuCard(menu: menuData.items[i]),
-                            itemCount: menuData.items.length,
+                            itemBuilder: (ctx, i) => OrderCard(
+                                order: orderData.userOrders[i], orderNum: i),
+                            itemCount: orderData.userOrders.length,
                           ),
                         ),
                       ),

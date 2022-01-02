@@ -49,6 +49,7 @@ class _BottomNavState extends State<BottomNav> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          // TODO: Implement Navigation to the main screen in each buttons
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () {},

@@ -7,6 +7,8 @@ import '../../utils/general/screen_size.dart';
 import '../../utils/general/customColor.dart';
 
 import './cafetaria_screens/cafetaria_menu.dart';
+import './cafetaria_screens/order_screen.dart';
+import './cafetaria_screens/rating_screen.dart';
 
 import '../../widgets/home/home_main_card.dart';
 
@@ -33,13 +35,17 @@ class CafetariaScreen extends StatelessWidget {
             HomeMainCard(
               mainTitle: "Orders",
               buttonTitle: "Click to visit",
-              buttonFunction: () {},
+              buttonFunction: () {
+                Navigator.of(context).pushNamed(OrderScreen.routeName);
+              },
               bgColor: SecondaryPallete.primary,
             ),
             HomeMainCard(
               mainTitle: "Rating",
               buttonTitle: "Click to visit",
-              buttonFunction: () {},
+              buttonFunction: () {
+                Navigator.of(context).pushNamed(RatingScreen.routeName);
+              },
               bgColor: SecondaryPallete.primary,
             ),
           ],

@@ -4,12 +4,13 @@ import '../general/customColor.dart';
 Future<dynamic> dialog(
     {required BuildContext ctx,
     required String errorMessage,
-    Function()? tryAgainFunc}) {
+    Function()? tryAgainFunc,
+    String? title}) {
   return showDialog(
     context: ctx,
     builder: (context) {
       return AlertDialog(
-        title: Text("Error Occurred",
+        title: Text(title ?? "Error Occurred",
             style: Theme.of(context).textTheme.headline6?.copyWith(
                   color: SecondaryPallete.primary,
                 )),
@@ -31,7 +32,7 @@ Future<dynamic> dialog(
               : const SizedBox(),
           TextButton(
             child: Text(
-              'Quit',
+              'OK',
               style: Theme.of(context)
                   .textTheme
                   .bodyText2

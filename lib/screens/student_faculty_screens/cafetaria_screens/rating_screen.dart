@@ -4,22 +4,16 @@ import 'package:provider/provider.dart';
 import '../../../providers/cafetaria/cafataria_providers.dart';
 
 import '../../../widgets/app_bar.dart';
-import '../../../widgets/cafetaria/menu_card.dart';
 import '../../../widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/cafetaria/rating_card.dart';
+import '../../../widgets/cafetaria/order_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
-class CafetariaMenu extends StatefulWidget {
-  const CafetariaMenu({Key? key}) : super(key: key);
-  static const routeName = '/cafetaria/menu';
-
-  @override
-  State<CafetariaMenu> createState() => _CafetariaMenuState();
-}
-
-class _CafetariaMenuState extends State<CafetariaMenu> {
-  var _expanded = false;
+class RatingScreen extends StatelessWidget {
+  static const routeName = '/cafetaria/ratings';
+  const RatingScreen({Key? key}) : super(key: key);
 
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<MenuItemProvider>(context, listen: false)
@@ -28,16 +22,10 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
 
   @override
   Widget build(BuildContext context) {
+    //final orderP = Provider.of<OrderProvider>(context);
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
-        title: "Cafetaria",
-        context: context,
-        subtitle: "Menu",
-        // TODO: Implement time range
-        available: true,
-        availabilityText: "PreOrder",
-      ),
+          title: "Cafetaria", context: context, subtitle: "Orders"),
       body: FutureBuilder(
         future:
             Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
@@ -45,14 +33,15 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (dataSnapShot.error != null) {
-            Future.delayed(
-              Duration.zero,
-              () => dialog(
+            Future.delayed(Duration.zero, () {
+              print(dataSnapShot.error);
+              dialog(
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
                 tryAgainFunc: () => _refreshItems(context),
-              ),
-            );
+              );
+            });
+
             return RefreshIndicator(
               onRefresh: () => _refreshItems(context),
               child: const Center(
@@ -70,8 +59,10 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                         child: Container(
                           height: ScreenSize.usableHeight(context),
                           child: ListView.builder(
-                            itemBuilder: (ctx, i) =>
-                                MenuCard(menu: menuData.items[i]),
+                            itemBuilder: (ctx, i) => RatingCard(
+                              key: Key(menuData.items[i].id),
+                              menu: menuData.items[i],
+                            ),
                             itemCount: menuData.items.length,
                           ),
                         ),

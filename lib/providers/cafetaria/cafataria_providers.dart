@@ -12,7 +12,7 @@ class MenuItem {
   final String id;
   final String name;
   final String description;
-  final int rating;
+  final num rating;
   final int price;
   final String imageUrl;
   final bool isAvailable;
@@ -65,6 +65,7 @@ class MenuItemProvider with ChangeNotifier {
       final response = await http.get(url, headers: _headers);
       var decodedData = json.decode(response.body) as Map<String, dynamic>;
       if (decodedData['error'] != null) {
+        print(decodedData);
         throw HttpException(decodedData['error']['message']);
       }
       List<MenuItem> loadedItems = [];
@@ -85,13 +86,31 @@ class MenuItemProvider with ChangeNotifier {
           );
         },
       );
-      //decodedData['items'];
+
       _menuItems = loadedItems;
-      //print(_menuItems);
-      //print(_menuItems);
+
       notifyListeners();
-    } on HttpException catch (error) {
-      print(error.message);
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> updateRating(String menuId, num rating) async {
+    print(menuId);
+    final url = cafetariaUrl('$menuId/rate');
+    try {
+      final response = await http.post(
+        url,
+        headers: _headers,
+        body: jsonEncode(
+          {
+            'rating': rating,
+          },
+        ),
+      );
+      //print(response.body);
+    } catch (error) {
+      throw HttpException(error.toString());
     }
   }
 }

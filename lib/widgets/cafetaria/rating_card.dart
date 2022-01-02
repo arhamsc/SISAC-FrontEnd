@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:sisac/utils/helpers/error_dialog.dart';
+import 'package:sisac/utils/helpers/http_exception.dart';
 
 import '../../providers/cafetaria/cafataria_providers.dart';
-
-import '../../screens/student_faculty_screens/cafetaria_screens/place_order_screen.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/themes.dart';
 
-class MenuCard extends StatefulWidget {
-  MenuCard({Key? key, required this.menu}) : super(key: key);
+import '../star_rating.dart';
+
+class RatingCard extends StatefulWidget {
+  RatingCard({Key? key, required this.menu}) : super(key: key);
 
   final MenuItem menu;
 
   @override
-  _MenuCardState createState() => _MenuCardState();
+  _RatingCardState createState() => _RatingCardState();
 }
 
-class _MenuCardState extends State<MenuCard> {
+class _RatingCardState extends State<RatingCard> {
   var _expanded = false;
+  num get rating {
+    return widget.menu.rating;
+  }
+
+  bool _isLoading = false;
+
+  late num newRating;
   @override
   Widget build(BuildContext context) {
     return Column(
+      key: widget.key,
       children: [
         const SizedBox(height: 25),
         Center(
@@ -29,33 +41,95 @@ class _MenuCardState extends State<MenuCard> {
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
-                height: _expanded ? ScreenSize.screenHeight(context) * .4 : 0,
+                height: _expanded ? ScreenSize.screenHeight(context) * .3 : 0,
                 width: ScreenSize.screenWidth(context) * .85,
                 decoration: BoxDecoration(
                   color: Palette.senaryDefault,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: const EdgeInsets.only(top: 70),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(25),
                       child: SingleChildScrollView(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              "Description",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
+                            Center(
+                              child: RatingBar(
+                                ratingWidget: RatingWidget(
+                                  full: const Icon(
+                                    Icons.star_outlined,
+                                    color: Palette.quinaryDefault,
                                   ),
+                                  half: const Icon(
+                                    Icons.star_half,
+                                    color: Palette.quinaryDefault,
+                                  ),
+                                  empty: const Icon(
+                                    Icons.star_border,
+                                    color: Palette.quinaryDefault,
+                                  ),
+                                ),
+                                initialRating: rating.toDouble(),
+                                onRatingUpdate: (rat) async {
+                                  setState(
+                                    () {
+                                      newRating = rat.toInt();
+                                    },
+                                  );
+                                },
+                                allowHalfRating: true,
+                              ),
                             ),
-                            const SizedBox(height: 20),
-                            Text(widget.menu.description),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Consumer<MenuItemProvider>(
+                              builder: (ctx, menuData, _) => ElevatedButton(
+                                style: Theme.of(context)
+                                    .elevatedButtonTheme
+                                    .style!
+                                    .copyWith(
+                                      padding: MaterialStateProperty.all(
+                                        const EdgeInsets.symmetric(
+                                          vertical: 10,
+                                          horizontal: 30,
+                                        ),
+                                      ),
+                                    ),
+                                onPressed: () async {
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+                                  try {
+                                    await menuData.updateRating(
+                                        widget.menu.id, newRating);
+                                    await dialog(
+                                        ctx: context,
+                                        errorMessage: "Thank you for rating",
+                                        title: "Success");
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                  } on HttpException catch (error) {
+                                    await dialog(
+                                        ctx: context,
+                                        errorMessage: error.message);
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                  }
+                                },
+                                child: _isLoading
+                                    ? CircularProgressIndicator()
+                                    : const Text(
+                                        "Rate",
+                                      ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -118,7 +192,7 @@ class _MenuCardState extends State<MenuCard> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                             "Ratings: ${widget.menu.rating.toString()}"),
+                                                "Ratings: ${widget.menu.rating.toStringAsPrecision(2)}"),
                                             Text("Price: ${widget.menu.price}"),
                                           ],
                                         ),
@@ -133,33 +207,6 @@ class _MenuCardState extends State<MenuCard> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Container(
-                                    height:
-                                        ScreenSize.screenHeight(context) * .02,
-                                    width:
-                                        ScreenSize.screenWidth(context) * .177,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          PlaceOrderScreen.routeName,
-                                          arguments: {
-                                            'name': widget.menu.name,
-                                            'price': widget.menu.price,
-                                            'menu': widget.menu,
-                                          },
-                                        );
-                                      },
-                                      child: const Text("Order"),
-                                      style: ButtonThemes.elevatedButtonSmall
-                                          .copyWith(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                          Palette.quaternaryDefault,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                   const SizedBox(width: 10),
                                   Container(
                                     height:
@@ -174,11 +221,11 @@ class _MenuCardState extends State<MenuCard> {
                                       },
                                       child: !_expanded
                                           ? const Text(
-                                              "View More",
+                                              "Rate Now",
                                               softWrap: false,
                                             )
                                           : const Text(
-                                              "View Less",
+                                              "Close",
                                               softWrap: false,
                                             ),
                                       style: ButtonThemes.elevatedButtonSmall
