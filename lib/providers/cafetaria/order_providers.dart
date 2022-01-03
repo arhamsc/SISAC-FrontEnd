@@ -62,7 +62,7 @@ class OrderProvider with ChangeNotifier {
   Uri orderUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
     return Uri.parse('http://192.168.1.25:3000/cafetaria/orders$end');
-    //return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
+    //return Uri.parse('http://172.20.10.3:3000/cafetaria/orders$end');
   }
 
   Map<String, String> get _headers {
@@ -101,6 +101,7 @@ class OrderProvider with ChangeNotifier {
         //print(decodedData['error']['message']);
         throw HttpException(decodedData['error']['message']);
       }
+      notifyListeners();
       //print(decodedData);
     } catch (error) {
       throw HttpException(error.toString());
@@ -115,10 +116,12 @@ class OrderProvider with ChangeNotifier {
       if (decodedData['error'] != null) {
         throw HttpException(decodedData['error']['message']);
       }
+      print(decodedData);
       List<Order> loadedOrders = [];
       List<MenuOrder> loadedMap = [];
       decodedData.forEach(
         (key, value) {
+          //print(value['ordersa']);
           value['orderItems'].forEach(
             (val) {
               loadedMap.add(

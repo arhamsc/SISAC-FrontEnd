@@ -113,4 +113,8 @@ class MenuItemProvider with ChangeNotifier {
       throw HttpException(error.toString());
     }
   }
+
+   MenuItem findMenu(String id) {
+    return _menuItems.firstWhere((element) => element.id == id);
+  }
 }

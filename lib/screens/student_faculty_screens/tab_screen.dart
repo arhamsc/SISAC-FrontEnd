@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './announcements_screen.dart';
 import './cafetaria_screen.dart';
@@ -8,6 +9,8 @@ import './home_screen.dart';
 
 import '../../widgets/app_bar.dart';
 import '../../widgets/bottom_bar.dart';
+
+import '../../providers/user_provider.dart';
 
 class TabScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -41,9 +44,26 @@ class _TabScreenState extends State<TabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
-      appBar:
-          BaseAppBar.getAppBar(title: _pages![_selectedPageIndex]['title'], context: context),
+      drawer: Drawer(
+        child: Consumer<Auth>(
+          
+          builder: (ctx, authData, _) => Column(
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    try {
+                      authData.logout();
+                    } catch (error) {
+                      print(error);
+                    }
+                  },
+                  child: Text("Logout"))
+            ],
+          ),
+        ),
+      ),
+      appBar: BaseAppBar.getAppBar(
+          title: _pages![_selectedPageIndex]['title'], context: context),
       body: _pages![_selectedPageIndex]['page'],
       extendBody: true,
       bottomNavigationBar: BottomNavBar(

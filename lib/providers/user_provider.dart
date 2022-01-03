@@ -19,6 +19,10 @@ class User {
     required this.role,
     required this.name,
   });
+  @override
+  String toString() {
+    return '[id: $id, name: $name, role: $role, username: $username]';
+  }
 }
 
 //below is the auth class to authenticate the user
@@ -37,8 +41,8 @@ class Auth with ChangeNotifier {
   }
 
   Uri url(String endPoint) {
-    final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
-    //final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
+    //final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
+    final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
     return url;
   }
 
@@ -170,8 +174,10 @@ class Auth with ChangeNotifier {
   }
 
   String? get getRole {
+    print(_role);
     return _role;
   }
+
   String? get getUserId {
     return _userId;
   }
