@@ -43,6 +43,81 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Widget> widgetSelector = {
+      'TimeTable': IconButton(
+        icon: Icon(Icons.calendar_today),
+        onPressed: () {},
+        color: selectedIcon == "TimeTable"
+            ? Palette.quinaryDefault
+            : Palette.tertiaryDefault,
+        iconSize: selectedIcon == "TimeTable" ? 30 : 24,
+      ),
+      'Announcements': IconButton(
+        icon: Icon(Icons.announcement_outlined),
+        onPressed: () {},
+        color: selectedIcon == "Announcements"
+            ? Palette.quinaryDefault
+            : Palette.tertiaryDefault,
+        iconSize: selectedIcon == "Announcements" ? 30 : 24,
+      ),
+      'Home': IconButton(
+        icon: Icon(Icons.home),
+        onPressed: () {},
+        color: selectedIcon == "Home"
+            ? Palette.quinaryDefault
+            : Palette.tertiaryDefault,
+        iconSize: selectedIcon == "Home" ? 30 : 24,
+      ),
+      'Stationary': IconButton(
+        icon: Icon(Icons.menu_book_outlined),
+        onPressed: () {},
+        color: selectedIcon == "Stationary"
+            ? Palette.quinaryDefault
+            : Palette.tertiaryDefault,
+        iconSize: selectedIcon == "Stationary" ? 30 : 24,
+      ),
+      'Cafetaria': IconButton(
+        icon: Icon(Icons.coffee_outlined),
+        onPressed: () {},
+        color: selectedIcon == "Cafetaria"
+            ? Palette.quinaryDefault
+            : Palette.tertiaryDefault,
+        iconSize: selectedIcon == "Cafetaria" ? 30 : 24,
+      ),
+    };
+
+    List<Widget>? showIcon(String selected, bool showOnlyOne) {
+      if (_showOnlyOne != null && _showOnlyOne == true) {
+        List<Widget> returningWid = [];
+        switch (selected) {
+          case 'TimeTable':
+            returningWid.add(widgetSelector['TimeTable']!);
+            break;
+          case 'Announcements':
+            returningWid.add(widgetSelector['Announcements']!);
+            break;
+          case 'Home':
+            returningWid.add(widgetSelector['Home']!);
+            break;
+          case 'Stationary':
+            returningWid.add(widgetSelector['Stationary']!);
+            break;
+          case 'Cafetaria':
+            returningWid.add(widgetSelector['Cafetaria']!);
+            break;
+          default:
+            const SizedBox();
+        }
+        return returningWid;
+      } else {
+        List<Widget> returningWid = [];
+        for (var v in widgetSelector.values) {
+          returningWid.add(v);
+        }
+        return returningWid;
+      }
+    }
+
     return Container(
       height: ScreenSize.screenHeight(context) * 0.1,
       decoration: const BoxDecoration(
@@ -53,63 +128,12 @@ class _BottomNavState extends State<BottomNav> {
         ),
       ),
       child: Row(
-        mainAxisAlignment: !_showOnlyOne
-            ? MainAxisAlignment.spaceAround
-            : MainAxisAlignment.center,
-        children: [
-          // TODO: Implement Navigation to the main screen in each buttons
-          _showOnlyOne && selectedIcon == 'TimeTable'
-              ? IconButton(
-                  icon: Icon(Icons.calendar_today),
-                  onPressed: () {},
-                  color: selectedIcon == "TimeTable"
-                      ? Palette.quinaryDefault
-                      : Palette.tertiaryDefault,
-                  iconSize: selectedIcon == "TimeTable" ? 30 : 24,
-                )
-              : const SizedBox(),
-          _showOnlyOne && selectedIcon == 'Announcements'
-              ? IconButton(
-                  icon: Icon(Icons.announcement_outlined),
-                  onPressed: () {},
-                  color: selectedIcon == "Announcements"
-                      ? Palette.quinaryDefault
-                      : Palette.tertiaryDefault,
-                  iconSize: selectedIcon == "Announcements" ? 30 : 24,
-                )
-              : const SizedBox(),
-          _showOnlyOne && selectedIcon == 'Home'
-              ? IconButton(
-                  icon: Icon(Icons.home),
-                  onPressed: () {},
-                  color: selectedIcon == "Home"
-                      ? Palette.quinaryDefault
-                      : Palette.tertiaryDefault,
-                  iconSize: selectedIcon == "Home" ? 30 : 24,
-                )
-              : const SizedBox(),
-          _showOnlyOne && selectedIcon == 'Stationary'
-              ? IconButton(
-                  icon: Icon(Icons.menu_book_outlined),
-                  onPressed: () {},
-                  color: selectedIcon == "Stationary"
-                      ? Palette.quinaryDefault
-                      : Palette.tertiaryDefault,
-                  iconSize: selectedIcon == "Stationary" ? 30 : 24,
-                )
-              : const SizedBox(),
-          _showOnlyOne && selectedIcon == 'Cafetaria'
-              ? IconButton(
-                  icon: Icon(Icons.coffee_outlined),
-                  onPressed: () {},
-                  color: selectedIcon == "Cafetaria"
-                      ? Palette.quinaryDefault
-                      : Palette.tertiaryDefault,
-                  iconSize: selectedIcon == "Cafetaria" ? 30 : 24,
-                )
-              : const SizedBox(),
-        ],
-      ),
+          mainAxisAlignment: !_showOnlyOne
+              ? MainAxisAlignment.spaceAround
+              : MainAxisAlignment.center,
+          children:
+              // TODO: Implement Navigation to the main screen in each buttons
+              showIcon(selectedIcon, _showOnlyOne)!.toList()),
     );
   }
 }

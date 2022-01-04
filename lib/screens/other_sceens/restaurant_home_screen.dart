@@ -12,6 +12,7 @@ import '../../utils/general/customColor.dart';
 import '../../utils/general/screen_size.dart';
 
 import '../../providers/cafetaria/restaurant_providers.dart';
+import '../../providers/user_provider.dart';
 
 class RestaurantHomeScreen extends StatelessWidget {
   static const routeName = 'cafetaria/restaurant';
@@ -20,10 +21,22 @@ class RestaurantHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final restP = Provider.of<RestaurantProvider>(context);
+    final userP = Provider.of<Auth>(context);
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
           title: "Restaurant", context: context, subtitle: "Home"),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                userP.logout();
+              },
+              child: Text("Logout"),
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           SizedBox(

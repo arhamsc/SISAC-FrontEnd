@@ -15,7 +15,7 @@ class MenuItem {
   final num rating;
   final int price;
   final String imageUrl;
-  final bool isAvailable;
+  bool isAvailable = true;
   MenuItem({
     required this.id,
     required this.name,
@@ -30,6 +30,7 @@ class MenuItem {
   // String toString() {
   //   return '[id: $id, name: $name, description: $description, rating: $rating, price: $price, imageUrl: $imageUrl, isAvailable: $isAvailable]';
   // }
+
 }
 
 class MenuItemProvider with ChangeNotifier {
@@ -48,8 +49,8 @@ class MenuItemProvider with ChangeNotifier {
 
   Uri cafetariaUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    //return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
-    return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
+    return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
+    //return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
   }
 
   Map<String, String> get _headers {
@@ -65,7 +66,7 @@ class MenuItemProvider with ChangeNotifier {
       final response = await http.get(url, headers: _headers);
       var decodedData = json.decode(response.body) as Map<String, dynamic>;
       if (decodedData['error'] != null) {
-        print(decodedData);
+        //print(decodedData);
         throw HttpException(decodedData['error']['message']);
       }
       List<MenuItem> loadedItems = [];
@@ -96,7 +97,7 @@ class MenuItemProvider with ChangeNotifier {
   }
 
   Future<void> updateRating(String menuId, num rating) async {
-    print(menuId);
+    //print(menuId);
     final url = cafetariaUrl('$menuId/rate');
     try {
       final response = await http.post(
@@ -114,7 +115,38 @@ class MenuItemProvider with ChangeNotifier {
     }
   }
 
-   MenuItem findMenu(String id) {
+  MenuItem findMenu(String id) {
     return _menuItems.firstWhere((element) => element.id == id);
+  }
+
+  Future<void> updateIsAvailable(String id, bool currentStatus) async {
+    final url = cafetariaUrl('$id/isAvailable');
+    final oldStatus = currentStatus;
+
+    currentStatus = !currentStatus;
+
+    notifyListeners();
+    try {
+      final response = await http.post(
+        url,
+        headers: _headers,
+        body: jsonEncode(
+          {
+            'isAvailable': currentStatus,
+          },
+        ),
+      );
+      final decodedData = jsonDecode(response.body);
+      if (decodedData['error'] != null) {
+        throw HttpException(decodedData['error']['message']);
+      }
+      if (response.statusCode >= 400) {
+        currentStatus = oldStatus;
+        notifyListeners();
+      }
+    } catch (error) {
+      currentStatus = oldStatus;
+      throw HttpException(error.toString());
+    }
   }
 }

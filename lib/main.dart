@@ -79,6 +79,7 @@ class MyApp extends StatelessWidget {
                 ..update(authProvider.token, authProvider.getUserId,
                     menuItemProvider),
         ),
+        
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(

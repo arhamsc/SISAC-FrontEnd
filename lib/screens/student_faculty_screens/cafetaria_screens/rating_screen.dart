@@ -13,10 +13,15 @@ import '../../../widgets/cafetaria/order_card.dart';
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
-class RatingScreen extends StatelessWidget {
+class RatingScreen extends StatefulWidget {
   static const routeName = '/cafetaria/ratings';
   const RatingScreen({Key? key}) : super(key: key);
 
+  @override
+  State<RatingScreen> createState() => _RatingScreenState();
+}
+
+class _RatingScreenState extends State<RatingScreen> {
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<MenuItemProvider>(context, listen: false)
         .fetchMenu();
@@ -65,6 +70,9 @@ class RatingScreen extends StatelessWidget {
                             itemBuilder: (ctx, i) => RatingCard(
                               key: Key(menuData.items[i].id),
                               menu: menuData.items[i],
+                              setStateFunc: () {
+                                setState(() {});
+                              },
                             ),
                             itemCount: menuData.items.length,
                           ),

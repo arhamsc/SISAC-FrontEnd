@@ -10,12 +10,13 @@ import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/themes.dart';
 
-import '../star_rating.dart';
+
 
 class RatingCard extends StatefulWidget {
-  RatingCard({Key? key, required this.menu}) : super(key: key);
+  RatingCard({Key? key, required this.menu, required this.setStateFunc}) : super(key: key);
 
   final MenuItem menu;
+  final Function setStateFunc;
 
   @override
   _RatingCardState createState() => _RatingCardState();
@@ -122,6 +123,7 @@ class _RatingCardState extends State<RatingCard> {
                                       _isLoading = false;
                                     });
                                   }
+                                  widget.setStateFunc();
                                 },
                                 child: _isLoading
                                     ? CircularProgressIndicator()
