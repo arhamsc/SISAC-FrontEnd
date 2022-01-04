@@ -38,6 +38,11 @@ class _RestaurantReceivedOrdersCardState
         element.id == widget.order.menuOrders[widget.index].itemId);
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   String dishName(String id) {
     var name;
     widget.menu.forEach((element) {

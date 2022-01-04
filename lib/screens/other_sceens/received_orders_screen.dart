@@ -5,7 +5,6 @@ import '../../../providers/cafetaria/cafataria_providers.dart';
 import '../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../widgets/app_bar.dart';
-import '../../../widgets/cafetaria/menu_card.dart';
 import '../../../widgets/cafetaria/bottom_nav.dart';
 import '../../widgets/cafetaria/restaurant/received_orders_card.dart';
 
@@ -26,6 +25,14 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<RestaurantProvider>(context, listen: false)
         .getReceivedOrders();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero);
+    Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
   }
 
   @override

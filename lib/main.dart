@@ -13,6 +13,7 @@ import './screens/student_faculty_screens/cafetaria_screens/order_screen.dart';
 import './screens/student_faculty_screens/cafetaria_screens/rating_screen.dart';
 import './screens/other_sceens/restaurant_home_screen.dart';
 import './screens/other_sceens/received_orders_screen.dart';
+import './screens/other_sceens/isAvailable_screen.dart';
 
 //*utils imports
 import './utils/general/customColor.dart';
@@ -100,6 +101,7 @@ class MyApp extends StatelessWidget {
                 const RestaurantHomeScreen(),
             ReceivedOrdersScreen.routeName: (ctx) =>
                 const ReceivedOrdersScreen(),
+            IsAvailableScreen.routeName: (ctx) => const IsAvailableScreen(),
           },
         ),
       ),

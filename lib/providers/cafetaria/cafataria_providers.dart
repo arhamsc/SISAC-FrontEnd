@@ -48,8 +48,8 @@ class MenuItemProvider with ChangeNotifier {
 
   Uri cafetariaUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
-    //return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
+    //return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
+    return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
   }
 
   Map<String, String> get _headers {

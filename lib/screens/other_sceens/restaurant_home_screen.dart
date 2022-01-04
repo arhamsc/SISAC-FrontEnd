@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './received_orders_screen.dart';
+import './isAvailable_screen.dart';
 
 import '../../widgets/home/home_main_card.dart';
 import '../../widgets/app_bar.dart';
@@ -44,7 +45,10 @@ class RestaurantHomeScreen extends StatelessWidget {
                   HomeMainCard(
                     mainTitle: "Menu Availability",
                     buttonTitle: "Click to update menu",
-                    buttonFunction: () {},
+                    buttonFunction: () {
+                      Navigator.of(context)
+                          .pushNamed(IsAvailableScreen.routeName);
+                    },
                     bgColor: SecondaryPallete.primary,
                   ),
                 ],
