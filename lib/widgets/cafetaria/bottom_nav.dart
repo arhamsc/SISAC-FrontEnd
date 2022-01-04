@@ -87,7 +87,7 @@ class _BottomNavState extends State<BottomNav> {
     };
 
     List<Widget>? showIcon(String selected, bool showOnlyOne) {
-      if (_showOnlyOne != null && _showOnlyOne == true) {
+      if (_showOnlyOne && _showOnlyOne == true) {
         List<Widget> returningWid = [];
         switch (selected) {
           case 'TimeTable':

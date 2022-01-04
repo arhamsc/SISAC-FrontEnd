@@ -79,7 +79,6 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                       ),
                     ),
                   ),
-                  
                   Expanded(
                     child: BottomNav(
                       isSelected: "Cafetaria",
