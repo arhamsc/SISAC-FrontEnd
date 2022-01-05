@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
 import './stationary/availability_screen.dart';
+import './stationary/books_material_screen.dart';
 
 import '../../widgets/home/home_main_card.dart';
 
@@ -33,7 +34,9 @@ class StationaryScreen extends StatelessWidget {
           HomeMainCard(
             mainTitle: "Books",
             buttonTitle: "Click to visit",
-            buttonFunction: () {},
+            buttonFunction: () {
+              Navigator.of(context).pushNamed(BooksMaterialScreen.routeName);
+            },
             bgColor: SecondaryPallete.primary,
           ),
           HomeMainCard(
