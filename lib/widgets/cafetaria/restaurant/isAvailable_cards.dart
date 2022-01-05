@@ -3,8 +3,7 @@ import 'package:sisac/utils/helpers/http_exception.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/cafetaria/cafataria_providers.dart';
-import '../../../providers/cafetaria/restaurant_providers.dart';
-import '../../../providers/user_provider.dart';
+
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';

@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../providers/stationary/availability_providers.dart';
 
 import '../../../widgets/app_bar.dart';
-import '../../widgets/cafetaria/restaurant/isAvailable_cards.dart';
 import '../../../widgets/cafetaria/bottom_nav.dart';
-
+import '../../../widgets/stationary/available_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
-class IsAvailableScreen extends StatefulWidget {
-  const IsAvailableScreen({Key? key}) : super(key: key);
-  static const routeName = '/cafetaria/restaurant/isAvailable';
+class AvailabilityScreen extends StatefulWidget {
+  const AvailabilityScreen({Key? key}) : super(key: key);
+  static const routeName = '/stationary/availability';
 
   @override
-  State<IsAvailableScreen> createState() => _IsAvailableScreenState();
+  State<AvailabilityScreen> createState() => _AvailabilityScreenState();
 }
 
-class _IsAvailableScreenState extends State<IsAvailableScreen> {
+class _AvailabilityScreenState extends State<AvailabilityScreen> {
   var _expanded = false;
 
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MenuItemProvider>(context, listen: false)
-        .fetchMenu();
+    return await Provider.of<AvailabilityProvider>(context, listen: false)
+        .fetchAvailableItems();
   }
 
   @override
@@ -32,14 +31,13 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
     return Scaffold(
       drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
-        title: "Cafetaria",
+        title: "Stationary",
         context: context,
-        subtitle: "Menu Available",
-        // TODO: Implement time range
+        subtitle: "Availability",
       ),
       body: FutureBuilder(
-        future:
-            Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
+        future: Provider.of<AvailabilityProvider>(context, listen: false)
+            .fetchAvailableItems(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -64,20 +62,20 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
               onRefresh: () => _refreshItems(context),
               child: Column(
                 children: [
-                  Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => Container(
+                  Consumer<AvailabilityProvider>(
+                    builder: (ctx, availabilityData, child) => Container(
                       child: SingleChildScrollView(
                         child: Container(
                           height: ScreenSize.usableHeight(context),
                           child: ListView.builder(
-                            itemBuilder: (ctx, i) => IsAvailableCard(
-                              menu: menuData.items[i],
+                            itemBuilder: (ctx, i) => AvailabilityCard(
+                              availableItems:
+                                  availabilityData.availableItems[i],
                               setFunc: () {
                                 setState(() {});
                               },
-                              key: Key(menuData.items[i].id),
                             ),
-                            itemCount: menuData.items.length,
+                            itemCount: availabilityData.availableItems.length,
                           ),
                         ),
                       ),
@@ -85,8 +83,7 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
                   ),
                   Expanded(
                     child: BottomNav(
-                      isSelected: "Cafetaria",
-                      showOnlyOne: true,
+                      isSelected: "Stationary",
                     ),
                   ),
                 ],

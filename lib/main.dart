@@ -14,6 +14,7 @@ import './screens/student_faculty_screens/cafetaria_screens/rating_screen.dart';
 import './screens/other_sceens/restaurant_home_screen.dart';
 import './screens/other_sceens/received_orders_screen.dart';
 import './screens/other_sceens/isAvailable_screen.dart';
+import './screens/student_faculty_screens/stationary/availability_screen.dart';
 
 //*utils imports
 import './utils/general/customColor.dart';
@@ -24,6 +25,7 @@ import './providers/user_provider.dart';
 import './providers/cafetaria/cafataria_providers.dart';
 import './providers/cafetaria/order_providers.dart';
 import './providers/cafetaria/restaurant_providers.dart';
+import './providers/stationary/availability_providers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -79,7 +81,14 @@ class MyApp extends StatelessWidget {
                 ..update(authProvider.token, authProvider.getUserId,
                     menuItemProvider),
         ),
-        
+        ChangeNotifierProxyProvider<Auth, AvailabilityProvider>(
+          create: (ctx) => AvailabilityProvider(),
+          update: (ctx, authData, availabilityData) => availabilityData!
+            ..update(
+              authData.token,
+              authData.getUserId,
+            ),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -103,6 +112,7 @@ class MyApp extends StatelessWidget {
             ReceivedOrdersScreen.routeName: (ctx) =>
                 const ReceivedOrdersScreen(),
             IsAvailableScreen.routeName: (ctx) => const IsAvailableScreen(),
+            AvailabilityScreen.routeName: (ctx) => const AvailabilityScreen(),
           },
         ),
       ),

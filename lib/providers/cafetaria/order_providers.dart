@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utils/helpers/http_exception.dart';
-import '../user_provider.dart';
 import './cafataria_providers.dart';
 
 class MenuOrder {
