@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../../providers/stationary/books_material_providers.dart';
+import '../../providers/stationary/material_available_providers.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
-import '../../../utils/general/themes.dart';
 
-class BooksMaterialCard extends StatefulWidget {
-  BooksMaterialCard(
-      {Key? key, required this.booksMaterial, required this.setStateFunc})
+class MaterialAvailableCard extends StatefulWidget {
+  MaterialAvailableCard(
+      {Key? key, required this.materialAvailable, required this.setStateFunc})
       : super(key: key);
 
-  final BooksMaterial booksMaterial;
+  final MaterialAvailable materialAvailable;
   final Function setStateFunc;
 
   @override
-  _BooksMaterialCardState createState() => _BooksMaterialCardState();
+  _MaterialAvailableCardState createState() => _MaterialAvailableCardState();
 }
 
-class _BooksMaterialCardState extends State<BooksMaterialCard> {
-  var _expanded = false;
+class _MaterialAvailableCardState extends State<MaterialAvailableCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,7 +25,7 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
         const SizedBox(height: 10),
         Center(
           child: Container(
-            height: ScreenSize.screenHeight(context) * .14,
+            height: ScreenSize.screenHeight(context) * .115,
             width: ScreenSize.screenWidth(context) * .85,
             decoration: BoxDecoration(
               color: SecondaryPallete.primary,
@@ -48,7 +46,7 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: NetworkImage(widget.booksMaterial.imageUrl),
+                      image: NetworkImage(widget.materialAvailable.imageUrl),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -73,38 +71,27 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      widget.booksMaterial.name,
+                                      widget.materialAvailable.name,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline5!
                                           .copyWith(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15,
+                                            fontSize: 18,
                                           ),
                                     ),
-                                    Text(
-                                      widget.booksMaterial.author,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w500),
+                                    const SizedBox(
+                                      height: 10,
                                     ),
                                     Text(
-                                      'Edition: ${widget.booksMaterial.edition}',
+                                      'Price: ${widget.materialAvailable.price.toString()}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText2!
                                           .copyWith(
-                                              fontWeight: FontWeight.w500),
-                                    ),
-                                    Text(
-                                      'Price: ${widget.booksMaterial.price.toString()}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -121,7 +108,9 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(
+          height: 10,
+        ),
       ],
     );
   }

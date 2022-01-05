@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import './stationary/availability_screen.dart';
 import './stationary/books_material_screen.dart';
+import './stationary/material_available_screen.dart';
 
 import '../../widgets/home/home_main_card.dart';
 
@@ -42,7 +43,10 @@ class StationaryScreen extends StatelessWidget {
           HomeMainCard(
             mainTitle: "Material Available",
             buttonTitle: "Click to visit",
-            buttonFunction: () {},
+            buttonFunction: () {
+              Navigator.of(context)
+                  .pushNamed(MaterialAvailableScreen.routeName);
+            },
             bgColor: SecondaryPallete.primary,
           ),
         ],

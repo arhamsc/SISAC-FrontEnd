@@ -16,6 +16,7 @@ import './screens/other_sceens/received_orders_screen.dart';
 import './screens/other_sceens/isAvailable_screen.dart';
 import './screens/student_faculty_screens/stationary/availability_screen.dart';
 import './screens/student_faculty_screens/stationary/books_material_screen.dart';
+import './screens/student_faculty_screens/stationary/material_available_screen.dart';
 
 //*utils imports
 import './utils/general/customColor.dart';
@@ -28,6 +29,7 @@ import './providers/cafetaria/order_providers.dart';
 import './providers/cafetaria/restaurant_providers.dart';
 import './providers/stationary/availability_providers.dart';
 import './providers/stationary/books_material_providers.dart';
+import './providers/stationary/material_available_providers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -99,6 +101,15 @@ class MyApp extends StatelessWidget {
               authData.getUserId,
             ),
         ),
+        ChangeNotifierProxyProvider<Auth, MaterialAvailableProvider>(
+          create: (ctx) => MaterialAvailableProvider(),
+          update: (ctx, authData, materialAvailableData) =>
+              materialAvailableData!
+                ..update(
+                  authData.token,
+                  authData.getUserId,
+                ),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -124,6 +135,8 @@ class MyApp extends StatelessWidget {
             IsAvailableScreen.routeName: (ctx) => const IsAvailableScreen(),
             AvailabilityScreen.routeName: (ctx) => const AvailabilityScreen(),
             BooksMaterialScreen.routeName: (ctx) => const BooksMaterialScreen(),
+            MaterialAvailableScreen.routeName: (ctx) =>
+                const MaterialAvailableScreen(),
           },
         ),
       ),
