@@ -37,10 +37,10 @@ class Auth with ChangeNotifier {
   String? _name;
   String? _username;
 
-  late User _user;
+  User? _user;
 
   User get getUser {
-    return _user;
+    return _user!;
   }
 
   Uri url(String endPoint) {
@@ -134,8 +134,8 @@ class Auth with ChangeNotifier {
     if (!prefs.containsKey('userData')) {
       return false;
     }
-    final extractedData = json.decode(prefs.getString('userData') as String)
-        as Map<String, dynamic>;
+    final extractedData = await json
+        .decode(prefs.getString('userData') as String) as Map<String, dynamic>;
     final expiryDate = DateTime.parse(extractedData['expiryDate'] as String);
 
     if (expiryDate.isBefore((DateTime.now()))) {
@@ -151,7 +151,7 @@ class Auth with ChangeNotifier {
     _user =
         User(id: _userId!, name: _name!, role: _role!, username: _username!);
     notifyListeners();
-    //print("$_token $_userId $_role");
+    //print("$_token $_userId $_role $_username");
     _autoLogout(context);
     return true;
   }
