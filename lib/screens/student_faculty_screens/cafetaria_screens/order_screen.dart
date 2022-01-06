@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/cafetaria/order_providers.dart';
+import '../../../providers/cafetaria/cafataria_providers.dart';
 
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/cafetaria/bottom_nav.dart';
@@ -10,13 +11,29 @@ import '../../../widgets/cafetaria/order_card.dart';
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   static const routeName = '/cafetaria/orders';
   const OrderScreen({Key? key}) : super(key: key);
 
+  @override
+  State<OrderScreen> createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen> {
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<OrderProvider>(context, listen: false)
         .fetchUserOrders();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    () async {
+      await Future.delayed(Duration.zero, () async {
+        final menuP = Provider.of<MenuItemProvider>(context);
+        await menuP.fetchMenu();
+      });
+    }();
   }
 
   @override

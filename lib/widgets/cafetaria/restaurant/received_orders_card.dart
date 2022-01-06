@@ -34,25 +34,34 @@ class _RestaurantReceivedOrdersCardState
   var _expanded = false;
 
   MenuItem get dish {
+    // print(widget.menu
+    //     .firstWhere((element) =>
+    //         element.id == widget.order.menuOrders[widget.index].itemId)
+    //     .id);
     return widget.menu.firstWhere((element) =>
         element.id == widget.order.menuOrders[widget.index].itemId);
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  String dishName(String id) {
-    var name;
+  String get dishImage {
+    var imageUrl;
     widget.menu.forEach((element) {
-      element.id == id ? name = element.name : null;
+      print("Name ${element.name}, id: ${element.id}");
     });
-    return name;
+    widget.menu.forEach((element) {
+      element.id == dish.id ? imageUrl = element.imageUrl : '';
+    });
+
+    return imageUrl;
   }
 
   String get menuName {
-    return dishName(dish.id);
+    var name;
+
+    widget.menu.forEach((element) {
+      element.id == dish.id ? name = element.name : '';
+    });
+
+    return name;
   }
 
   bool _isLoading = false;
@@ -105,7 +114,7 @@ class _RestaurantReceivedOrdersCardState
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: NetworkImage(dish.imageUrl),
+                      image: NetworkImage(dishImage),
                       fit: BoxFit.fill,
                     ),
                   ),
