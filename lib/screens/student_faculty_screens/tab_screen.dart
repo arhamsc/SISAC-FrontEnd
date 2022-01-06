@@ -52,7 +52,7 @@ class _TabScreenState extends State<TabScreen> {
               ElevatedButton(
                   onPressed: () {
                     try {
-                      authData.logout();
+                      authData.logout(context);
                     } catch (error) {
                       print(error);
                     }

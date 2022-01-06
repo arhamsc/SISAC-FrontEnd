@@ -20,7 +20,6 @@ class RestaurantHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final restP = Provider.of<RestaurantProvider>(context);
     final userP = Provider.of<Auth>(context);
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
@@ -30,7 +29,7 @@ class RestaurantHomeScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                userP.logout();
+                userP.logout(context);
               },
               child: Text("Logout"),
             ),

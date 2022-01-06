@@ -43,20 +43,19 @@ class RestaurantProvider with ChangeNotifier {
   List<ReceivedOrderItem> _receivedOrderItem = [];
   late String _authToken;
   late String _userId;
-  late MenuItemProvider _menuItem;
+  
 
-  void update(token, userId, menuItem) {
-    _authToken = token;
-    _userId = userId;
-    _menuItem = menuItem;
+  void update(token, userId) {
+    token != null ? _authToken = token : _authToken = '';
+    userId != null ? _userId = userId : _userId = '';
+    
     notifyListeners();
   }
 
   Uri restaurantUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    //return Uri.parse(
-    //'http://192.168.1.25:3000/cafetaria/orders/restaurant$end');
-    return Uri.parse('http://172.20.10.3:3000/cafetaria/orders/restaurant$end');
+    return Uri.parse('http://192.168.1.25:3000/cafetaria/orders/restaurant$end');
+    //return Uri.parse('http://172.20.10.3:3000/cafetaria/orders/restaurant$end');
   }
 
   List<ReceivedOrder> get receivedOrders {
@@ -134,9 +133,9 @@ class RestaurantProvider with ChangeNotifier {
       // _receivedOrders.forEach((element) {
       //   print(element.user.name);
       // });
-      _receivedOrders.forEach((element) {
-        print(element.paymentStatus);
-      });
+      // _receivedOrders.forEach((element) {
+      //   print(element.paymentStatus);
+      // });
       notifyListeners();
       //print(decodedData);
     } catch (error) {

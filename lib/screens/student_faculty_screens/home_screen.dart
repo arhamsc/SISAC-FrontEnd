@@ -16,37 +16,39 @@ class HomeScreen extends StatelessWidget {
     //final authData = Provider.of<Auth>(context);
     final screenHeight =
         MediaQuery.of(context).size.height - appBarHeight - bottomHeight;
-    return Container(
-      height: screenHeight,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          HomeMainCard(
-            mainTitle: "Time Table",
-            buttonTitle: "Click to View",
-            buttonFunction: () {},
-          ),
-          Container(
-            child: Column(
-              children: [
-                HomeRowCards(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.chevron_left, color: Palette.quinaryDefault),
-                    Icon(Icons.chevron_right, color: Palette.quinaryDefault),
-                  ],
-                ),
-              ],
+    return SingleChildScrollView(
+      child: Container(
+        height: screenHeight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            HomeMainCard(
+              mainTitle: "Time Table",
+              buttonTitle: "Click to View",
+              buttonFunction: () {},
             ),
-          ),
-          HomeMainCard(
-            mainTitle: "Cafetaria",
-            buttonTitle: "Click to visit",
-            buttonFunction: () {},
-            bgColor: SecondaryPallete.tertiary,
-          ),
-        ],
+            Container(
+              child: Column(
+                children: [
+                  HomeRowCards(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.chevron_left, color: Palette.quinaryDefault),
+                      Icon(Icons.chevron_right, color: Palette.quinaryDefault),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            HomeMainCard(
+              mainTitle: "Cafetaria",
+              buttonTitle: "Click to visit",
+              buttonFunction: () {},
+              bgColor: SecondaryPallete.tertiary,
+            ),
+          ],
+        ),
       ),
     );
   }

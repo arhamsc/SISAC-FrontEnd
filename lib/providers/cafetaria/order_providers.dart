@@ -49,8 +49,8 @@ class OrderProvider with ChangeNotifier {
   late String _userId;
 
   void update(token, userId) {
-    _authToken = token;
-    _userId = userId;
+    token != null ? _authToken = token : _authToken = '';
+    userId != null ? _userId = userId : _userId = '';
     notifyListeners();
   }
 
@@ -60,8 +60,8 @@ class OrderProvider with ChangeNotifier {
 
   Uri orderUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    //return Uri.parse('http://192.168.1.25:3000/cafetaria/orders$end');
-    return Uri.parse('http://172.20.10.3:3000/cafetaria/orders$end');
+    return Uri.parse('http://192.168.1.25:3000/cafetaria/orders$end');
+    //return Uri.parse('http://172.20.10.3:3000/cafetaria/orders$end');
   }
 
   Map<String, String> get _headers {

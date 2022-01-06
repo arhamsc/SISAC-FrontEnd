@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 import '../utils/helpers/http_exception.dart';
 
+import '../screens/login_screen.dart';
+
 //below is the student model
 class User {
   final String id;
@@ -41,13 +43,13 @@ class Auth with ChangeNotifier {
   }
 
   Uri url(String endPoint) {
-    //final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
-    final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
+    final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
+    //final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
     return url;
   }
 
 //below is the method for logging in the user from our API
-  Future<void> login(String? username, String? password) async {
+  Future<void> login(String? username, String? password, BuildContext context) async {
     final url = this.url('login');
 
     try {
@@ -91,7 +93,7 @@ class Auth with ChangeNotifier {
           milliseconds: decodedData['expiresIn'],
         ),
       );
-      _autoLogout();
+      _autoLogout(context);
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
@@ -124,7 +126,7 @@ class Auth with ChangeNotifier {
   }
 
   //to try autologging in if the token is stored in the memory
-  Future<bool> tryAutoLogin() async {
+  Future<bool> tryAutoLogin(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return false;
@@ -144,12 +146,12 @@ class Auth with ChangeNotifier {
     _expiryDate = expiryDate;
     notifyListeners();
     //print("$_token $_userId $_role");
-    _autoLogout();
+    _autoLogout(context);
     return true;
   }
 
   //logout method
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     _token = null;
     _userId = null;
     _expiryDate = null;
@@ -159,18 +161,19 @@ class Auth with ChangeNotifier {
       _authTimer?.cancel();
       _authTimer = null;
     }
+    Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (Route<dynamic> route) => false);
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }
 
   //to start the timer for the expiry date to auto logout after the timer ends
-  void _autoLogout() {
+  void _autoLogout(BuildContext context) {
     if (_authTimer != null) {
       _authTimer?.cancel();
     }
     final timeToExpire = _expiryDate?.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timeToExpire as int), logout);
+    _authTimer = Timer(Duration(seconds: timeToExpire as int), () => logout(context));
   }
 
   String? get getRole {

@@ -35,22 +35,35 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    Widget HomeScreen(Auth func) {
+    Widget HomeScreen(Auth func, BuildContext context) {
       if (func.isAuth) {
-        if (func.getRole == 'Other') {
-          return RestaurantHomeScreen();
+        getRole() {
+          return func.getRole;
+        }
+
+        var role = getRole();
+        if (role == 'Other') {
+          
+          return const RestaurantHomeScreen();
         } else {
-          return TabScreen();
+          
+          return const TabScreen();
         }
       } else {
         return FutureBuilder(
-          future: func.tryAutoLogin(),
+          future: func.tryAutoLogin(context),
           builder: (ctx, authResultSnapShot) =>
               authResultSnapShot.connectionState == ConnectionState.waiting
                   ? const SplashScreen()
@@ -82,8 +95,10 @@ class MyApp extends StatelessWidget {
           create: (context) => RestaurantProvider(),
           update: (ctx, authProvider, menuItemProvider, restaurantProvider) =>
               restaurantProvider!
-                ..update(authProvider.token, authProvider.getUserId,
-                    menuItemProvider),
+                ..update(
+                  authProvider.token,
+                  authProvider.getUserId,
+                ),
         ),
         ChangeNotifierProxyProvider<Auth, AvailabilityProvider>(
           create: (ctx) => AvailabilityProvider(),
@@ -120,7 +135,7 @@ class MyApp extends StatelessWidget {
               textTheme: TextThemes.customText,
               elevatedButtonTheme: ButtonThemes.elevatedButton,
               bottomAppBarTheme: AppBarThemes.bottomNav()),
-          home: HomeScreen(auth),
+          home: Builder(builder: (context) => HomeScreen(auth, context)),
           routes: {
             TabScreen.routeName: (ctx) => const TabScreen(),
             LoginScreen.routeName: (ctx) => const LoginScreen(),

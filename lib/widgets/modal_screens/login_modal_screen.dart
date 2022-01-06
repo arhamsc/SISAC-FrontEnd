@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../screens/student_faculty_screens/tab_screen.dart';
+import '../../screens/other_sceens/restaurant_home_screen.dart';
 
 import '../../utils/helpers/error_dialog.dart';
 
@@ -65,11 +66,16 @@ class _InputColumnState extends State<InputColumn> {
           _isLoading = true;
         });
         InputColumn._formKey.currentState?.save();
-        await authProvider.login(_username, _password);
+        await authProvider.login(_username, _password, context);
         setState(
           () {
             _isLoading = false;
-            Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
+            if (authProvider.getRole == 'Other') {
+              Navigator.of(context)
+                  .pushReplacementNamed(RestaurantHomeScreen.routeName);
+            } else {
+              Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
+            }
           },
         );
       } on HttpException catch (error) {
