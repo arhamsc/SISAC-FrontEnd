@@ -80,11 +80,13 @@ class _RatingScreenState extends State<RatingScreen> {
                       ),
                     ),
                   ),
+                  
                   Expanded(
                     child: BottomNav(
                       isSelected: "Cafetaria",
                     ),
                   ),
+                  
                 ],
               ),
             );

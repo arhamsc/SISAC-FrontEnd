@@ -38,8 +38,8 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
+        
         title: "Cafetaria",
         context: context,
         subtitle: "Received Orders",

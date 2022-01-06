@@ -12,9 +12,14 @@ import './cafetaria_screens/rating_screen.dart';
 
 import '../../widgets/home/home_main_card.dart';
 
-class CafetariaScreen extends StatelessWidget {
-  const CafetariaScreen({Key? key}) : super(key: key);
+class CafetariaScreen extends StatefulWidget {
+   CafetariaScreen({Key? key, required this.pageController}) : super(key: key);
+  PageController? pageController;
+  @override
+  State<CafetariaScreen> createState() => _CafetariaScreenState();
+}
 
+class _CafetariaScreenState extends State<CafetariaScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(

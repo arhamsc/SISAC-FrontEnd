@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+import 'package:sisac/utils/general/screen_size.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:sisac/utils/helpers/http_exception.dart';
 
 import './announcements_screen.dart';
 import './cafetaria_screen.dart';
@@ -9,67 +12,114 @@ import './home_screen.dart';
 
 import '../../widgets/app_bar.dart';
 import '../../widgets/bottom_bar.dart';
-
-import '../../providers/user_provider.dart';
+import '../../widgets/app_drawer.dart';
 
 class TabScreen extends StatefulWidget {
   static const routeName = '/home';
-  const TabScreen({Key? key}) : super(key: key);
+  const TabScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TabScreen> createState() => _TabScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _TabScreenState extends State<TabScreen>
+    with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>>? _pages;
+
   int _selectedPageIndex = 2;
+
+  PageController? _tabController;
+
   @override
   void initState() {
-    _pages = [
-      {'page': const TimeTableScreen(), 'title': 'TimeTable'},
-      {'page': const AnnouncementScreen(), 'title': 'Announcements'},
-      {'page': HomeScreen(), 'title': 'Home'},
-      {'page': const StationaryScreen(), 'title': 'Stationary'},
-      {'page': const CafetariaScreen(), 'title': 'Cafetaria'},
-    ];
+    _tabController = PageController(initialPage: _selectedPageIndex);
     super.initState();
   }
 
-  void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
+  void selectPage(int index) {
+    _tabController!.animateToPage(index,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _selectedPageIndex = index;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: Consumer<Auth>(
-          
-          builder: (ctx, authData, _) => Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    try {
-                      authData.logout(context);
-                    } catch (error) {
-                      print(error);
-                    }
-                  },
-                  child: Text("Logout"))
-            ],
-          ),
+    _pages = [
+      {
+        'page': TimeTableScreen(
+          pageController: _tabController,
         ),
-      ),
+        'title': 'TimeTable'
+      },
+      {
+        'page': AnnouncementScreen(
+          pageController: _tabController,
+        ),
+        'title': 'Announcements'
+      },
+      {
+        'page': HomeScreen(
+          pageController: _tabController!,
+        ),
+        'title': 'Home'
+      },
+      {
+        'page': StationaryScreen(
+          pageController: _tabController,
+        ),
+        'title': 'Stationary'
+      },
+      {
+        'page': CafetariaScreen(
+          pageController: _tabController,
+        ),
+        'title': 'Cafetaria'
+      },
+    ];
+
+    return Scaffold(
+      drawer: AppDrawer(pageController: _tabController!,),
       appBar: BaseAppBar.getAppBar(
           title: _pages![_selectedPageIndex]['title'], context: context),
-      body: _pages![_selectedPageIndex]['page'],
+      body: ExpandablePageView(
+        controller: _tabController,
+        onPageChanged: (newPage) {
+          setState(() {
+            _selectedPageIndex = newPage;
+          });
+        },
+        children: _pages!
+            .map(
+              (element) => Container(
+                constraints: BoxConstraints(
+                  maxHeight: ScreenSize.usableHeight(context),
+                ),
+                child: element['page'] as Widget,
+              ),
+            )
+            .toList(),
+      ),
       extendBody: true,
       bottomNavigationBar: BottomNavBar(
         currentPageIndex: _selectedPageIndex,
-        selectPage: _selectPage,
+        selectPage: selectPage,
       ),
     );
   }
 }
+
+/**
+ * 
+ * ElevatedButton(
+                onPressed: () {
+                  try {
+                    authData.logout(context);
+                  } catch (error) {
+                    throw HttpException(error.toString());
+                  }
+                },
+                child: Text("Logout"),
+              ),
+ */

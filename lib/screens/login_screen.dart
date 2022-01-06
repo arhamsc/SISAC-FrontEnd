@@ -33,11 +33,14 @@ class LoginScreen extends StatelessWidget {
             Center(
               heightFactor: 2.0,
               child: Container(
-                height: ScreenSize.screenHeight(context) * 0.2,
-                width: ScreenSize.screenWidth(context) * 0.45,
+                height: ScreenSize.screenHeight(context) * 0.3,
+                width: ScreenSize.screenWidth(context) * 0.65,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
                   borderRadius: BorderRadius.circular(10),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('assets/images/SISAC.png'),
+                  ),
                 ),
               ),
             ),

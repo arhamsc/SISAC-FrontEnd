@@ -30,7 +30,7 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      
       appBar: BaseAppBar.getAppBar(
         title: "Cafetaria",
         context: context,

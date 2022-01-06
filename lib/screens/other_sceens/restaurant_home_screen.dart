@@ -7,11 +7,12 @@ import './isAvailable_screen.dart';
 import '../../widgets/home/home_main_card.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/cafetaria/bottom_nav.dart';
+import '../../widgets/cafetaria/restaurant/restaurant_drawer.dart';
 
 import '../../utils/general/customColor.dart';
 import '../../utils/general/screen_size.dart';
 
-import '../../providers/cafetaria/restaurant_providers.dart';
+
 import '../../providers/user_provider.dart';
 
 class RestaurantHomeScreen extends StatelessWidget {
@@ -24,18 +25,7 @@ class RestaurantHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
           title: "Restaurant", context: context, subtitle: "Home"),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                userP.logout(context);
-              },
-              child: Text("Logout"),
-            ),
-          ],
-        ),
-      ),
+      drawer: RestaurantDrawer(),
       body: Column(
         children: [
           SizedBox(

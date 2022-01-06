@@ -26,7 +26,7 @@ class _OrderCardState extends State<OrderCard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 25),
+        const SizedBox(height: 10),
         Center(
           child: Container(
             height: ScreenSize.screenHeight(context) * .108,
@@ -124,6 +124,7 @@ class _OrderCardState extends State<OrderCard> {
             ),
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }

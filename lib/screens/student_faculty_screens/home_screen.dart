@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 
+import './tab_screen.dart';
+
 import '../../widgets/home/home_main_card.dart';
 import '../../widgets/home/home_row_cards.dart';
 
 import '../../utils/general/screen_size.dart';
 import '../../utils/general/customColor.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  HomeScreen({Key? key, required this.pageController}) : super(key: key);
 
+  PageController pageController;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final appBarHeight = AppBar().preferredSize.height;
+
   @override
   Widget build(BuildContext context) {
     final bottomHeight = ScreenSize.screenHeight(context) * 0.17;
@@ -25,12 +35,20 @@ class HomeScreen extends StatelessWidget {
             HomeMainCard(
               mainTitle: "Time Table",
               buttonTitle: "Click to View",
-              buttonFunction: () {},
+              buttonFunction: () {
+                widget.pageController.animateToPage(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
             ),
             Container(
               child: Column(
                 children: [
-                  HomeRowCards(),
+                  HomeRowCards(
+                    pageController: widget.pageController,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -44,7 +62,13 @@ class HomeScreen extends StatelessWidget {
             HomeMainCard(
               mainTitle: "Cafetaria",
               buttonTitle: "Click to visit",
-              buttonFunction: () {},
+              buttonFunction: () {
+                widget.pageController.animateToPage(
+                  4,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
               bgColor: SecondaryPallete.tertiary,
             ),
           ],

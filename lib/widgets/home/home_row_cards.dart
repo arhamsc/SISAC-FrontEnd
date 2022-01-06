@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import '../../utils/general/screen_size.dart';
 import '../../utils/general/customColor.dart';
 
-class HomeRowCards extends StatelessWidget {
-  const HomeRowCards({Key? key}) : super(key: key);
+class HomeRowCards extends StatefulWidget {
+  HomeRowCards({Key? key, required this.pageController}) : super(key: key);
+  PageController pageController;
 
+  @override
+  State<HomeRowCards> createState() => _HomeRowCardsState();
+}
+
+class _HomeRowCardsState extends State<HomeRowCards> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +27,11 @@ class HomeRowCards extends StatelessWidget {
             const SizedBox(width: 10),
             RowCard(
               title: "Announcement",
-              gestureFunction: () {},
+              gestureFunction: () => widget.pageController.animateToPage(
+                1,
+                duration: const Duration(microseconds: 500),
+                curve: Curves.easeInOut,
+              ),
             ),
             const SizedBox(width: 10),
             RowCard(
@@ -31,7 +41,11 @@ class HomeRowCards extends StatelessWidget {
             const SizedBox(width: 10),
             RowCard(
               title: "Stationary",
-              gestureFunction: () {},
+              gestureFunction: () => widget.pageController.animateToPage(
+                3,
+                duration: const Duration(microseconds: 500),
+                curve: Curves.easeInOut,
+              ),
             ),
             const SizedBox(width: 10),
           ],
@@ -41,7 +55,7 @@ class HomeRowCards extends StatelessWidget {
   }
 }
 
-class RowCard extends StatelessWidget {
+class RowCard extends StatefulWidget {
   const RowCard({
     Key? key,
     required this.title,
@@ -52,9 +66,17 @@ class RowCard extends StatelessWidget {
   final Function gestureFunction;
 
   @override
+  State<RowCard> createState() => _RowCardState();
+}
+
+class _RowCardState extends State<RowCard> {
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => gestureFunction,
+    return ElevatedButton(
+      onPressed: () {
+        widget.gestureFunction();
+      },
+      style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(0)),
       child: Container(
         width: ScreenSize.screenWidth(context) * .37,
         height: ScreenSize.screenHeight(context) * .15,
@@ -65,7 +87,7 @@ class RowCard extends StatelessWidget {
         alignment: Alignment.center,
         child: Center(
           child: Text(
-            title,
+            widget.title,
             style: Theme.of(context).textTheme.headline5!.copyWith(
               color: SecondaryPallete.secondary,
               shadows: [

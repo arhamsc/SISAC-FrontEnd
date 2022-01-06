@@ -12,9 +12,14 @@ import '../../utils/general/customColor.dart';
 
 import '../../providers/stationary/availability_providers.dart';
 
-class StationaryScreen extends StatelessWidget {
-  const StationaryScreen({Key? key}) : super(key: key);
+class StationaryScreen extends StatefulWidget {
+  StationaryScreen({Key? key, required this.pageController}) : super(key: key);
+  PageController? pageController;
+  @override
+  State<StationaryScreen> createState() => _StationaryScreenState();
+}
 
+class _StationaryScreenState extends State<StationaryScreen> {
   @override
   Widget build(BuildContext context) {
     final availP = Provider.of<AvailabilityProvider>(context);

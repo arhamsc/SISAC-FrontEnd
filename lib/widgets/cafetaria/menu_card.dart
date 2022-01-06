@@ -23,7 +23,7 @@ class _MenuCardState extends State<MenuCard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 25),
+        const SizedBox(height: 10),
         Center(
           child: Stack(
             children: [
@@ -118,7 +118,7 @@ class _MenuCardState extends State<MenuCard> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                             "Ratings: ${widget.menu.rating.toString()}"),
+                                                "Ratings: ${widget.menu.rating.toString()}"),
                                             Text("Price: ${widget.menu.price}"),
                                           ],
                                         ),
@@ -205,6 +205,7 @@ class _MenuCardState extends State<MenuCard> {
             ],
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }

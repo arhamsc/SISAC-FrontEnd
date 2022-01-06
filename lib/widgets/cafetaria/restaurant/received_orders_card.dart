@@ -44,9 +44,7 @@ class _RestaurantReceivedOrdersCardState
 
   String get dishImage {
     var imageUrl;
-    widget.menu.forEach((element) {
-      print("Name ${element.name}, id: ${element.id}");
-    });
+
     widget.menu.forEach((element) {
       element.id == dish.id ? imageUrl = element.imageUrl : '';
     });

@@ -74,7 +74,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               iconSize: 24,
               onTap: widget.selectPage,
               currentIndex: widget.currentPageIndex,
-              selectedIconTheme: const IconThemeData(size: 30),
+              selectedIconTheme: const IconThemeData(size: 30),           
             ),
             Expanded(
               child: Container(

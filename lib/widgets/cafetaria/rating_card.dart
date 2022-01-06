@@ -10,10 +10,9 @@ import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/themes.dart';
 
-
-
 class RatingCard extends StatefulWidget {
-  RatingCard({Key? key, required this.menu, required this.setStateFunc}) : super(key: key);
+  RatingCard({Key? key, required this.menu, required this.setStateFunc})
+      : super(key: key);
 
   final MenuItem menu;
   final Function setStateFunc;
@@ -36,7 +35,7 @@ class _RatingCardState extends State<RatingCard> {
     return Column(
       key: widget.key,
       children: [
-        const SizedBox(height: 25),
+        const SizedBox(height: 10),
         Center(
           child: Stack(
             children: [
@@ -78,7 +77,7 @@ class _RatingCardState extends State<RatingCard> {
                                 onRatingUpdate: (rat) async {
                                   setState(
                                     () {
-                                      newRating = rat.toInt();
+                                      newRating = rat;
                                     },
                                   );
                                 },
@@ -254,6 +253,7 @@ class _RatingCardState extends State<RatingCard> {
             ],
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }

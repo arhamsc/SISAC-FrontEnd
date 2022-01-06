@@ -35,11 +35,12 @@ class Auth with ChangeNotifier {
   Timer? _authTimer;
   String? _role;
   String? _name;
+  String? _username;
 
-  List<User> _user = [];
+  late User _user;
 
-  List<User> get getUser {
-    return [..._user];
+  User get getUser {
+    return _user;
   }
 
   Uri url(String endPoint) {
@@ -49,7 +50,8 @@ class Auth with ChangeNotifier {
   }
 
 //below is the method for logging in the user from our API
-  Future<void> login(String? username, String? password, BuildContext context) async {
+  Future<void> login(
+      String? username, String? password, BuildContext context) async {
     final url = this.url('login');
 
     try {
@@ -79,7 +81,7 @@ class Auth with ChangeNotifier {
         role: decodedData['role'],
         name: decodedData['name'],
       );
-      _user.add(newUser);
+      _user = newUser;
       //if there is an error then it is thrown here
       if (json.decode(response.body)['error'] != null) {
         throw HttpException(decodedData['error']['message']);
@@ -87,7 +89,7 @@ class Auth with ChangeNotifier {
       _token = decodedData['token'];
       _userId = decodedData['id'];
       _role = decodedData['role'];
-      _name = decodedData['name'];
+      _username = decodedData['username'];
       _expiryDate = DateTime.now().add(
         Duration(
           milliseconds: decodedData['expiresIn'],
@@ -102,8 +104,9 @@ class Auth with ChangeNotifier {
         'expiryDate': _expiryDate?.toIso8601String(),
         'role': _role,
         'name': _name,
+        'username': _username
       });
-      print(userData);
+      //print(userData);
       await prefs.setString('userData', userData);
     } catch (error) {
       rethrow;
@@ -143,7 +146,10 @@ class Auth with ChangeNotifier {
     _userId = extractedData['userId'] as String;
     _role = extractedData['role'] as String;
     _name = extractedData['name'] as String;
+    _username = extractedData['username'] as String;
     _expiryDate = expiryDate;
+    _user =
+        User(id: _userId!, name: _name!, role: _role!, username: _username!);
     notifyListeners();
     //print("$_token $_userId $_role");
     _autoLogout(context);
@@ -156,12 +162,14 @@ class Auth with ChangeNotifier {
     _userId = null;
     _expiryDate = null;
     _role = null;
+    _username = null;
 
     if (_authTimer != null) {
       _authTimer?.cancel();
       _authTimer = null;
     }
-    Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        LoginScreen.routeName, (Route<dynamic> route) => false);
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -173,11 +181,12 @@ class Auth with ChangeNotifier {
       _authTimer?.cancel();
     }
     final timeToExpire = _expiryDate?.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timeToExpire as int), () => logout(context));
+    _authTimer =
+        Timer(Duration(seconds: timeToExpire as int), () => logout(context));
   }
 
   String? get getRole {
-    print(_role);
+    // print(_role);
     return _role;
   }
 

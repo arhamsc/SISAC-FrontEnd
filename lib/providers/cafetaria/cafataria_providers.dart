@@ -15,16 +15,17 @@ class MenuItem {
   final num rating;
   final int price;
   final String imageUrl;
+  final String imageFileName;
   bool isAvailable = true;
-  MenuItem({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.rating,
-    required this.price,
-    required this.imageUrl,
-    required this.isAvailable,
-  });
+  MenuItem(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.rating,
+      required this.price,
+      required this.imageUrl,
+      required this.isAvailable,
+      required this.imageFileName});
 
   // @override
   // String toString() {
@@ -69,25 +70,26 @@ class MenuItemProvider with ChangeNotifier {
         //print(decodedData);
         throw HttpException(decodedData['error']['message']);
       }
+      // print(decodedData);
       List<MenuItem> loadedItems = [];
-      //print(decodedData);
+      // print(decodedData);
       //print(decodedData['items']);
       decodedData.forEach(
         (key, value) {
           loadedItems.add(
             MenuItem(
-              id: value['_id'],
-              name: value['name'],
-              description: value['description'],
-              rating: value['rating'],
-              price: value['price'],
-              imageUrl: value['imageUrl'],
-              isAvailable: value['isAvailable'],
-            ),
+                id: value['_id'],
+                name: value['name'],
+                description: value['description'],
+                rating: value['rating'],
+                price: value['price'],
+                imageUrl: value['imageUrl'],
+                isAvailable: value['isAvailable'],
+                imageFileName: value['imageFileName']),
           );
         },
       );
-
+      
       _menuItems = loadedItems;
 
       notifyListeners();
