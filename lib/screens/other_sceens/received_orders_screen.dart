@@ -31,15 +31,15 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero);
-    Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
+    Future.delayed(Duration.zero, () {
+      Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-        
         title: "Cafetaria",
         context: context,
         subtitle: "Received Orders",

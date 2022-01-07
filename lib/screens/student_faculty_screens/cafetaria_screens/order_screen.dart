@@ -30,7 +30,7 @@ class _OrderScreenState extends State<OrderScreen> {
     super.initState();
     () async {
       await Future.delayed(Duration.zero, () async {
-        final menuP = Provider.of<MenuItemProvider>(context);
+        final menuP = Provider.of<MenuItemProvider>(context, listen: false);
         await menuP.fetchMenu();
       });
     }();
