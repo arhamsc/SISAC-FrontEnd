@@ -8,12 +8,27 @@ import '../../utils/helpers/http_exception.dart';
 import '../user_provider.dart';
 import './cafataria_providers.dart';
 
+class OrderedItems {
+  final String id;
+  final String name;
+  final String imageUrl;
+  bool isAvailable;
+  OrderedItems({
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    required this.isAvailable,
+  });
+}
+
 class ReceivedOrderItem {
   final int quantity;
   final int itemPrice;
-  final String itemId;
+  final OrderedItems items;
+  final String id;
   ReceivedOrderItem({
-    required this.itemId,
+    required this.id,
+    required this.items,
     required this.quantity,
     required this.itemPrice,
   });
@@ -82,18 +97,39 @@ class RestaurantProvider with ChangeNotifier {
         throw HttpException(decodedData['error']['message']);
       List<ReceivedOrder> loadedOrders = [];
       List<ReceivedOrderItem> loadedOrderItems = [];
+      OrderedItems loadedOrderedItems =
+          OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
       User loadedUser = User(id: '', name: '', role: '', username: '');
+      //print(decodedData);
       decodedData.forEach(
         (key, value) {
+          // print("Item:  ${value['orderItems']}");
           value['orderItems'].forEach(
             (val) {
+              print("Ordered Item: ${val['orderedItem']}");
+              getLoadedOrderedItem() {
+                for (var key in val['orderedItem'].keys) {
+                  loadedOrderedItems = OrderedItems(
+                    id: val['orderedItem']['_id'],
+                    name: val['orderedItem']['name'],
+                    imageUrl: val['orderedItem']['imageUrl'],
+                    isAvailable: val['orderedItem']['isAvailable'],
+                  );
+                  return loadedOrderedItems;
+                }
+              }
+
+              //print("Function: ${}");
+              //print(loadedOrderedItems);
               loadedOrderItems.add(
                 ReceivedOrderItem(
-                  itemId: val['_id'],
+                  id: val['_id'],
+                  items: getLoadedOrderedItem()!,
                   itemPrice: val['price'],
                   quantity: val['quantity'],
                 ),
               );
+              //print('loadedOrderItems');
               return loadedOrderItems;
             },
           );

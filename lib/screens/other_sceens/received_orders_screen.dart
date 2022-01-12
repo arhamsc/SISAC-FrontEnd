@@ -52,6 +52,7 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (dataSnapShot.error != null) {
+            
             Future.delayed(
               Duration.zero,
               () => dialog(
