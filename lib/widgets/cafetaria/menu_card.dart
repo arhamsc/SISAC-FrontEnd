@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../providers/cafetaria/cafataria_providers.dart';
-
-import '../../screens/student_faculty_screens/cafetaria_screens/place_order_screen.dart';
+import '../../providers/cafetaria/cart_provider.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/themes.dart';
+
+import '../../utils/helpers/snack_bar.dart';
 
 class MenuCard extends StatefulWidget {
   MenuCard({Key? key, required this.menu}) : super(key: key);
@@ -21,6 +23,7 @@ class _MenuCardState extends State<MenuCard> {
   var _expanded = false;
   @override
   Widget build(BuildContext context) {
+    final cartP = Provider.of<CartProvider>(context, listen: false);
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -67,16 +70,17 @@ class _MenuCardState extends State<MenuCard> {
                 height: ScreenSize.screenHeight(context) * .108,
                 width: ScreenSize.screenWidth(context) * .85,
                 decoration: BoxDecoration(
-                    color: SecondaryPallete.primary,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 6,
-                        color: Colors.black54,
-                        spreadRadius: 2,
-                        offset: Offset(0, -2),
-                      ),
-                    ]),
+                  color: SecondaryPallete.primary,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 6,
+                      color: Colors.black54,
+                      spreadRadius: 2,
+                      offset: Offset(0, -2),
+                    ),
+                  ],
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -133,24 +137,42 @@ class _MenuCardState extends State<MenuCard> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height:
                                         ScreenSize.screenHeight(context) * .02,
                                     width:
-                                        ScreenSize.screenWidth(context) * .177,
+                                        ScreenSize.screenWidth(context) * .22,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          PlaceOrderScreen.routeName,
-                                          arguments: {
-                                            'name': widget.menu.name,
-                                            'price': widget.menu.price,
-                                            'menu': widget.menu,
-                                          },
+                                        // Navigator.pushNamed(
+                                        //   context,
+                                        //   PlaceOrderScreen.routeName,
+                                        //   arguments: {
+                                        //     'name': widget.menu.name,
+                                        //     'price': widget.menu.price,
+                                        //     'menu': widget.menu,
+                                        //   },
+                                        // );
+                                        cartP.addCartItem(
+                                          widget.menu.id,
+                                          cartP
+                                              .getItemPrice(
+                                                  widget.menu.price, 1)
+                                              .toInt(),
+                                          1,
+                                        );
+                                        customSnackBar(
+                                          ctx: context,
+                                          title:
+                                              '${widget.menu.name} added to the cart',
+                                          undoFunc: () => cartP
+                                              .deleteCartItem(widget.menu.id, widget.menu.price),
                                         );
                                       },
-                                      child: const Text("Order"),
+                                      child: const Text(
+                                        "Add to Cart",
+                                        softWrap: false,
+                                      ),
                                       style: ButtonThemes.elevatedButtonSmall
                                           .copyWith(
                                         backgroundColor:
@@ -161,7 +183,7 @@ class _MenuCardState extends State<MenuCard> {
                                     ),
                                   ),
                                   const SizedBox(width: 10),
-                                  Container(
+                                  SizedBox(
                                     height:
                                         ScreenSize.screenHeight(context) * .02,
                                     width:

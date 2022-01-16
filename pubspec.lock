@@ -83,6 +83,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_elegant_number_button:
+    dependency: "direct main"
+    description:
+      name: flutter_elegant_number_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -163,6 +170,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  number_inc_dec:
+    dependency: "direct main"
+    description:
+      name: number_inc_dec
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.0"
   path:
     dependency: transitive
     description:

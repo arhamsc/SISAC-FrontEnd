@@ -3,15 +3,15 @@ import 'package:sisac/utils/general/customColor.dart';
 import '../utils/general/screen_size.dart';
 
 class BaseAppBar {
-  static getAppBar(
-      {required String title,
-      required BuildContext context,
-      String? subtitle,
-      bool? available,
-      String? availabilityText}) {
+  static getAppBar({
+    required String title,
+    required BuildContext context,
+    String? subtitle,
+    bool? available,
+    String? availabilityText,
+  }) {
     return AppBar(
       toolbarHeight: ScreenSize.screenHeight(context) * 0.1,
-      //automaticallyImplyLeading: false,
       leadingWidth: 25,
       title: subtitle == null
           ? Text(title)

@@ -5,29 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utils/helpers/http_exception.dart';
-import './cafataria_providers.dart';
+import './restaurant_providers.dart';
 
 class MenuOrder {
   final int quantity;
   final int itemPrice;
   final String itemId;
+
   MenuOrder({
     required this.itemId,
     required this.quantity,
     required this.itemPrice,
   });
-  factory MenuOrder.fromJson(Map<String, dynamic> parsedJson) {
-    return MenuOrder(
-        itemId: parsedJson['_id'],
-        itemPrice: parsedJson['price'],
-        quantity: parsedJson['quantity']);
-  }
 }
 
 class Order {
   final String id;
   final String user;
-  final List<MenuOrder> menuOrders;
+  final List<ReceivedOrderItem> menuOrders;
   final int totalAmount;
   final String paymentStatus;
   final String transactionId;
@@ -71,42 +66,6 @@ class OrderProvider with ChangeNotifier {
     };
   }
 
-  Future<void> makeOrder(MenuItem menu, int quantity, String paymentStatus,
-      String txnId, String createdOn) async {
-    final url = orderUrl();
-    final price = menu.price * quantity;
-    try {
-      final response = await http.post(url,
-          headers: _headers,
-          body: jsonEncode({
-            // TODO: when implementing cart send array of menu Items
-            'orderItem': //*use .map method on the list when creating a cart to send data.
-                [
-              {
-                '_id': menu.id,
-                'quantity': quantity,
-                'price': price,
-              }
-            ],
-            'order': {
-              'amount': price,
-              'paymentStatus': paymentStatus,
-              'transactionId': txnId,
-              'createdOn': createdOn,
-            }
-          }));
-      var decodedData = json.decode(response.body) as Map<String, dynamic>;
-      if (decodedData['error'] != null) {
-        //print(decodedData['error']['message']);
-        throw HttpException(decodedData['error']['message']);
-      }
-      notifyListeners();
-      //print(decodedData);
-    } catch (error) {
-      throw HttpException(error.toString());
-    }
-  }
-
   Future<void> fetchUserOrders() async {
     final url = orderUrl();
     try {
@@ -117,32 +76,57 @@ class OrderProvider with ChangeNotifier {
       }
       //print(decodedData);
       List<Order> loadedOrders = [];
-      List<MenuOrder> loadedMap = [];
+      List<ReceivedOrderItem> loadedOrderItems = [];
+      OrderedItems loadedOrderedItems =
+          OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
       decodedData.forEach(
         (key, value) {
-          //print(value['ordersa']);
           value['orderItems'].forEach(
             (val) {
-              loadedMap.add(
-                MenuOrder(
-                  itemId: val['_id'],
+              //print("Ordered Item: ${val['orderedItem']}");
+              getLoadedOrderedItem() {
+                for (var key in val['orderedItem'].keys) {
+                  loadedOrderedItems = OrderedItems(
+                    id: val['orderedItem']['_id'],
+                    name: val['orderedItem']['name'],
+                    imageUrl: val['orderedItem']['imageUrl'],
+                    isAvailable: val['orderedItem']['isAvailable'],
+                  );
+                  return loadedOrderedItems;
+                }
+              }
+
+              //print("Function: ${}");
+              //print(loadedOrderedItems);
+              loadedOrderItems.add(
+                ReceivedOrderItem(
+                  id: val['_id'],
+                  items: getLoadedOrderedItem()!,
                   itemPrice: val['price'],
                   quantity: val['quantity'],
                 ),
               );
-              return loadedMap;
+              //print('loadedOrderItems');
+              return loadedOrderItems;
             },
           );
+          //print(loadedOrderItems);
+
+          //print(getLoadedUser());
           loadedOrders.add(
             Order(
-                id: value['_id'],
-                user: value['user'],
-                totalAmount: value['amount'],
-                paymentStatus: value['paymentStatus'],
-                transactionId: value['transactionId'],
-                createdOn: DateTime.parse(value['createdOn']),
-                menuOrders: loadedMap),
+              id: value['_id'],
+              user: value['user'],
+              menuOrders: loadedOrderItems,
+              totalAmount: value['amount'],
+              paymentStatus: value['paymentStatus'],
+              transactionId: value['transactionId'],
+              createdOn: DateTime.parse(
+                value['createdOn'],
+              ),
+            ),
           );
+          //print(loadedOrders);
         },
       );
       _userOrders = loadedOrders;

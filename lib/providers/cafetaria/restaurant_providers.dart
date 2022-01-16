@@ -106,7 +106,7 @@ class RestaurantProvider with ChangeNotifier {
           // print("Item:  ${value['orderItems']}");
           value['orderItems'].forEach(
             (val) {
-              print("Ordered Item: ${val['orderedItem']}");
+              //print("Ordered Item: ${val['orderedItem']}");
               getLoadedOrderedItem() {
                 for (var key in val['orderedItem'].keys) {
                   loadedOrderedItems = OrderedItems(

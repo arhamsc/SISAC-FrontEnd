@@ -66,16 +66,6 @@ class _OrderCardState extends State<OrderCard> {
                                         .headline5!
                                         .copyWith(fontWeight: FontWeight.w500),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          "Quantity: ${widget.order.menuOrders[widget.orderNum].quantity}"),
-                                      Text(
-                                          "Price: ${widget.order.menuOrders[widget.orderNum].itemPrice}"),
-                                    ],
-                                  ),
                                 ],
                               ),
                             ),

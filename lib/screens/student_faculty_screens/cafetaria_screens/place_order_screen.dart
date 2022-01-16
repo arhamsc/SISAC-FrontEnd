@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:sisac/utils/helpers/error_dialog.dart';
 
 import '../../../providers/cafetaria/order_providers.dart';
@@ -64,20 +63,12 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         _isLoading = true;
       });
       try {
-        await orderProvider.makeOrder(
-          arguments['menu'],
-          quantity,
-          "Completed",
-          getRandomString(10),
-          DateFormat('yyyy-MM-dd').format(
-            DateTime.now(),
-          ),
-        );
         setState(() {
           _isLoading = false;
           Navigator.of(context).pop();
         });
-        await dialog(ctx: context, errorMessage: "Order Placed", title: "Success");
+        await dialog(
+            ctx: context, errorMessage: "Order Placed", title: "Success");
       } on HttpException catch (error) {
         await dialog(ctx: context, errorMessage: error.message);
         setState(() {

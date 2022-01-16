@@ -11,6 +11,7 @@ import './screens/student_faculty_screens/cafetaria_screens/cafetaria_menu.dart'
 import './screens/student_faculty_screens/cafetaria_screens/place_order_screen.dart';
 import './screens/student_faculty_screens/cafetaria_screens/order_screen.dart';
 import './screens/student_faculty_screens/cafetaria_screens/rating_screen.dart';
+import './screens/student_faculty_screens/cafetaria_screens/cart_screen.dart';
 import './screens/other_sceens/restaurant_home_screen.dart';
 import './screens/other_sceens/received_orders_screen.dart';
 import './screens/other_sceens/isAvailable_screen.dart';
@@ -30,6 +31,7 @@ import './providers/cafetaria/restaurant_providers.dart';
 import './providers/stationary/availability_providers.dart';
 import './providers/stationary/books_material_providers.dart';
 import './providers/stationary/material_available_providers.dart';
+import './providers/cafetaria/cart_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,10 +57,8 @@ class _MyAppState extends State<MyApp> {
 
         var role = getRole();
         if (role == 'Other') {
-          
           return const RestaurantHomeScreen();
         } else {
-          
           return const TabScreen();
         }
       } else {
@@ -125,6 +125,14 @@ class _MyAppState extends State<MyApp> {
                   authData.getUserId,
                 ),
         ),
+        ChangeNotifierProxyProvider<Auth, CartProvider>(
+          create: (ctx) => CartProvider(),
+          update: (ctx, authData, cartData) => cartData!
+            ..update(
+              authData.token,
+              authData.getUserId,
+            ),
+        )
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -152,6 +160,7 @@ class _MyAppState extends State<MyApp> {
             BooksMaterialScreen.routeName: (ctx) => const BooksMaterialScreen(),
             MaterialAvailableScreen.routeName: (ctx) =>
                 const MaterialAvailableScreen(),
+            CartScreen.routeName: (ctx) => const CartScreen(),
           },
         ),
       ),

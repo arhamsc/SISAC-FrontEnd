@@ -40,6 +40,8 @@ dependencies:
   shared_preferences: ^2.0.11
   flutter_rating_bar: ^4.0.0
   expandable_page_view: ^1.0.9
+  number_inc_dec: ^0.8.0
+  flutter_elegant_number_button: ^0.0.6
   
 
 dev_dependencies:

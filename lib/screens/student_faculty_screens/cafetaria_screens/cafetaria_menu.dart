@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sisac/utils/general/customColor.dart';
 
 import '../../../providers/cafetaria/cafataria_providers.dart';
+
+import './cart_screen.dart';
 
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/cafetaria/menu_card.dart';
@@ -19,7 +22,6 @@ class CafetariaMenu extends StatefulWidget {
 }
 
 class _CafetariaMenuState extends State<CafetariaMenu> {
-  var _expanded = false;
 
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<MenuItemProvider>(context, listen: false)
@@ -29,7 +31,6 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
         title: "Cafetaria",
         context: context,
@@ -66,22 +67,15 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
               child: Column(
                 children: [
                   Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) =>
-                                MenuCard(menu: menuData.items[i]),
-                            itemCount: menuData.items.length,
-                          ),
+                    builder: (ctx, menuData, child) => SingleChildScrollView(
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) =>
+                              MenuCard(menu: menuData.items[i]),
+                          itemCount: menuData.items.length,
                         ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Cafetaria",
                     ),
                   ),
                 ],
@@ -89,6 +83,22 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(CartScreen.routeName);
+        },
+        isExtended: false,
+        child: const Icon(
+          Icons.shopping_cart,
+          color: SecondaryPallete.primary,
+        ),
+        backgroundColor: Palette.quinaryDefault,
+      ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
+      bottomNavigationBar: BottomNav(
+        isSelected: "Cafetaria",
       ),
     );
   }
