@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
 import '../general/customColor.dart';
 
-void customSnackBar({
-  required BuildContext ctx,
-  required String title,
-  required Function undoFunc,
-}) {
+void customSnackBar(
+    {required BuildContext ctx,
+    required String title,
+    required Function undoFunc,
+    bool error = false}) {
   ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
   ScaffoldMessenger.of(ctx).showSnackBar(
     SnackBar(
       content: Text(
         title,
         textAlign: TextAlign.center,
+        style: TextStyle(
+          color: !error ? Palette.tertiaryDefault : Colors.red,
+        ),
       ),
       duration: const Duration(seconds: 2),
-      action: SnackBarAction(
-        label: 'Undo',
-        onPressed: () => undoFunc(),
-        textColor: Palette.quinaryDefault,
-      ),
+      action: !error
+          ? SnackBarAction(
+              label: 'Undo',
+              onPressed: () => undoFunc(),
+              textColor: Palette.quinaryDefault,
+            )
+          : null,
     ),
   );
-
-  // return SnackBar(
-  //   content: Text(
-  //     title,
-  //     textAlign: TextAlign.center,
-  //   ),
-  //   duration: const Duration(seconds: 2),
-  //   action: SnackBarAction(
-  //     label: 'Undo',
-  //     onPressed: () => undoFunc(),
-  //     textColor: Palette.quinaryDefault,
-  //   ),
-  // );
 }

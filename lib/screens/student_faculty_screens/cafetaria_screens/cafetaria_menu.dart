@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:sisac/utils/general/customColor.dart';
 
 import '../../../providers/cafetaria/cafataria_providers.dart';
@@ -22,10 +23,27 @@ class CafetariaMenu extends StatefulWidget {
 }
 
 class _CafetariaMenuState extends State<CafetariaMenu> {
-
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<MenuItemProvider>(context, listen: false)
         .fetchMenu();
+  }
+
+  DateTime now = DateTime.now();
+
+  DateTime availableDurationStart = DateFormat('yyyy-MM-dd hh:mm:ss').parseLoose(
+      '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day} 10:30:00');
+  DateTime availableDurationEnd = DateFormat('yyyy-MM-dd hh:mm:ssa').parseLoose(
+      '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day} 12:30:00');
+  DateTimeRange get duration {
+    return DateTimeRange(
+        start: availableDurationStart, end: availableDurationEnd);
+  }
+
+  bool get availability {
+    return now.isAfter(availableDurationStart) &&
+            now.isBefore(availableDurationEnd)
+        ? true
+        : false;
   }
 
   @override
@@ -35,8 +53,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
         title: "Cafetaria",
         context: context,
         subtitle: "Menu",
-        // TODO: Implement time range
-        available: true,
+        available: availability ? true : false,
         availabilityText: "PreOrder",
       ),
       body: FutureBuilder(
@@ -71,8 +88,10 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                       child: SizedBox(
                         height: ScreenSize.usableHeight(context),
                         child: ListView.builder(
-                          itemBuilder: (ctx, i) =>
-                              MenuCard(menu: menuData.items[i]),
+                          itemBuilder: (ctx, i) => MenuCard(
+                            menu: menuData.items[i],
+                            preOrder: availability,
+                          ),
                           itemCount: menuData.items.length,
                         ),
                       ),

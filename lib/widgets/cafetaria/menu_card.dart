@@ -11,10 +11,11 @@ import '../../../utils/general/themes.dart';
 import '../../utils/helpers/snack_bar.dart';
 
 class MenuCard extends StatefulWidget {
-  MenuCard({Key? key, required this.menu}) : super(key: key);
+  MenuCard({Key? key, required this.menu, required this.preOrder})
+      : super(key: key);
 
   final MenuItem menu;
-
+  final bool preOrder;
   @override
   _MenuCardState createState() => _MenuCardState();
 }
@@ -143,32 +144,44 @@ class _MenuCardState extends State<MenuCard> {
                                     width:
                                         ScreenSize.screenWidth(context) * .22,
                                     child: ElevatedButton(
-                                      onPressed: () {
-                                        // Navigator.pushNamed(
-                                        //   context,
-                                        //   PlaceOrderScreen.routeName,
-                                        //   arguments: {
-                                        //     'name': widget.menu.name,
-                                        //     'price': widget.menu.price,
-                                        //     'menu': widget.menu,
-                                        //   },
-                                        // );
-                                        cartP.addCartItem(
-                                          widget.menu.id,
-                                          cartP
-                                              .getItemPrice(
-                                                  widget.menu.price, 1)
-                                              .toInt(),
-                                          1,
-                                        );
-                                        customSnackBar(
-                                          ctx: context,
-                                          title:
-                                              '${widget.menu.name} added to the cart',
-                                          undoFunc: () => cartP
-                                              .deleteCartItem(widget.menu.id, widget.menu.price),
-                                        );
-                                      },
+                                      onPressed: widget.menu.isAvailable &&
+                                              widget.preOrder
+                                          ? () {
+                                              // Navigator.pushNamed(
+                                              //   context,
+                                              //   PlaceOrderScreen.routeName,
+                                              //   arguments: {
+                                              //     'name': widget.menu.name,
+                                              //     'price': widget.menu.price,
+                                              //     'menu': widget.menu,
+                                              //   },
+                                              // );
+                                              cartP.addCartItem(
+                                                widget.menu.id,
+                                                cartP
+                                                    .getItemPrice(
+                                                        widget.menu.price, 1)
+                                                    .toInt(),
+                                                1,
+                                              );
+                                              customSnackBar(
+                                                ctx: context,
+                                                title:
+                                                    '${widget.menu.name} added to the cart',
+                                                undoFunc: () =>
+                                                    cartP.deleteCartItem(
+                                                        widget.menu.id,
+                                                        widget.menu.price),
+                                              );
+                                            }
+                                          : () {
+                                              customSnackBar(
+                                                ctx: context,
+                                                title: 'Item not available',
+                                                undoFunc: () {},
+                                                error: true,
+                                              );
+                                            },
                                       child: const Text(
                                         "Add to Cart",
                                         softWrap: false,
@@ -177,7 +190,10 @@ class _MenuCardState extends State<MenuCard> {
                                           .copyWith(
                                         backgroundColor:
                                             MaterialStateProperty.all(
-                                          Palette.quaternaryDefault,
+                                          widget.menu.isAvailable &&
+                                                  widget.preOrder
+                                              ? Palette.quaternaryDefault
+                                              : SecondaryPallete.quaternary,
                                         ),
                                       ),
                                     ),

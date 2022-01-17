@@ -40,6 +40,9 @@ class Order {
 
 class OrderProvider with ChangeNotifier {
   List<Order> _userOrders = [];
+  OrderedItems _orderedItem =
+      OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
+  List<ReceivedOrderItem> _orderItems = [];
   late String _authToken;
   late String _userId;
 
@@ -51,6 +54,14 @@ class OrderProvider with ChangeNotifier {
 
   List<Order> get userOrders {
     return [..._userOrders];
+  }
+
+  OrderedItems get orderedItem {
+    return _orderedItem;
+  }
+
+  List<ReceivedOrderItem> get orderItems {
+    return [..._orderItems];
   }
 
   Uri orderUrl([String endPoint = '']) {
@@ -85,7 +96,7 @@ class OrderProvider with ChangeNotifier {
             (val) {
               //print("Ordered Item: ${val['orderedItem']}");
               getLoadedOrderedItem() {
-                for (var key in val['orderedItem'].keys) {
+                for (var key in val['orderedItem'].values) {
                   loadedOrderedItems = OrderedItems(
                     id: val['orderedItem']['_id'],
                     name: val['orderedItem']['name'],
@@ -106,10 +117,12 @@ class OrderProvider with ChangeNotifier {
                   quantity: val['quantity'],
                 ),
               );
-              //print('loadedOrderItems');
+              //print(loadedOrderItems);
+              //print("End of First");
               return loadedOrderItems;
             },
           );
+          //print("End of full orderItem");
           //print(loadedOrderItems);
 
           //print(getLoadedUser());
@@ -126,13 +139,25 @@ class OrderProvider with ChangeNotifier {
               ),
             ),
           );
+
+          //print("End of Full ORDERS");
           //print(loadedOrders);
         },
       );
+      _orderItems = loadedOrderItems;
+      _orderedItem = loadedOrderedItems;
       _userOrders = loadedOrders;
       notifyListeners();
     } catch (error) {
       throw HttpException(error.toString());
     }
+  }
+
+  int get totalOrderLength {
+    var total = 0;
+    _userOrders.forEach((element) {
+      total += element.menuOrders.length;
+    });
+    return total;
   }
 }

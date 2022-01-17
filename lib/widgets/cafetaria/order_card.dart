@@ -28,90 +28,197 @@ class _OrderCardState extends State<OrderCard> {
       children: [
         const SizedBox(height: 10),
         Center(
-          child: Container(
-            height: ScreenSize.screenHeight(context) * .108,
-            width: ScreenSize.screenWidth(context) * .85,
-            decoration: BoxDecoration(
-              color: SecondaryPallete.primary,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 6,
-                  color: Colors.black54,
-                  spreadRadius: 2,
-                  offset: Offset(0, -2),
+          child: Stack(
+            children: [
+              // AnimatedContainer(
+              //   duration: const Duration(milliseconds: 500),
+              //   height: _expanded ? ScreenSize.screenHeight(context) * .4 : 0,
+              //   width: ScreenSize.screenWidth(context) * .85,
+              //   decoration: BoxDecoration(
+              //     color: Palette.senaryDefault,
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(top: 50),
+              //     child: Center(
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(25),
+              //         child: SingleChildScrollView(
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             mainAxisSize: MainAxisSize.min,
+              //             children: [
+              //               Text(
+              //                 "Order Items",
+              //                 style: Theme.of(context)
+              //                     .textTheme
+              //                     .bodyText2!
+              //                     .copyWith(
+              //                       fontWeight: FontWeight.bold,
+              //                       fontSize: 20,
+              //                     ),
+              //               ),
+              //               const SizedBox(height: 20),
+              //               ListView.builder(
+              //                 physics: NeverScrollableScrollPhysics(),
+              //                 shrinkWrap: true,
+              //                 itemBuilder: (ctx, index) => Padding(
+              //                   padding: const EdgeInsets.all(5.0),
+              //                   child: Text(
+              //                     "${index + 1}. ${widget.order.menuOrders[index].items.name}, Quantity: ${widget.order.menuOrders[index].quantity}",
+              //                     style: Theme.of(context)
+              //                         .textTheme
+              //                         .bodyText1!
+              //                         .copyWith(fontSize: 15),
+              //                   ),
+              //                 ),
+              //                 itemCount: widget.order.menuOrders.length,
+              //               ),
+              //               const SizedBox(height: 20),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Container(
+                height: ScreenSize.screenHeight(context) * .12,
+                width: ScreenSize.screenWidth(context) * .85,
+                decoration: BoxDecoration(
+                  color: SecondaryPallete.primary,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 6,
+                      color: Colors.black54,
+                      spreadRadius: 2,
+                      offset: Offset(0, -2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 10),
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Order: ${(widget.orderNum + 1).toString()}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                          ),
+                                          Text(
+                                            "\u{20B9} ${(widget.order.totalAmount).toString()}\u2070\u2070",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 10)
+                              ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Center(
+                                child: Text(
+                                  "Payment: ${widget.order.paymentStatus}",
+                                ),
+                              ),
+                              SizedBox(
+                                height: ScreenSize.screenHeight(context) * .008,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(
-                                    "Order: ${(widget.orderNum + 1).toString()}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5!
-                                        .copyWith(fontWeight: FontWeight.w500),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Palette.quaternaryDefault,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    width: ScreenSize.screenWidth(context) * .6,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                          horizontal: 20,
+                                        ),
+                                        child: Text(
+                                          "Ordered On: ${DateFormat('dd-MM-yyyy - kk:mm').format(widget.order.createdOn)}",
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Palette.quaternaryDefault,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    height: ScreenSize.screenHeight(context) *
+                                        0.035,
+                                    width:
+                                        ScreenSize.screenWidth(context) * .08,
+                                    child: IconButton(
+                                      padding: const EdgeInsets.all(0),
+                                      color: Palette.quinaryDefault,
+                                      icon: _expanded
+                                          ? const Icon(Icons.arrow_drop_up)
+                                          : const Icon(Icons.arrow_drop_down),
+                                      onPressed: () async {
+                                        setState(() {
+                                          _expanded = !_expanded;
+                                        });
+                                      },
+                                      splashRadius: 1,
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(width: 10)
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                              const SizedBox(width: 10),
+                            ],
+                          ),
                           const SizedBox(
-                            width: 5,
-                          ),
-                          Center(
-                            child: Text(
-                              "Ordered On: ${DateFormat('dd-MM-yyyy').format(widget.order.createdOn)}",
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Palette.quaternaryDefault,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5,
-                                  horizontal: 20,
-                                ),
-                                child: Text(
-                                  "Total Amount: ${widget.order.totalAmount}",
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
+                            height: 5,
+                          )
                         ],
                       ),
-                      const SizedBox(
-                        height: 5,
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 10),
