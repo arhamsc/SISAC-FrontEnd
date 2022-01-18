@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 
 import '../../utils/helpers/http_exception.dart';
 import '../user_provider.dart';
-import './cafataria_providers.dart';
+
+import '../../constants/request_url.dart' as req_url;
 
 class OrderedItems {
   final String id;
@@ -68,9 +69,7 @@ class RestaurantProvider with ChangeNotifier {
 
   Uri restaurantUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    return Uri.parse(
-        'http://192.168.1.25:3000/cafetaria/orders/restaurant$end');
-    //return Uri.parse('http://172.20.10.3:3000/cafetaria/orders/restaurant$end');
+    return req_url.url('cafetaria/orders/restaurant$end');
   }
 
   List<ReceivedOrder> get receivedOrders {

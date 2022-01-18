@@ -9,6 +9,8 @@ import '../utils/helpers/http_exception.dart';
 
 import '../screens/login_screen.dart';
 
+import '../constants/request_url.dart' as req_url;
+
 //below is the student model
 class User {
   final String id;
@@ -43,16 +45,12 @@ class Auth with ChangeNotifier {
     return _user!;
   }
 
-  Uri url(String endPoint) {
-    final url = Uri.parse('http://192.168.1.25:3000/$endPoint');
-    //final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
-    return url;
-  }
+  
 
 //below is the method for logging in the user from our API
   Future<void> login(
       String? username, String? password, BuildContext context) async {
-    final url = this.url('login');
+    final url = req_url.url('login');
 
     try {
       final response = await http.post(

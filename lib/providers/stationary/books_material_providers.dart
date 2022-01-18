@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 
 import '../../utils/helpers/http_exception.dart';
 
+import '../../constants/request_url.dart' as req_url;
+
 class BooksMaterial {
   final String id;
   final String name;
@@ -42,8 +44,7 @@ class BooksMaterialProvider with ChangeNotifier {
 
   Uri booksMaterialUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    return Uri.parse('http://192.168.1.25:3000/stationary/booksmaterial$end');
-    //return Uri.parse('http://172.20.10.3:3000/stationary/booksmaterial$end');
+    return req_url.url('stationary/booksmaterial$end');
   }
 
   Map<String, String> get _headers {

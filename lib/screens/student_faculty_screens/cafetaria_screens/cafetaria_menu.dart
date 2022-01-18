@@ -23,6 +23,15 @@ class CafetariaMenu extends StatefulWidget {
 }
 
 class _CafetariaMenuState extends State<CafetariaMenu> {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      final menuP = Provider.of<MenuItemProvider>(context, listen: false);
+      menuP.getRecommendations();
+    }());
+    super.initState();
+  }
+
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<MenuItemProvider>(context, listen: false)
         .fetchMenu();
@@ -48,6 +57,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final menuP = Provider.of<MenuItemProvider>(context, listen: false);
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
         title: "Cafetaria",
@@ -57,8 +67,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
         availabilityText: "PreOrder",
       ),
       body: FutureBuilder(
-        future:
-            Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
+        future: menuP.fetchMenu(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -91,6 +100,10 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                           itemBuilder: (ctx, i) => MenuCard(
                             menu: menuData.items[i],
                             preOrder: availability,
+                           
+                            showBadge: menuData.recommendations.any(
+                                (element) =>
+                                    element.itemId == menuData.items[i].id),
                           ),
                           itemCount: menuData.items.length,
                         ),

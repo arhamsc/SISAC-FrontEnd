@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../constants/request_url.dart' as req_url;
 import '../../utils/helpers/http_exception.dart';
 
 class MenuItem {
@@ -24,18 +25,24 @@ class MenuItem {
       required this.imageUrl,
       required this.isAvailable,
       required this.imageFileName});
+}
 
-  // @override
-  // String toString() {
-  //   return '[id: $id, name: $name, description: $description, rating: $rating, price: $price, imageUrl: $imageUrl, isAvailable: $isAvailable]';
-  // }
-
+class Recommendations {
+  final String id;
+  final String itemId;
+  final int count;
+  Recommendations({
+    required this.id,
+    required this.itemId,
+    required this.count,
+  });
 }
 
 class MenuItemProvider with ChangeNotifier {
   late String _authToken;
   late String _userId;
   List<MenuItem> _menuItems = [];
+  List<Recommendations> _recommendations = [];
   void update(token, userId) {
     token != null ? _authToken = token : _authToken = '';
     userId != null ? _userId = userId : _userId = '';
@@ -46,10 +53,13 @@ class MenuItemProvider with ChangeNotifier {
     return [..._menuItems];
   }
 
+  List<Recommendations> get recommendations {
+    return [..._recommendations];
+  }
+
   Uri cafetariaUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    return Uri.parse('http://192.168.1.25:3000/cafetaria$end');
-    //return Uri.parse('http://172.20.10.3:3000/cafetaria$end');
+    return req_url.url('cafetaria$end');
   }
 
   Map<String, String> get _headers {
@@ -87,7 +97,7 @@ class MenuItemProvider with ChangeNotifier {
           );
         },
       );
-      
+
       _menuItems = loadedItems;
 
       notifyListeners();
@@ -146,6 +156,31 @@ class MenuItemProvider with ChangeNotifier {
       }
     } catch (error) {
       currentStatus = oldStatus;
+      throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> getRecommendations() async {
+    final url = cafetariaUrl('recommendation');
+    try {
+      final response = await http.get(url, headers: _headers);
+      final decodedData = json.decode(response.body) as Map<String, dynamic>;
+      if (decodedData['error'] != null) {
+        throw HttpException(decodedData['error']['message']);
+      }
+      List<Recommendations> loadedRecoms = [];
+      decodedData.forEach((key, value) {
+        loadedRecoms.add(
+          Recommendations(
+            id: value['_id'],
+            itemId: value['item'],
+            count: value['count'],
+          ),
+        );
+      });
+      _recommendations = loadedRecoms;
+      
+    } catch (error) {
       throw HttpException(error.toString());
     }
   }

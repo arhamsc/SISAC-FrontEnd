@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../utils/helpers/http_exception.dart';
 import './order_providers.dart';
 
+import '../../constants/request_url.dart' as req_url;
 class CartProvider with ChangeNotifier {
   late String _authToken;
   late String _userId;
@@ -20,8 +21,7 @@ class CartProvider with ChangeNotifier {
 
   Uri orderUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    return Uri.parse('http://192.168.1.25:3000/cafetaria/orders$end');
-    //return Uri.parse('http://172.20.10.3:3000/cafetaria/orders$end');
+    return req_url.url('cafetaria/orders$end');
   }
 
   Map<String, String> get _headers {

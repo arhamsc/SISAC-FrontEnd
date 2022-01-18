@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../../utils/helpers/http_exception.dart';
 
+import '../../constants/request_url.dart' as req_url;
 class Availability {
   final String id;
   final String materialType;
@@ -34,8 +35,7 @@ class AvailabilityProvider with ChangeNotifier {
 
   Uri availabilityUrl([String endPoint = '']) {
     final end = endPoint.isEmpty ? '' : '/$endPoint';
-    return Uri.parse('http://192.168.1.25:3000/stationary/availability$end');
-    //return Uri.parse('http://172.20.10.3:3000/stationary/availability$end');
+    return req_url.url('stationary/availability$end');
   }
 
   Map<String, String> get _headers {
