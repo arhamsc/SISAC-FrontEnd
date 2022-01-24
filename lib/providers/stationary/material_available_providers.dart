@@ -1,3 +1,4 @@
+//This contains all the methods dealing with the materials that are available in the stationary.
 import 'dart:async';
 import 'dart:convert';
 
@@ -8,6 +9,7 @@ import '../../utils/helpers/http_exception.dart';
 
 import '../../constants/request_url.dart' as req_url;
 
+//Model for the available material
 class MaterialAvailable {
   final String id;
   final String materialType;
@@ -52,6 +54,7 @@ class MaterialAvailableProvider with ChangeNotifier {
     };
   }
 
+  //Method to fetch all the materials from the database.
   Future<void> fetchAllMaterials() async {
     final url = materialAvailableUrl();
     try {

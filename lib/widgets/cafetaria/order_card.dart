@@ -3,14 +3,11 @@ import 'package:intl/intl.dart';
 
 import '../../providers/cafetaria/order_providers.dart';
 
-import '../../screens/student_faculty_screens/cafetaria_screens/place_order_screen.dart';
-
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
-import '../../../utils/general/themes.dart';
 
 class OrderCard extends StatefulWidget {
-  OrderCard({Key? key, required this.order, required this.orderNum})
+  const OrderCard({Key? key, required this.order, required this.orderNum})
       : super(key: key);
 
   final Order order;

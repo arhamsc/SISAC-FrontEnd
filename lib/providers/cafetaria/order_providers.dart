@@ -1,3 +1,4 @@
+//This provider contains all the methods related to Orders of a Student/Faculty
 import 'dart:async';
 import 'dart:convert';
 
@@ -8,6 +9,8 @@ import '../../utils/helpers/http_exception.dart';
 import './restaurant_providers.dart';
 
 import '../../constants/request_url.dart' as req_url;
+
+//Model to store a particular menu item for a particular order of a user. Each order can have multiple order Item a.k.a menuOrder
 class MenuOrder {
   final int quantity;
   final int itemPrice;
@@ -20,6 +23,7 @@ class MenuOrder {
   });
 }
 
+//Model for the Order
 class Order {
   final String id;
   final String user;
@@ -77,6 +81,7 @@ class OrderProvider with ChangeNotifier {
     };
   }
 
+  //Method to fetch Orders of the logged in User from the server.
   Future<void> fetchUserOrders() async {
     final url = orderUrl();
     try {
@@ -85,16 +90,15 @@ class OrderProvider with ChangeNotifier {
       if (decodedData['error'] != null) {
         throw HttpException(decodedData['error']['message']);
       }
-      //print(decodedData);
       List<Order> loadedOrders = [];
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =
           OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
       decodedData.forEach(
         (key, value) {
+          loadedOrderItems = [];
           value['orderItems'].forEach(
             (val) {
-              //print("Ordered Item: ${val['orderedItem']}");
               getLoadedOrderedItem() {
                 for (var key in val['orderedItem'].values) {
                   loadedOrderedItems = OrderedItems(
@@ -107,8 +111,6 @@ class OrderProvider with ChangeNotifier {
                 }
               }
 
-              //print("Function: ${}");
-              //print(loadedOrderedItems);
               loadedOrderItems.add(
                 ReceivedOrderItem(
                   id: val['_id'],
@@ -117,15 +119,9 @@ class OrderProvider with ChangeNotifier {
                   quantity: val['quantity'],
                 ),
               );
-              //print(loadedOrderItems);
-              //print("End of First");
               return loadedOrderItems;
             },
           );
-          //print("End of full orderItem");
-          //print(loadedOrderItems);
-
-          //print(getLoadedUser());
           loadedOrders.add(
             Order(
               id: value['_id'],
@@ -139,9 +135,6 @@ class OrderProvider with ChangeNotifier {
               ),
             ),
           );
-
-          //print("End of Full ORDERS");
-          //print(loadedOrders);
         },
       );
       _orderItems = loadedOrderItems;
@@ -153,6 +146,7 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
+  //Getter to get the total order length or number of order items in all the user orders.
   int get totalOrderLength {
     var total = 0;
     _userOrders.forEach((element) {

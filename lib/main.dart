@@ -1,3 +1,5 @@
+//THIS IS THE MAIN FILE OF THE PROJECT.
+
 //*package imports
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +14,10 @@ import './screens/student_faculty_screens/cafetaria_screens/place_order_screen.d
 import './screens/student_faculty_screens/cafetaria_screens/order_screen.dart';
 import './screens/student_faculty_screens/cafetaria_screens/rating_screen.dart';
 import './screens/student_faculty_screens/cafetaria_screens/cart_screen.dart';
-import './screens/other_sceens/restaurant_home_screen.dart';
-import './screens/other_sceens/received_orders_screen.dart';
-import './screens/other_sceens/isAvailable_screen.dart';
+import './screens/other_sceens/restaurant_screens/restaurant_home_screen.dart';
+import './screens/other_sceens/restaurant_screens/received_orders_screen.dart';
+import './screens/other_sceens/restaurant_screens/isAvailable_screen.dart';
+import './screens/other_sceens/restaurant_screens/add_edit_menuItem_screen.dart';
 import './screens/student_faculty_screens/stationary/availability_screen.dart';
 import './screens/student_faculty_screens/stationary/books_material_screen.dart';
 import './screens/student_faculty_screens/stationary/material_available_screen.dart';
@@ -33,10 +36,12 @@ import './providers/stationary/books_material_providers.dart';
 import './providers/stationary/material_available_providers.dart';
 import './providers/cafetaria/cart_provider.dart';
 
+//Main function of the app, dart syntax. It is where the execution begins, similar to C.
 void main() {
   runApp(const MyApp());
 }
 
+//this is the ROOT widget which contains all our themes, routes, provider declarations and home screen.
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -46,34 +51,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-
   @override
   Widget build(BuildContext context) {
-    Widget HomeScreen(Auth func, BuildContext context) {
-      if (func.isAuth) {
-        getRole() {
-          return func.getRole;
-        }
-
-        var role = getRole();
-        if (role == 'Other') {
-          return const RestaurantHomeScreen();
-        } else {
-          return const TabScreen();
-        }
-      } else {
-        return FutureBuilder(
-          future: func.tryAutoLogin(context),
-          builder: (ctx, authResultSnapShot) =>
-              authResultSnapShot.connectionState == ConnectionState.waiting
-                  ? const SplashScreen()
-                  : const LoginScreen(),
-        );
-      }
-    }
-
+    //Below the multiple providers used in this project
     return MultiProvider(
       providers: [
+        //Auth provider, it is also the base of all other providers as we pass the login token to other providers also
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
@@ -85,6 +68,7 @@ class _MyAppState extends State<MyApp> {
               authProvider.getUserId,
             ),
         ),
+        //these providers depend on Auth provider
         ChangeNotifierProxyProvider<Auth, OrderProvider>(
           create: (context) => OrderProvider(),
           update: (ctx, authProvider, orderProvider) => orderProvider!
@@ -134,16 +118,21 @@ class _MyAppState extends State<MyApp> {
             ),
         )
       ],
+      //Consumer auth is from Provider package
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           title: 'SISAC',
+          //below is the Theme data for the app, the actual specification in defined in Utility -> General folder.
           theme: ThemeData(
-              appBarTheme: AppBarThemes.appBarTheme(),
-              scaffoldBackgroundColor: Palette.primaryDefault,
-              textTheme: TextThemes.customText,
-              elevatedButtonTheme: ButtonThemes.elevatedButton,
-              bottomAppBarTheme: AppBarThemes.bottomNav()),
-          home: Builder(builder: (context) => HomeScreen(auth, context)),
+            appBarTheme: AppBarThemes.appBarTheme(),
+            scaffoldBackgroundColor: Palette.primaryDefault,
+            textTheme: TextThemes.customText,
+            elevatedButtonTheme: ButtonThemes.elevatedButton,
+            bottomAppBarTheme: AppBarThemes.bottomNav(),
+          ),
+          //below is the home route or the home page
+          home: HomePage(auth: auth),
+          //All the named routes are declared here.
           routes: {
             TabScreen.routeName: (ctx) => const TabScreen(),
             LoginScreen.routeName: (ctx) => const LoginScreen(),
@@ -161,9 +150,36 @@ class _MyAppState extends State<MyApp> {
             MaterialAvailableScreen.routeName: (ctx) =>
                 const MaterialAvailableScreen(),
             CartScreen.routeName: (ctx) => const CartScreen(),
+            AddEditMenuItemScreen.routeName: (ctx) =>
+                const AddEditMenuItemScreen(),
           },
         ),
       ),
     );
+  }
+}
+
+//This is the Sub Root widget which will render the required screen according to the conditions
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.auth}) : super(key: key);
+  final Auth auth;
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.auth.isAuth
+        ? widget.auth.getRole == 'Other'
+            ? const RestaurantHomeScreen()
+            : const TabScreen()
+        : FutureBuilder(
+            future: widget.auth.tryAutoLogin(context),
+            builder: (ctx, authResultSnapShot) =>
+                authResultSnapShot.connectionState == ConnectionState.waiting
+                    ? const SplashScreen()
+                    : const LoginScreen(),
+          );
   }
 }

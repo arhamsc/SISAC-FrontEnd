@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import './received_orders_screen.dart';
-import './isAvailable_screen.dart';
+import 'received_orders_screen.dart';
+import 'isAvailable_screen.dart';
 
-import '../../widgets/home/home_main_card.dart';
-import '../../widgets/app_bar.dart';
-import '../../widgets/cafetaria/bottom_nav.dart';
-import '../../widgets/cafetaria/restaurant/restaurant_drawer.dart';
+import '../../../widgets/home/home_main_card.dart';
+import '../../../widgets/app_bar.dart';
+import '../../../widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/cafetaria/restaurant/restaurant_drawer.dart';
 
-import '../../utils/general/customColor.dart';
-import '../../utils/general/screen_size.dart';
-
-
-import '../../providers/user_provider.dart';
+import '../../../utils/general/customColor.dart';
+import '../../../utils/general/screen_size.dart';
 
 class RestaurantHomeScreen extends StatelessWidget {
   static const routeName = 'cafetaria/restaurant';
@@ -21,10 +17,12 @@ class RestaurantHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userP = Provider.of<Auth>(context);
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-          title: "Restaurant", context: context, subtitle: "Home"),
+        title: "Restaurant",
+        context: context,
+        subtitle: "Home",
+      ),
       drawer: RestaurantDrawer(),
       body: Column(
         children: [

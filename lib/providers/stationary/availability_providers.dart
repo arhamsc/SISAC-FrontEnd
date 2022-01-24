@@ -1,3 +1,4 @@
+//This contains all the methods for fetching the availability of Bluebooks and records.
 import 'dart:async';
 import 'dart:convert';
 
@@ -7,6 +8,8 @@ import 'package:http/http.dart' as http;
 import '../../utils/helpers/http_exception.dart';
 
 import '../../constants/request_url.dart' as req_url;
+
+//Model for each item
 class Availability {
   final String id;
   final String materialType;
@@ -45,6 +48,7 @@ class AvailabilityProvider with ChangeNotifier {
     };
   }
 
+  //method to fetch the items along with their availability.
   Future<void> fetchAvailableItems() async {
     final url = availabilityUrl();
     try {

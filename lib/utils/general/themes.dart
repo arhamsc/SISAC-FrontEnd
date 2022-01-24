@@ -76,6 +76,44 @@ class ButtonThemes {
     ),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
   );
+  static ButtonStyle elevatedButtonInput = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(Palette.quaternaryDefault),
+    foregroundColor: MaterialStateProperty.all(Palette.quinaryDefault),
+    textStyle: MaterialStateProperty.all(
+      TextThemes.customText.bodyText2!.copyWith(fontSize: 15),
+    ),
+    padding: MaterialStateProperty.all(
+      const EdgeInsets.symmetric(
+        vertical: 0,
+        horizontal: 20,
+      ),
+    ),
+    shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
+  static ButtonStyle elevatedButtonConfirmation = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all(Palette.quaternaryDefault),
+    foregroundColor: MaterialStateProperty.all(Palette.quinaryDefault),
+    textStyle: MaterialStateProperty.all(
+      TextThemes.customText.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+    ),
+    padding: MaterialStateProperty.all(
+      const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 20,
+      ),
+    ),
+    shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
 }
 
 class AppBarThemes {

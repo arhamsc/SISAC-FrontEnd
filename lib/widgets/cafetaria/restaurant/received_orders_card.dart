@@ -11,7 +11,7 @@ import '../../../utils/general/customColor.dart';
 import '../../../utils/helpers/error_dialog.dart';
 
 class RestaurantReceivedOrdersCard extends StatefulWidget {
-  RestaurantReceivedOrdersCard(
+  const RestaurantReceivedOrdersCard(
       {Key? key,
       required this.menu,
       required this.order,
@@ -33,28 +33,9 @@ class _RestaurantReceivedOrdersCardState
     extends State<RestaurantReceivedOrdersCard> {
   var _expanded = false;
 
-  // MenuItem get dish {
-  //   // print(widget.menu
-  //   //     .firstWhere((element) =>
-  //   //         element.id == widget.order.menuOrders[widget.index].itemId)
-  //   //     .id);
-  //   return widget.menu.firstWhere((element) =>
-  //       element.id == widget.order.menuOrders[widget.index].itemId);
-  // }
-
   String get dishImage {
     return widget.order.menuOrders[widget.index].items.imageUrl;
   }
-
-  // String get menuName {
-  //   var name;
-
-  //   widget.menu.forEach((element) {
-  //     element.id == dish.id ? name = element.name : '';
-  //   });
-
-  //   return name;
-  // }
 
   bool _isLoading = false;
 
@@ -105,28 +86,32 @@ class _RestaurantReceivedOrdersCardState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              "Order Items",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                            ),
                             const SizedBox(height: 20),
                             ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (ctx, index) => Padding(
                                 padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                  "${index + 1}. ${widget.order.menuOrders[index].items.name}, Quantity: ${widget.order.menuOrders[index].quantity}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(fontSize: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      "${index + 1}. ${widget.order.menuOrders[index].items.name}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(fontSize: 15),
+                                    ),
+                                    const Expanded(child: SizedBox()),
+                                    Text(
+                                      "Quantity: ${widget.order.menuOrders[index].quantity}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(fontSize: 15),
+                                    ),
+                                  ],
                                 ),
                               ),
                               itemCount: widget.order.menuOrders.length,

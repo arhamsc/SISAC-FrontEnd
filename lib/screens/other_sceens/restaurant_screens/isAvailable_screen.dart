@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../providers/cafetaria/cafataria_providers.dart';
 
-import '../../../widgets/app_bar.dart';
-import '../../widgets/cafetaria/restaurant/isAvailable_cards.dart';
-import '../../../widgets/cafetaria/bottom_nav.dart';
+import '../../../screens/other_sceens/restaurant_screens/add_edit_menuItem_screen.dart';
 
+import '../../../../widgets/app_bar.dart';
+import '../../../widgets/cafetaria/restaurant/isAvailable_cards.dart';
+import '../../../../widgets/cafetaria/bottom_nav.dart';
 
-import '../../../utils/helpers/error_dialog.dart';
-import '../../../utils/general/screen_size.dart';
+import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/general/screen_size.dart';
 
 class IsAvailableScreen extends StatefulWidget {
   const IsAvailableScreen({Key? key}) : super(key: key);
@@ -20,8 +21,6 @@ class IsAvailableScreen extends StatefulWidget {
 }
 
 class _IsAvailableScreenState extends State<IsAvailableScreen> {
-  var _expanded = false;
-
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<MenuItemProvider>(context, listen: false)
         .fetchMenu();
@@ -30,12 +29,14 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: BaseAppBar.getAppBar(
         title: "Cafetaria",
         context: context,
         subtitle: "Menu Available",
-        // TODO: Implement time range
+        showAddIcon: true,
+        addButtonFunc: () {
+          Navigator.of(context).pushNamed(AddEditMenuItemScreen.routeName, arguments: '');
+        },
       ),
       body: FutureBuilder(
         future:
@@ -65,20 +66,18 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
               child: Column(
                 children: [
                   Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) => IsAvailableCard(
-                              menu: menuData.items[i],
-                              setFunc: () {
-                                setState(() {});
-                              },
-                              key: Key(menuData.items[i].id),
-                            ),
-                            itemCount: menuData.items.length,
+                    builder: (ctx, menuData, child) => SingleChildScrollView(
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) => IsAvailableCard(
+                            menu: menuData.items[i],
+                            setFunc: () {
+                              setState(() {});
+                            },
+                            key: Key(menuData.items[i].id),
                           ),
+                          itemCount: menuData.items.length,
                         ),
                       ),
                     ),

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/user_provider.dart';
 
-import '../../../screens/other_sceens/received_orders_screen.dart';
-import '../../../screens/other_sceens/isAvailable_screen.dart';
+import '../../../screens/other_sceens/restaurant_screens/received_orders_screen.dart';
+import '../../../screens/other_sceens/restaurant_screens/isAvailable_screen.dart';
 
 import '../../../utils/general/customColor.dart';
 

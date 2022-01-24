@@ -1,3 +1,4 @@
+//This contains all the methods related to the User authentication
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -11,7 +12,7 @@ import '../screens/login_screen.dart';
 
 import '../constants/request_url.dart' as req_url;
 
-//below is the student model
+//Model for the User info which will be received from the server
 class User {
   final String id;
   final String username;
@@ -29,7 +30,7 @@ class User {
   }
 }
 
-//below is the auth class to authenticate the user
+//Model for Authentication info which will be stored of a user
 class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
@@ -45,9 +46,7 @@ class Auth with ChangeNotifier {
     return _user!;
   }
 
-  
-
-//below is the method for logging in the user from our API
+//Method to Login the user after authentication from the server.
   Future<void> login(
       String? username, String? password, BuildContext context) async {
     final url = req_url.url('login');
@@ -88,13 +87,16 @@ class Auth with ChangeNotifier {
       _userId = decodedData['id'];
       _role = decodedData['role'];
       _username = decodedData['username'];
+      _name = decodedData['name'];
       _expiryDate = DateTime.now().add(
         Duration(
           milliseconds: decodedData['expiresIn'],
         ),
       );
+      //Calling auto logout to start the timer for to automatically logout.
       _autoLogout(context);
-      notifyListeners();
+
+      //Using Shared preferences package to store the required info for authentication in local memory.
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
         'token': _token,
@@ -104,14 +106,14 @@ class Auth with ChangeNotifier {
         'name': _name,
         'username': _username
       });
-      //print(userData);
       await prefs.setString('userData', userData);
+      notifyListeners();
     } catch (error) {
       rethrow;
     }
   }
 
-  //local validation if token exists or not
+  //Getter to get if token is present or not with some local validation.
   String? get token {
     if (_expiryDate != null &&
         _expiryDate!.isAfter(DateTime.now()) &&
@@ -121,17 +123,19 @@ class Auth with ChangeNotifier {
     return null;
   }
 
-  //if the token exists then the user is authenticated
+  //Getter to authenticate if the token is present in the local memory.
   bool get isAuth {
     return _token != null;
   }
 
-  //to try autologging in if the token is stored in the memory
+  //Method to auto login the User by checking the user info stored in the local memory.
   Future<bool> tryAutoLogin(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return false;
     }
+
+    //Extracting the user instance from local memory and storing them in appropriate variables
     final extractedData = await json
         .decode(prefs.getString('userData') as String) as Map<String, dynamic>;
     final expiryDate = DateTime.parse(extractedData['expiryDate'] as String);
@@ -146,16 +150,19 @@ class Auth with ChangeNotifier {
     _name = extractedData['name'] as String;
     _username = extractedData['username'] as String;
     _expiryDate = expiryDate;
-    _user =
+    final newUser =
         User(id: _userId!, name: _name!, role: _role!, username: _username!);
+    _user = newUser;
     notifyListeners();
-    //print("$_token $_userId $_role $_username");
+
+    //Calling auto logout cuz this is also kind of a login itself.
     _autoLogout(context);
     return true;
   }
 
-  //logout method
+  //Method for logging out the user on the User's request
   Future<void> logout(BuildContext context) async {
+    //Setting all the authentication variables to null to logout.
     _token = null;
     _userId = null;
     _expiryDate = null;
@@ -166,28 +173,34 @@ class Auth with ChangeNotifier {
       _authTimer?.cancel();
       _authTimer = null;
     }
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        LoginScreen.routeName, (Route<dynamic> route) => false);
+    //After logout the app screen is navigated to the Login screen.
+    Navigator.of(context).popUntil(ModalRoute.withName('/'));
     notifyListeners();
+
+    //deleting the user instance stored in the memory.
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }
 
-  //to start the timer for the expiry date to auto logout after the timer ends
+  //Method to trigger autoLogout, which will start a timer from when it is called and the duration of the timer is the expiry time of the token received from the server. After the timer is up it will call the logout method.
   void _autoLogout(BuildContext context) {
     if (_authTimer != null) {
       _authTimer?.cancel();
     }
     final timeToExpire = _expiryDate?.difference(DateTime.now()).inSeconds;
-    _authTimer =
-        Timer(Duration(seconds: timeToExpire as int), () => logout(context));
+    _authTimer = Timer(
+      Duration(seconds: timeToExpire as int),
+      () => logout(context),
+    );
   }
 
+  //Getter to get user role
   String? get getRole {
     // print(_role);
     return _role;
   }
 
+  //Getter to get UserId
   String? get getUserId {
     return _userId;
   }

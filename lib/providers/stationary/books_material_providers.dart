@@ -1,3 +1,4 @@
+//This contains all the methods related to the books material part of the stationary.
 import 'dart:async';
 import 'dart:convert';
 
@@ -8,6 +9,7 @@ import '../../utils/helpers/http_exception.dart';
 
 import '../../constants/request_url.dart' as req_url;
 
+//Model for the books which will be fetched from the server.
 class BooksMaterial {
   final String id;
   final String name;
@@ -54,6 +56,7 @@ class BooksMaterialProvider with ChangeNotifier {
     };
   }
 
+  //Method to fetch all the books from the database.
   Future<void> fetchAllBooks() async {
     final url = booksMaterialUrl();
     try {

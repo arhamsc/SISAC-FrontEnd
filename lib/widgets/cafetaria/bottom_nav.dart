@@ -4,11 +4,11 @@ import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
 
 class BottomNav extends StatefulWidget {
-  BottomNav({Key? key, required this.isSelected, this.showOnlyOne})
+  const BottomNav({Key? key, required this.isSelected, this.showOnlyOne})
       : super(key: key);
 
-  String isSelected;
-  bool? showOnlyOne;
+  final String isSelected;
+  final bool? showOnlyOne;
 
   @override
   _BottomNavState createState() => _BottomNavState();
@@ -45,7 +45,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     Map<String, Widget> widgetSelector = {
       'TimeTable': IconButton(
-        icon: Icon(Icons.calendar_today),
+        icon: const Icon(Icons.calendar_today),
         onPressed: () {},
         color: selectedIcon == "TimeTable"
             ? Palette.quinaryDefault
@@ -53,7 +53,7 @@ class _BottomNavState extends State<BottomNav> {
         iconSize: selectedIcon == "TimeTable" ? 30 : 24,
       ),
       'Announcements': IconButton(
-        icon: Icon(Icons.announcement_outlined),
+        icon: const Icon(Icons.announcement_outlined),
         onPressed: () {},
         color: selectedIcon == "Announcements"
             ? Palette.quinaryDefault
@@ -61,7 +61,7 @@ class _BottomNavState extends State<BottomNav> {
         iconSize: selectedIcon == "Announcements" ? 30 : 24,
       ),
       'Home': IconButton(
-        icon: Icon(Icons.home),
+        icon: const Icon(Icons.home),
         onPressed: () {},
         color: selectedIcon == "Home"
             ? Palette.quinaryDefault
@@ -69,7 +69,7 @@ class _BottomNavState extends State<BottomNav> {
         iconSize: selectedIcon == "Home" ? 30 : 24,
       ),
       'Stationary': IconButton(
-        icon: Icon(Icons.menu_book_outlined),
+        icon: const Icon(Icons.menu_book_outlined),
         onPressed: () {},
         color: selectedIcon == "Stationary"
             ? Palette.quinaryDefault
@@ -77,7 +77,7 @@ class _BottomNavState extends State<BottomNav> {
         iconSize: selectedIcon == "Stationary" ? 30 : 24,
       ),
       'Cafetaria': IconButton(
-        icon: Icon(Icons.coffee_outlined),
+        icon: const Icon(Icons.coffee_outlined),
         onPressed: () {},
         color: selectedIcon == "Cafetaria"
             ? Palette.quinaryDefault

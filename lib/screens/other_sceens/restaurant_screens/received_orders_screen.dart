@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/cafetaria/cafataria_providers.dart';
-import '../../providers/cafetaria/restaurant_providers.dart';
+import '../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../providers/cafetaria/restaurant_providers.dart';
 
-import '../../../widgets/app_bar.dart';
-import '../../../widgets/cafetaria/bottom_nav.dart';
-import '../../widgets/cafetaria/restaurant/received_orders_card.dart';
+import '../../../../widgets/app_bar.dart';
+import '../../../../widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/cafetaria/restaurant/received_orders_card.dart';
 
-import '../../../utils/helpers/error_dialog.dart';
-import '../../../utils/general/screen_size.dart';
+import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/general/screen_size.dart';
 
 class ReceivedOrdersScreen extends StatefulWidget {
   const ReceivedOrdersScreen({Key? key}) : super(key: key);
@@ -20,8 +20,6 @@ class ReceivedOrdersScreen extends StatefulWidget {
 }
 
 class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
-  var _expanded = false;
-
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<RestaurantProvider>(context, listen: false)
         .getReceivedOrders();
@@ -29,7 +27,6 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
@@ -43,7 +40,6 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
         title: "Cafetaria",
         context: context,
         subtitle: "Received Orders",
-        // TODO: Implement time range
       ),
       body: FutureBuilder(
         future: Provider.of<RestaurantProvider>(context, listen: false)
@@ -52,7 +48,6 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (dataSnapShot.error != null) {
-            
             Future.delayed(
               Duration.zero,
               () => dialog(
@@ -75,22 +70,19 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
                 children: [
                   Consumer2<RestaurantProvider, MenuItemProvider>(
                     builder: (ctx, restaurantProvider, menuData, child) =>
-                        Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) =>
-                                RestaurantReceivedOrdersCard(
-                              order: restaurantProvider.receivedOrders[i],
-                              menu: menuData.items,
-                              index: i,
-                              setStateFunc: () {
-                                setState(() {});
-                              },
-                            ),
-                            itemCount: restaurantProvider.receivedOrders.length,
+                        SingleChildScrollView(
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) => RestaurantReceivedOrdersCard(
+                            order: restaurantProvider.receivedOrders[i],
+                            menu: menuData.items,
+                            index: i,
+                            setStateFunc: () {
+                              setState(() {});
+                            },
                           ),
+                          itemCount: restaurantProvider.receivedOrders.length,
                         ),
                       ),
                     ),

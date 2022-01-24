@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "659614678651",
+    "project_id": "sisac-b578f",
+    "storage_bucket": "sisac-b578f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659614678651:android:95a02c3fb7eb409a432cde",
+        "android_client_info": {
+          "package_name": "com.sisac.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659614678651-qontp4q3n9kirpervpbc08cpgvmc4ea0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzZrYLb8Ynuzt3KPnIfKcFqx23ry0eFzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659614678651-qontp4q3n9kirpervpbc08cpgvmc4ea0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

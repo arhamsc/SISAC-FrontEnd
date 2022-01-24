@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/cafetaria/cafataria_providers.dart';
 
+import '../../../screens/other_sceens/restaurant_screens/add_edit_menuItem_screen.dart';
+
+import '../../../widgets/ui_widgets/small_button.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
@@ -11,7 +14,7 @@ import '../../../utils/general/customColor.dart';
 import '../../../utils/helpers/error_dialog.dart';
 
 class IsAvailableCard extends StatefulWidget {
-  IsAvailableCard({Key? key, required this.menu, required this.setFunc})
+  const IsAvailableCard({Key? key, required this.menu, required this.setFunc})
       : super(key: key);
 
   final MenuItem menu;
@@ -54,7 +57,7 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
     return Column(
       key: widget.key,
       children: [
-        const SizedBox(height: 25),
+        const SizedBox(height: 10),
         Center(
           child: Container(
             height: ScreenSize.screenHeight(context) * .12,
@@ -115,30 +118,36 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(),
-                    Row(
-                      children: [
-                        Container(
-                          height: ScreenSize.screenHeight(context) * 0.04,
-                          width: ScreenSize.screenWidth(context) * .08,
-                          child: Center(
-                            child: Switch(
-                              value: widget.menu.isAvailable,
-                              onChanged: (_) async {
-                                await updateMenu(
-                                  menuP,
-                                  widget.menu.id,
-                                );
-                                //print(widget.menu.id);
-                                widget.setFunc();
-                              },
-                              activeTrackColor: Palette.quaternaryDefault,
-                              inactiveTrackColor: SecondaryPallete.quaternary,
-                              inactiveThumbColor: Palette.tertiaryDefault,
-                              activeColor: Palette.quinaryDefault,
-                            ),
-                          ),
+                    SizedBox(
+                      height: ScreenSize.screenHeight(context) * 0.04,
+                      width: ScreenSize.screenWidth(context) * .08,
+                      child: Center(
+                        child: Switch(
+                          value: widget.menu.isAvailable,
+                          onChanged: (_) async {
+                            await updateMenu(
+                              menuP,
+                              widget.menu.id,
+                            );
+
+                            widget.setFunc();
+                          },
+                          activeTrackColor: Palette.quaternaryDefault,
+                          inactiveTrackColor: SecondaryPallete.quaternary,
+                          inactiveThumbColor: Palette.tertiaryDefault,
+                          activeColor: Palette.quinaryDefault,
                         ),
-                      ],
+                      ),
+                    ),
+                    smallEleBtn(
+                      context: context,
+                      title: "Edit",
+                      onPressFunc: () {
+                        Navigator.of(context).pushNamed(
+                          AddEditMenuItemScreen.routeName,
+                          arguments: widget.menu.id,
+                        );
+                      },
                     ),
                     const SizedBox(),
                   ],
@@ -150,6 +159,7 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
             ),
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }

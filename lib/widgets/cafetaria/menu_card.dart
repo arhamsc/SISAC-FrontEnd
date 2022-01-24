@@ -156,7 +156,9 @@ class _MenuCardState extends State<MenuCard> {
                                               widget.menu.id,
                                               cartP
                                                   .getItemPrice(
-                                                      widget.menu.price, 1)
+                                                    widget.menu.price,
+                                                    1,
+                                                  )
                                                   .toInt(),
                                               1,
                                             );
@@ -166,8 +168,9 @@ class _MenuCardState extends State<MenuCard> {
                                                   '${widget.menu.name} added to the cart',
                                               undoFunc: () =>
                                                   cartP.deleteCartItem(
-                                                      widget.menu.id,
-                                                      widget.menu.price),
+                                                widget.menu.id,
+                                                widget.menu.price,
+                                              ),
                                             );
                                           }
                                         : () {

@@ -1,14 +1,18 @@
+//This Contains all the methods related to the restaurant side of the cafetaria.
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../../utils/helpers/http_exception.dart';
 import '../user_provider.dart';
 
 import '../../constants/request_url.dart' as req_url;
 
+//Model to store the specific order Item.
 class OrderedItems {
   final String id;
   final String name;
@@ -22,6 +26,7 @@ class OrderedItems {
   });
 }
 
+//Model for the ordered Items from all the users
 class ReceivedOrderItem {
   final int quantity;
   final int itemPrice;
@@ -35,6 +40,7 @@ class ReceivedOrderItem {
   });
 }
 
+//Model for the overall received Order
 class ReceivedOrder {
   final String id;
   final User user;
@@ -87,13 +93,15 @@ class RestaurantProvider with ChangeNotifier {
     };
   }
 
+  //Method to fetch ALL orders from the server
   Future<void> getReceivedOrders() async {
     final url = restaurantUrl();
     try {
       final response = await http.get(url, headers: _headers);
       final decodedData = jsonDecode(response.body);
-      if (decodedData['error'] != null)
+      if (decodedData['error'] != null) {
         throw HttpException(decodedData['error']['message']);
+      }
       List<ReceivedOrder> loadedOrders = [];
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =
@@ -102,10 +110,9 @@ class RestaurantProvider with ChangeNotifier {
       //print(decodedData);
       decodedData.forEach(
         (key, value) {
-          // print("Item:  ${value['orderItems']}");
+          loadedOrderItems = [];
           value['orderItems'].forEach(
             (val) {
-              //print("Ordered Item: ${val['orderedItem']}");
               getLoadedOrderedItem() {
                 for (var key in val['orderedItem'].keys) {
                   loadedOrderedItems = OrderedItems(
@@ -118,8 +125,6 @@ class RestaurantProvider with ChangeNotifier {
                 }
               }
 
-              //print("Function: ${}");
-              //print(loadedOrderedItems);
               loadedOrderItems.add(
                 ReceivedOrderItem(
                   id: val['_id'],
@@ -128,7 +133,6 @@ class RestaurantProvider with ChangeNotifier {
                   quantity: val['quantity'],
                 ),
               );
-              //print('loadedOrderItems');
               return loadedOrderItems;
             },
           );
@@ -178,6 +182,101 @@ class RestaurantProvider with ChangeNotifier {
     }
   }
 
+  //Method to Add a New Menu Item
+  Future<void> newMenuItem(
+      String name, String price, String description, File image) async {
+    final url = req_url.url('cafetaria/');
+    try {
+      var req = http.MultipartRequest('POST', url);
+
+      req.files.add(http.MultipartFile(
+        'image', //form field name
+        image.readAsBytes().asStream(),
+        image.lengthSync(),
+        filename: image.path,
+        contentType: MediaType('image', 'jpeg'),
+      ));
+
+      req.headers.addAll({
+        'secret_token': _authToken,
+        "Content-type": "multipart/form-data",
+      });
+
+      req.fields.addAll({
+        'menuItem[name]': name,
+        'menuItem[price]': price,
+        'menuItem[description]': description,
+      });
+
+      await req.send();
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  //Method to patch a menuItem
+  Future<void> patchMenuitem(
+    String id,
+    String name,
+    String price,
+    String description, {
+    required bool imageChanged,
+    File? image,
+  }) async {
+    final url = req_url.url('cafetaria/$id');
+    if (imageChanged && image != null) {
+      try {
+        var req = http.MultipartRequest('PATCH', url);
+
+        req.files.add(http.MultipartFile(
+          'image', //form field name
+          image.readAsBytes().asStream(),
+          image.lengthSync(),
+          filename: image.path,
+          contentType: MediaType('image', 'jpeg'),
+        ));
+
+        req.headers.addAll({
+          'secret_token': _authToken,
+          "Content-type": "multipart/form-data",
+        });
+
+        req.fields.addAll({
+          'menuItem[name]': name,
+          'menuItem[price]': price,
+          'menuItem[description]': description,
+        });
+
+        await req.send();
+      } catch (error) {
+        throw HttpException(error.toString());
+      }
+    } else {
+      try {
+        final response = await http.patch(
+          url,
+          headers: _headers,
+          body: jsonEncode(
+            {
+              'menuItem': {
+                'name': name,
+                'price': price,
+                'description': description,
+              }
+            },
+          ),
+        );
+        final decodedData = jsonDecode(response.body);
+        if (decodedData['error'] != null) {
+          throw HttpException(decodedData['error']['message']);
+        }
+      } catch (error) {
+        throw HttpException(error.toString());
+      }
+    }
+  }
+
+  //Method to delete a particular order from the Database after it has been prepared.
   Future<void> deleteOrder(String id) async {
     final url = restaurantUrl(id);
     try {
@@ -190,7 +289,7 @@ class RestaurantProvider with ChangeNotifier {
         throw HttpException(decodedData['message']);
       }
 
-      print(decodedData);
+      //print(decodedData);
     } catch (error) {
       throw HttpException(error.toString());
     }
