@@ -1,4 +1,6 @@
-# SISAC-Student Information System And Cafeteria
+# SISAC
+
+## Student Information System And Cafeteria
 
 <p align = "center"><img src="./assets/images/SISAC.png" width="200"></p>
 
