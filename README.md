@@ -1,6 +1,6 @@
 # SISAC-Student Information System And Cafeteria
 
-<p style = "text-align: center"><img src="./assets/images/SISAC.png" width="200"></p>
+<p align = "center"><img src="./assets/images/SISAC.png" width="200"></p>
 
 SISAC is an application software which is supported in android and iOS platforms.
 
