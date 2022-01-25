@@ -18,6 +18,7 @@ import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/themes.dart';
 import '../../../utils/helpers/error_dialog.dart';
 
+//This widget is for adding or editing menu Items
 class AddEditMenuItemScreen extends StatefulWidget {
   static const routeName = '/cafetaria/restaurant/addEditMenuItem';
   const AddEditMenuItemScreen({Key? key}) : super(key: key);
@@ -254,7 +255,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
       appBar: BaseAppBar.getAppBar(
         title: "Cafetaria",
         context: context,
-        subtitle: "Add Menu Item",
+        subtitle: _editing ? "Edit Menu Item" : "Add Menu Item",
         showActions: false,
       ),
       body: SizedBox(
