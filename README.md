@@ -17,7 +17,7 @@ the Assignments, Attendance etc. for the faculty.
 
 SISAC will considerably decrease the time spent on paperwork, forwarding, and
 communication gap and will efficiently increase the management of facilities, time and
-activities of the student. It will bring about the ALL IN ONE application which a university
+activities of the student. It will bring about the **_ALL IN ONE_** application which a university
 will need.
 
 ## Tech Stack
