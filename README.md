@@ -1,6 +1,6 @@
 # SISAC-Student Information System And Cafeteria
 
-![Logo](./assets/images/SISAC.png | width = 400)
+<p style = "text-align: center"><img src="./assets/images/SISAC.png" width="200"></p>
 
 SISAC is an application software which is supported in android and iOS platforms.
 
@@ -36,7 +36,7 @@ will need.
 
 ## Authors
 
-- Arham S C 1by20cs152@bmsit.in
-- Rayees Hussain 1by20cs48@bmsit.in
-- Subramanya Keshav 1by20cs192@bmsit.in
-- S Sagar 1by20cs156@bmsit.in
+-   Arham S C 1by20cs152@bmsit.in
+-   Rayees Hussain 1by20cs48@bmsit.in
+-   Subramanya Keshav 1by20cs192@bmsit.in
+-   S Sagar 1by20cs156@bmsit.in
