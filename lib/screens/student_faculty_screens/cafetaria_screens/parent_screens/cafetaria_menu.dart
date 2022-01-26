@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sisac/utils/general/customColor.dart';
 
-import '../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../functional_screens/cart_screen.dart';
 
@@ -33,8 +33,9 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
   }
 
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MenuItemProvider>(context, listen: false)
-        .fetchMenu();
+    setState(() {
+      Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
+    });
   }
 
   DateTime now = DateTime.now();
@@ -88,29 +89,21 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => SingleChildScrollView(
-                      child: SizedBox(
-                        height: ScreenSize.usableHeight(context),
-                        child: ListView.builder(
-                          itemBuilder: (ctx, i) => MenuCard(
-                            menu: menuData.items[i],
-                            preOrder: availability,
-                           
-                            showBadge: menuData.recommendations.any(
-                                (element) =>
-                                    element.itemId == menuData.items[i].id),
-                          ),
-                          itemCount: menuData.items.length,
-                        ),
-                      ),
+            return Consumer<MenuItemProvider>(
+              builder: (ctx, menuData, child) => RefreshIndicator(
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, i) => MenuCard(
+                      menu: menuData.items[i],
+                      preOrder: availability,
+                      showBadge: menuData.recommendations.any(
+                          (element) => element.itemId == menuData.items[i].id),
                     ),
+                    itemCount: menuData.items.length,
                   ),
-                ],
+                ),
               ),
             );
           }

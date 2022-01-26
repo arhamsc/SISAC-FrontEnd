@@ -19,8 +19,6 @@ class BooksMaterialScreen extends StatefulWidget {
 }
 
 class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
-  
-
   Future<void> _refreshItems(BuildContext context) async {
     return await Provider.of<BooksMaterialProvider>(context, listen: false)
         .fetchAllBooks();
@@ -29,11 +27,10 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
         title: "Stationary",
         context: context,
-        subtitle: "Availability",
+        subtitle: "Book Material",
       ),
       body: FutureBuilder(
         future: Provider.of<BooksMaterialProvider>(context, listen: false)
@@ -69,8 +66,7 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
                           height: ScreenSize.usableHeight(context),
                           child: ListView.builder(
                             itemBuilder: (ctx, i) => BooksMaterialCard(
-                              booksMaterial:
-                                  booksMaterialData.booksMaterial[i],
+                              booksMaterial: booksMaterialData.booksMaterial[i],
                               setStateFunc: () {
                                 setState(() {});
                               },

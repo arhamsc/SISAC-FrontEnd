@@ -6,9 +6,12 @@ import '../../../providers/user_provider.dart';
 import '../../../utils/general/customColor.dart';
 
 class AppDrawer extends StatelessWidget {
-  AppDrawer({Key? key, required this.pageController}) : super(key: key);
+  const AppDrawer({
+    Key? key,
+    required this.pageController,
+  }) : super(key: key);
 
-  PageController pageController;
+  final PageController pageController;
 
   @override
   Widget build(BuildContext context) {

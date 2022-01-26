@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 
-import '../../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../../providers/cafetaria/cart_provider.dart';
 
 import '../../../../../utils/general/screen_size.dart';

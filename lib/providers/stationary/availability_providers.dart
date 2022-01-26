@@ -71,7 +71,25 @@ class AvailabilityProvider with ChangeNotifier {
         },
       );
       _availableItems = loadedItems;
-      
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  /* 
+    Method to update the Availability of Bluebook or Record
+   */
+  Future<void> updateAvailability(String id, bool available) async {
+    final url = availabilityUrl(id);
+    try {
+      final response = await http.patch(
+        url,
+        body: jsonEncode(
+          {'isAvailable': available},
+        ),
+        headers: _headers,
+      );
+      req_url.checkResponseError(response);
     } catch (error) {
       throw HttpException(error.toString());
     }

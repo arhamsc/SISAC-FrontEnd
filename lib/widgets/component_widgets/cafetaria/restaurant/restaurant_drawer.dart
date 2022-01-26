@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../../../../providers/user_provider.dart';
 
-import '../../../../screens/other_sceens/restaurant_screens/parent_screens/received_orders_screen.dart';
-import '../../../../screens/other_sceens/restaurant_screens/parent_screens/isAvailable_screen.dart';
+import '../../../../screens/other_screens/restaurant_screens/parent_screens/received_orders_screen.dart';
+import '../../../../screens/other_screens/restaurant_screens/parent_screens/isAvailable_screen.dart';
 
 import '../../../../utils/general/customColor.dart';
 
 class RestaurantDrawer extends StatelessWidget {
-  RestaurantDrawer({
+  const RestaurantDrawer({
     Key? key,
   }) : super(key: key);
 

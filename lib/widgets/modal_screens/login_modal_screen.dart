@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../screens/student_faculty_screens/nav_screens/tab_screen.dart';
-import '../../screens/other_sceens/restaurant_screens/parent_screens/restaurant_home_screen.dart';
+import '../../screens/other_screens/restaurant_screens/parent_screens/restaurant_home_screen.dart';
+import '../../screens/other_screens/stationary_screens/parent_screens/stationary_home_screen.dart';
 
 import '../../utils/helpers/error_dialog.dart';
 
@@ -39,22 +40,30 @@ class LoginModalScreen extends StatelessWidget {
 
 class InputColumn extends StatefulWidget {
   static GlobalKey<FormState> _formKey = new GlobalKey();
-
   @override
   State<InputColumn> createState() => _InputColumnState();
 }
 
 class _InputColumnState extends State<InputColumn> {
   String? _username;
-
   String? _password;
 
   bool _isLoading = false;
   @override
   void initState() {
-    // TODO: implement initState
     _isLoading = false;
     super.initState();
+  }
+
+  String ScreenByRole(String role) {
+    switch (role) {
+      case "Other":
+        return RestaurantHomeScreen.routeName;
+      case "Stationary":
+        return StationaryHomeScreen.routeName;
+      default:
+        return TabScreen.routeName;
+    }
   }
 
   @override
@@ -70,12 +79,9 @@ class _InputColumnState extends State<InputColumn> {
         setState(
           () {
             _isLoading = false;
-            if (authProvider.getRole == 'Other') {
-              Navigator.of(context)
-                  .pushReplacementNamed(RestaurantHomeScreen.routeName);
-            } else {
-              Navigator.of(context).pushReplacementNamed(TabScreen.routeName);
-            }
+            Navigator.of(context).pushReplacementNamed(
+              ScreenByRole(authProvider.getRole!),
+            );
           },
         );
       } on HttpException catch (error) {
@@ -95,7 +101,7 @@ class _InputColumnState extends State<InputColumn> {
           key: InputColumn._formKey,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: ScreenSize.screenWidth(context) * 0.85,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +144,7 @@ class _InputColumnState extends State<InputColumn> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 width: ScreenSize.screenWidth(context) * 0.85,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +222,6 @@ class _RoleRowState extends State<RoleRow> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _toggleSelections[0] = true;
     super.initState();
   }
@@ -266,6 +271,6 @@ enum Roles { Student, Faculty, Other }
 
 extension ParseToString on Roles {
   String enumToString() {
-    return this.toString().split('.').last;
+    return toString().split('.').last;
   }
 }

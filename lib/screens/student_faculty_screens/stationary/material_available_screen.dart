@@ -21,18 +21,19 @@ class MaterialAvailableScreen extends StatefulWidget {
 
 class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MaterialAvailableProvider>(context, listen: false)
-        .fetchAllMaterials();
+    setState(() {
+      Provider.of<MaterialAvailableProvider>(context, listen: false)
+          .fetchAllMaterials();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
         title: "Stationary",
         context: context,
-        subtitle: "Availability",
+        subtitle: "Materials",
       ),
       body: FutureBuilder(
         future: Provider.of<MaterialAvailableProvider>(context, listen: false)
@@ -57,40 +58,29 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer<MaterialAvailableProvider>(
-                    builder: (ctx, booksMaterialData, child) => Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) => MaterialAvailableCard(
-                              materialAvailable:
-                                  booksMaterialData.materialsAvailable[i],
-                              setStateFunc: () {
-                                setState(() {});
-                              },
-                            ),
-                            itemCount:
-                                booksMaterialData.materialsAvailable.length,
-                          ),
-                        ),
-                      ),
+            return Consumer<MaterialAvailableProvider>(
+              builder: (ctx, booksMaterialData, child) => RefreshIndicator(
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, i) => MaterialAvailableCard(
+                      materialAvailable:
+                          booksMaterialData.materialsAvailable[i],
+                      setStateFunc: () {
+                        setState(() {});
+                      },
                     ),
+                    itemCount: booksMaterialData.materialsAvailable.length,
                   ),
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Stationary",
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Stationary",
       ),
     );
   }

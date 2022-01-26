@@ -27,58 +27,58 @@ class _OrderCardState extends State<OrderCard> {
         Center(
           child: Stack(
             children: [
-              // AnimatedContainer(
-              //   duration: const Duration(milliseconds: 500),
-              //   height: _expanded ? ScreenSize.screenHeight(context) * .4 : 0,
-              //   width: ScreenSize.screenWidth(context) * .85,
-              //   decoration: BoxDecoration(
-              //     color: Palette.senaryDefault,
-              //     borderRadius: BorderRadius.circular(10),
-              //   ),
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(top: 50),
-              //     child: Center(
-              //       child: Padding(
-              //         padding: const EdgeInsets.all(25),
-              //         child: SingleChildScrollView(
-              //           child: Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             mainAxisSize: MainAxisSize.min,
-              //             children: [
-              //               Text(
-              //                 "Order Items",
-              //                 style: Theme.of(context)
-              //                     .textTheme
-              //                     .bodyText2!
-              //                     .copyWith(
-              //                       fontWeight: FontWeight.bold,
-              //                       fontSize: 20,
-              //                     ),
-              //               ),
-              //               const SizedBox(height: 20),
-              //               ListView.builder(
-              //                 physics: NeverScrollableScrollPhysics(),
-              //                 shrinkWrap: true,
-              //                 itemBuilder: (ctx, index) => Padding(
-              //                   padding: const EdgeInsets.all(5.0),
-              //                   child: Text(
-              //                     "${index + 1}. ${widget.order.menuOrders[index].items.name}, Quantity: ${widget.order.menuOrders[index].quantity}",
-              //                     style: Theme.of(context)
-              //                         .textTheme
-              //                         .bodyText1!
-              //                         .copyWith(fontSize: 15),
-              //                   ),
-              //                 ),
-              //                 itemCount: widget.order.menuOrders.length,
-              //               ),
-              //               const SizedBox(height: 20),
-              //             ],
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                height: _expanded ? ScreenSize.screenHeight(context) * .4 : 0,
+                width: ScreenSize.screenWidth(context) * .85,
+                decoration: BoxDecoration(
+                  color: Palette.senaryDefault,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(25),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Order Items",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                            ),
+                            const SizedBox(height: 20),
+                            ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (ctx, index) => Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Text(
+                                  "${index + 1}. ${widget.order.menuOrders[index].items.name}, Quantity: ${widget.order.menuOrders[index].quantity}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(fontSize: 15),
+                                ),
+                              ),
+                              itemCount: widget.order.menuOrders.length,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 height: ScreenSize.screenHeight(context) * .12,
                 width: ScreenSize.screenWidth(context) * .85,

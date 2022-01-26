@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';

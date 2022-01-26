@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/general/themes.dart';
-import '../../utils/general/screen_size.dart';
+import '../../../utils/general/themes.dart';
+import '../../../utils/general/customColor.dart';
+import '../../../utils/general/screen_size.dart';
 
 Widget smallEleBtn({
   required BuildContext context,
   required String title,
   required Function onPressFunc,
+  bool? showSecondaryColor,
 }) {
   return SizedBox(
     height: ScreenSize.screenHeight(context) * .02,
@@ -24,6 +26,13 @@ Widget smallEleBtn({
           const EdgeInsets.symmetric(
             horizontal: 5,
           ),
+        ),
+        backgroundColor: MaterialStateProperty.all(
+          showSecondaryColor != null
+              ? showSecondaryColor
+                  ? Palette.quaternaryDefault
+                  : SecondaryPallete.quaternary
+              : Palette.quaternaryDefault,
         ),
       ),
     ),

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/cafetaria/cafataria_providers.dart';
-
-import 'cafetaria_menu.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/rating_card.dart';
-import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/order_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
@@ -23,8 +20,9 @@ class RatingScreen extends StatefulWidget {
 
 class _RatingScreenState extends State<RatingScreen> {
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MenuItemProvider>(context, listen: false)
-        .fetchMenu();
+    setState(() {
+      Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
+    });
   }
 
   @override
@@ -41,7 +39,6 @@ class _RatingScreenState extends State<RatingScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (dataSnapShot.error != null) {
             Future.delayed(Duration.zero, () {
-              print(dataSnapShot.error);
               dialog(
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
@@ -57,41 +54,29 @@ class _RatingScreenState extends State<RatingScreen> {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) => RatingCard(
-                              key: Key(menuData.items[i].id),
-                              menu: menuData.items[i],
-                              setStateFunc: () {
-                                setState(() {});
-                              },
-                            ),
-                            itemCount: menuData.items.length,
-                          ),
-                        ),
-                      ),
+            return Consumer<MenuItemProvider>(
+              builder: (ctx, menuData, child) => RefreshIndicator(
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, i) => RatingCard(
+                      key: Key(menuData.items[i].id),
+                      menu: menuData.items[i],
+                      setStateFunc: () {
+                        setState(() {});
+                      },
                     ),
+                    itemCount: menuData.items.length,
                   ),
-                  
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Cafetaria",
-                    ),
-                  ),
-                  
-                ],
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Cafetaria",
       ),
     );
   }

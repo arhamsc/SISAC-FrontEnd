@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sisac/utils/helpers/http_exception.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../../utils/general/screen_size.dart';

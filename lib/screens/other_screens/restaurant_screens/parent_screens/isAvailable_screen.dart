@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../updation_screens/add_edit_menuItem_screen.dart';
 
@@ -21,11 +21,6 @@ class IsAvailableScreen extends StatefulWidget {
 }
 
 class _IsAvailableScreenState extends State<IsAvailableScreen> {
-  Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MenuItemProvider>(context, listen: false)
-        .fetchMenu();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +30,8 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
         subtitle: "Menu Available",
         showAddIcon: true,
         addButtonFunc: () {
-          Navigator.of(context).pushNamed(AddEditMenuItemScreen.routeName, arguments: '');
+          Navigator.of(context)
+              .pushNamed(AddEditMenuItemScreen.routeName, arguments: '');
         },
       ),
       body: FutureBuilder(
@@ -50,49 +46,55 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
               () => dialog(
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
-                tryAgainFunc: () => _refreshItems(context),
+                tryAgainFunc: () => setState(() async {
+                  await Provider.of<MenuItemProvider>(context, listen: false)
+                      .fetchMenu();
+                }),
                 pop2Pages: true,
               ),
             );
             return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
+              onRefresh: () async {
+                setState(
+                  () async {
+                    await Provider.of<MenuItemProvider>(context, listen: false)
+                        .fetchMenu();
+                  },
+                );
+              },
               child: const Center(
                 child: Text("Error"),
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer<MenuItemProvider>(
-                    builder: (ctx, menuData, child) => SingleChildScrollView(
-                      child: SizedBox(
-                        height: ScreenSize.usableHeight(context),
-                        child: ListView.builder(
-                          itemBuilder: (ctx, i) => IsAvailableCard(
-                            menu: menuData.items[i],
-                            setFunc: () {
-                              setState(() {});
-                            },
-                            key: Key(menuData.items[i].id),
-                          ),
-                          itemCount: menuData.items.length,
-                        ),
-                      ),
+            return Consumer<MenuItemProvider>(
+              builder: (ctx, menuData, child) => RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {
+                    menuData.fetchMenu();
+                  });
+                },
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, i) => IsAvailableCard(
+                      menu: menuData.items[i],
+                      setFunc: () {
+                        setState(() {});
+                      },
+                      key: Key(menuData.items[i].id),
                     ),
+                    itemCount: menuData.items.length,
                   ),
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Cafetaria",
-                      showOnlyOne: true,
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Cafetaria",
+        showOnlyOne: true,
       ),
     );
   }

@@ -23,7 +23,7 @@ class RestaurantHomeScreen extends StatelessWidget {
         context: context,
         subtitle: "Home",
       ),
-      drawer: RestaurantDrawer(),
+      drawer: const RestaurantDrawer(),
       body: Column(
         children: [
           SizedBox(

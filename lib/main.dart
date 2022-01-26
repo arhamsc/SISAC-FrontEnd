@@ -1,34 +1,41 @@
 //THIS IS THE MAIN FILE OF THE PROJECT.
 
-//*package imports
+/* Package imports */
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sisac/providers/cafetaria/cafataria_providers.dart';
+import 'package:sisac/providers/cafetaria/cafetaria_providers.dart';
 
-//*screen imports
+/* Screen imports */
+//Home Screens
 import 'screens/home/login_screen.dart';
 import 'screens/student_faculty_screens/nav_screens/tab_screen.dart';
 import 'screens/home/splash_screen.dart';
+//Cafetaria Screens - Consumer
 import 'screens/student_faculty_screens/cafetaria_screens/parent_screens/cafetaria_menu.dart';
 import 'screens/student_faculty_screens/cafetaria_screens/functional_screens/place_order_screen.dart';
 import 'screens/student_faculty_screens/cafetaria_screens/parent_screens/order_screen.dart';
 import 'screens/student_faculty_screens/cafetaria_screens/parent_screens/rating_screen.dart';
 import 'screens/student_faculty_screens/cafetaria_screens/functional_screens/cart_screen.dart';
-import 'screens/other_sceens/restaurant_screens/parent_screens/restaurant_home_screen.dart';
-import 'screens/other_sceens/restaurant_screens/parent_screens/received_orders_screen.dart';
-import 'screens/other_sceens/restaurant_screens/parent_screens/isAvailable_screen.dart';
-import 'screens/other_sceens/restaurant_screens/updation_screens/add_edit_menuItem_screen.dart';
+//Cafetaria Screens - Restaurant
+import 'screens/other_screens/restaurant_screens/parent_screens/restaurant_home_screen.dart';
+import 'screens/other_screens/restaurant_screens/parent_screens/received_orders_screen.dart';
+import 'screens/other_screens/restaurant_screens/parent_screens/isAvailable_screen.dart';
+import 'screens/other_screens/restaurant_screens/updation_screens/add_edit_menuItem_screen.dart';
+//Stationary Screens - Consumer
 import './screens/student_faculty_screens/stationary/availability_screen.dart';
 import './screens/student_faculty_screens/stationary/books_material_screen.dart';
 import './screens/student_faculty_screens/stationary/material_available_screen.dart';
+//Stationary Screens - Vendor
+import './screens/other_screens/stationary_screens/parent_screens/stationary_home_screen.dart';
+import './screens/other_screens/stationary_screens/parent_screens/update_availability_screen.dart';
 
-//*utils imports
+/* Utility imports */
 import './utils/general/customColor.dart';
 import './utils/general/themes.dart';
 
-//*provider imports
+/* Provider imports */
 import './providers/user_provider.dart';
-import './providers/cafetaria/cafataria_providers.dart';
+import 'providers/cafetaria/cafetaria_providers.dart';
 import './providers/cafetaria/order_providers.dart';
 import './providers/cafetaria/restaurant_providers.dart';
 import './providers/stationary/availability_providers.dart';
@@ -134,24 +141,33 @@ class _MyAppState extends State<MyApp> {
           home: HomePage(auth: auth),
           //All the named routes are declared here.
           routes: {
+            //Home Screen Routes
             TabScreen.routeName: (ctx) => const TabScreen(),
             LoginScreen.routeName: (ctx) => const LoginScreen(),
+            RestaurantHomeScreen.routeName: (ctx) =>
+                const RestaurantHomeScreen(),
+            StationaryHomeScreen.routeName: (ctx) =>
+                const StationaryHomeScreen(),
+            //Cafetaria Screens - Consumer Routes
             CafetariaMenu.routeName: (ctx) => const CafetariaMenu(),
             PlaceOrderScreen.routeName: (ctx) => const PlaceOrderScreen(),
             OrderScreen.routeName: (ctx) => const OrderScreen(),
             RatingScreen.routeName: (ctx) => const RatingScreen(),
-            RestaurantHomeScreen.routeName: (ctx) =>
-                const RestaurantHomeScreen(),
+            CartScreen.routeName: (ctx) => const CartScreen(),
+            //Cafetaria Screens - Vendor Routes
             ReceivedOrdersScreen.routeName: (ctx) =>
                 const ReceivedOrdersScreen(),
             IsAvailableScreen.routeName: (ctx) => const IsAvailableScreen(),
+            AddEditMenuItemScreen.routeName: (ctx) =>
+                const AddEditMenuItemScreen(),
+            //Stationary Screens - Consumer Routes
             AvailabilityScreen.routeName: (ctx) => const AvailabilityScreen(),
             BooksMaterialScreen.routeName: (ctx) => const BooksMaterialScreen(),
             MaterialAvailableScreen.routeName: (ctx) =>
                 const MaterialAvailableScreen(),
-            CartScreen.routeName: (ctx) => const CartScreen(),
-            AddEditMenuItemScreen.routeName: (ctx) =>
-                const AddEditMenuItemScreen(),
+            //Stationary Screens - Vendor Routes
+            UpdateAvailabilityScreen.routeName: (ctx) =>
+                const UpdateAvailabilityScreen(),
           },
         ),
       ),
@@ -168,12 +184,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Widget ScreenByRole(String role) {
+    switch (role) {
+      case "Other":
+        return const RestaurantHomeScreen();
+      case "Stationary":
+        return const StationaryHomeScreen();
+      default:
+        return const TabScreen();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return widget.auth.isAuth
-        ? widget.auth.getRole == 'Other'
-            ? const RestaurantHomeScreen()
-            : const TabScreen()
+        ? ScreenByRole(widget.auth.getRole ?? "Student")
         : FutureBuilder(
             future: widget.auth.tryAutoLogin(context),
             builder: (ctx, authResultSnapShot) =>

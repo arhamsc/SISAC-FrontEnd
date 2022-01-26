@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/cafetaria/order_providers.dart';
-import '../../../../providers/cafetaria/cafataria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
@@ -21,8 +21,9 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<OrderProvider>(context, listen: false)
-        .fetchUserOrders();
+    setState(() {
+      Provider.of<OrderProvider>(context, listen: false).fetchUserOrders();
+    });
   }
 
   @override
@@ -65,34 +66,24 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer<OrderProvider>(
-                    builder: (ctx, orderData, child) => Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) => OrderCard(
-                                order: orderData.userOrders[i], orderNum: i),
-                            itemCount: orderData.userOrders.length,
-                          ),
-                        ),
-                      ),
-                    ),
+            return Consumer<OrderProvider>(
+              builder: (ctx, orderData, child) => RefreshIndicator(
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, i) =>
+                        OrderCard(order: orderData.userOrders[i], orderNum: i),
+                    itemCount: orderData.userOrders.length,
                   ),
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Cafetaria",
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Cafetaria",
       ),
     );
   }

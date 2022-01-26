@@ -1,5 +1,18 @@
+import 'dart:convert';
+import 'package:http/http.dart';
+
+import '../utils/helpers/http_exception.dart';
+
 Uri url(String endPoint) {
   final url = Uri.parse('http://192.168.1.13:3000/$endPoint');
   //final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
   return url;
+}
+
+Map<String, dynamic> checkResponseError(Response response) {
+  final decodedData = jsonDecode(response.body) as Map<String, dynamic>;
+  if (decodedData['error'] != null) {
+    throw HttpException(decodedData['error']['message']);
+  }
+  return decodedData;
 }

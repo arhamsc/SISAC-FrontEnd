@@ -19,17 +19,16 @@ class AvailabilityScreen extends StatefulWidget {
 }
 
 class _AvailabilityScreenState extends State<AvailabilityScreen> {
-  var _expanded = false;
-
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<AvailabilityProvider>(context, listen: false)
-        .fetchAvailableItems();
+    setState(() {
+      Provider.of<AvailabilityProvider>(context, listen: false)
+          .fetchAvailableItems();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
         title: "Stationary",
         context: context,
@@ -40,7 +39,9 @@ class _AvailabilityScreenState extends State<AvailabilityScreen> {
             .fetchAvailableItems(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (dataSnapShot.error != null) {
             Future.delayed(
               Duration.zero,
@@ -58,39 +59,28 @@ class _AvailabilityScreenState extends State<AvailabilityScreen> {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer<AvailabilityProvider>(
-                    builder: (ctx, availabilityData, child) => Container(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          height: ScreenSize.usableHeight(context),
-                          child: ListView.builder(
-                            itemBuilder: (ctx, i) => AvailabilityCard(
-                              availableItems:
-                                  availabilityData.availableItems[i],
-                              setFunc: () {
-                                setState(() {});
-                              },
-                            ),
-                            itemCount: availabilityData.availableItems.length,
-                          ),
-                        ),
-                      ),
+            return Consumer<AvailabilityProvider>(
+              builder: (ctx, availabilityData, child) => RefreshIndicator(
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, i) => AvailabilityCard(
+                      availableItems: availabilityData.availableItems[i],
+                      setFunc: () {
+                        setState(() {});
+                      },
                     ),
+                    itemCount: availabilityData.availableItems.length,
                   ),
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Stationary",
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Stationary",
       ),
     );
   }
