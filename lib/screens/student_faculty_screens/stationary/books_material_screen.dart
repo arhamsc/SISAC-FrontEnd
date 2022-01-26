@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/stationary/books_material_providers.dart';
 
-import '../../../widgets/app_bar.dart';
-import '../../../widgets/cafetaria/bottom_nav.dart';
-import '../../../widgets/stationary/books_material_card.dart';
+import '../../../widgets/component_widgets/scaffold/app_bar.dart';
+import '../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/component_widgets/stationary/display_cards/books_material_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';

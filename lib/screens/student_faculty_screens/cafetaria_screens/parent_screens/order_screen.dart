@@ -1,43 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/stationary/availability_providers.dart';
+import '../../../../providers/cafetaria/order_providers.dart';
+import '../../../../providers/cafetaria/cafataria_providers.dart';
 
-import '../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
-import '../../../widgets/component_widgets/stationary/display_cards/available_card.dart';
+import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
+import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/order_card.dart';
 
-import '../../../utils/helpers/error_dialog.dart';
-import '../../../utils/general/screen_size.dart';
+import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/general/screen_size.dart';
 
-class AvailabilityScreen extends StatefulWidget {
-  const AvailabilityScreen({Key? key}) : super(key: key);
-  static const routeName = '/stationary/availability';
+class OrderScreen extends StatefulWidget {
+  static const routeName = '/cafetaria/orders';
+  const OrderScreen({Key? key}) : super(key: key);
 
   @override
-  State<AvailabilityScreen> createState() => _AvailabilityScreenState();
+  State<OrderScreen> createState() => _OrderScreenState();
 }
 
-class _AvailabilityScreenState extends State<AvailabilityScreen> {
-  var _expanded = false;
-
+class _OrderScreenState extends State<OrderScreen> {
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<AvailabilityProvider>(context, listen: false)
-        .fetchAvailableItems();
+    return await Provider.of<OrderProvider>(context, listen: false)
+        .fetchUserOrders();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    () async {
+      await Future.delayed(Duration.zero, () async {
+        final menuP = Provider.of<MenuItemProvider>(context, listen: false);
+        await menuP.fetchMenu();
+      });
+    }();
   }
 
   @override
   Widget build(BuildContext context) {
+    //final orderP = Provider.of<OrderProvider>(context);
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
-        title: "Stationary",
-        context: context,
-        subtitle: "Availability",
-      ),
+          title: "Cafetaria", context: context, subtitle: "Orders"),
       body: FutureBuilder(
-        future: Provider.of<AvailabilityProvider>(context, listen: false)
-            .fetchAvailableItems(),
+        future: Provider.of<OrderProvider>(context, listen: false)
+            .fetchUserOrders(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -62,20 +69,15 @@ class _AvailabilityScreenState extends State<AvailabilityScreen> {
               onRefresh: () => _refreshItems(context),
               child: Column(
                 children: [
-                  Consumer<AvailabilityProvider>(
-                    builder: (ctx, availabilityData, child) => Container(
+                  Consumer<OrderProvider>(
+                    builder: (ctx, orderData, child) => Container(
                       child: SingleChildScrollView(
                         child: Container(
                           height: ScreenSize.usableHeight(context),
                           child: ListView.builder(
-                            itemBuilder: (ctx, i) => AvailabilityCard(
-                              availableItems:
-                                  availabilityData.availableItems[i],
-                              setFunc: () {
-                                setState(() {});
-                              },
-                            ),
-                            itemCount: availabilityData.availableItems.length,
+                            itemBuilder: (ctx, i) => OrderCard(
+                                order: orderData.userOrders[i], orderNum: i),
+                            itemCount: orderData.userOrders.length,
                           ),
                         ),
                       ),
@@ -83,7 +85,7 @@ class _AvailabilityScreenState extends State<AvailabilityScreen> {
                   ),
                   Expanded(
                     child: BottomNav(
-                      isSelected: "Stationary",
+                      isSelected: "Cafetaria",
                     ),
                   ),
                 ],

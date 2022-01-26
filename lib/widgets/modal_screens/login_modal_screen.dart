@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/student_faculty_screens/tab_screen.dart';
-import '../../screens/other_sceens/restaurant_screens/restaurant_home_screen.dart';
+import '../../screens/student_faculty_screens/nav_screens/tab_screen.dart';
+import '../../screens/other_sceens/restaurant_screens/parent_screens/restaurant_home_screen.dart';
 
 import '../../utils/helpers/error_dialog.dart';
 

@@ -1,55 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/stationary/material_available_providers.dart';
+import '../../../../providers/cafetaria/cafataria_providers.dart';
 
-import '../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
-import '../../../widgets/component_widgets/stationary/display_cards/material_available_card.dart';
+import 'cafetaria_menu.dart';
 
-import '../../../utils/helpers/error_dialog.dart';
-import '../../../utils/general/screen_size.dart';
+import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
+import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/rating_card.dart';
+import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/order_card.dart';
 
-class MaterialAvailableScreen extends StatefulWidget {
-  const MaterialAvailableScreen({Key? key}) : super(key: key);
-  static const routeName = '/stationary/materialAvailable';
+import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/general/screen_size.dart';
+
+class RatingScreen extends StatefulWidget {
+  static const routeName = '/cafetaria/ratings';
+  const RatingScreen({Key? key}) : super(key: key);
 
   @override
-  State<MaterialAvailableScreen> createState() =>
-      _MaterialAvailableScreenState();
+  State<RatingScreen> createState() => _RatingScreenState();
 }
 
-class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
+class _RatingScreenState extends State<RatingScreen> {
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<MaterialAvailableProvider>(context, listen: false)
-        .fetchAllMaterials();
+    return await Provider.of<MenuItemProvider>(context, listen: false)
+        .fetchMenu();
   }
 
   @override
   Widget build(BuildContext context) {
+    //final orderP = Provider.of<OrderProvider>(context);
     return Scaffold(
-      drawer: Drawer(),
       appBar: BaseAppBar.getAppBar(
-        title: "Stationary",
-        context: context,
-        subtitle: "Availability",
-      ),
+          title: "Cafetaria", context: context, subtitle: "Orders"),
       body: FutureBuilder(
-        future: Provider.of<MaterialAvailableProvider>(context, listen: false)
-            .fetchAllMaterials(),
+        future:
+            Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (dataSnapShot.error != null) {
-            Future.delayed(
-              Duration.zero,
-              () => dialog(
+            Future.delayed(Duration.zero, () {
+              print(dataSnapShot.error);
+              dialog(
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
                 tryAgainFunc: () => _refreshItems(context),
                 pop2Pages: true,
-              ),
-            );
+              );
+            });
+
             return RefreshIndicator(
               onRefresh: () => _refreshItems(context),
               child: const Center(
@@ -61,31 +61,32 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
               onRefresh: () => _refreshItems(context),
               child: Column(
                 children: [
-                  Consumer<MaterialAvailableProvider>(
-                    builder: (ctx, booksMaterialData, child) => Container(
+                  Consumer<MenuItemProvider>(
+                    builder: (ctx, menuData, child) => Container(
                       child: SingleChildScrollView(
                         child: Container(
                           height: ScreenSize.usableHeight(context),
                           child: ListView.builder(
-                            itemBuilder: (ctx, i) => MaterialAvailableCard(
-                              materialAvailable:
-                                  booksMaterialData.materialsAvailable[i],
+                            itemBuilder: (ctx, i) => RatingCard(
+                              key: Key(menuData.items[i].id),
+                              menu: menuData.items[i],
                               setStateFunc: () {
                                 setState(() {});
                               },
                             ),
-                            itemCount:
-                                booksMaterialData.materialsAvailable.length,
+                            itemCount: menuData.items.length,
                           ),
                         ),
                       ),
                     ),
                   ),
+                  
                   Expanded(
                     child: BottomNav(
-                      isSelected: "Stationary",
+                      isSelected: "Cafetaria",
                     ),
                   ),
+                  
                 ],
               ),
             );

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 import '../utils/helpers/http_exception.dart';
 
-import '../screens/login_screen.dart';
+import '../screens/home/login_screen.dart';
 
 import '../constants/request_url.dart' as req_url;
 
