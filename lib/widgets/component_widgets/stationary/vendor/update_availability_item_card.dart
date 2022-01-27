@@ -35,6 +35,7 @@ class _UpdateIsAvailableCardState extends State<UpdateIsAvailableCard> {
               widget.switchFunc();
             },
             editButtonRequired: false,
+            deleteButtonRequired: false,
           ),
         ),
         const SizedBox(height: 10),

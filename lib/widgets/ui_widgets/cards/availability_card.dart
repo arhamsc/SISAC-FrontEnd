@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../buttons/small_button.dart';
+import '../buttons/small_delete_button.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
+import '../../../utils/helpers/snack_bar.dart';
 
 class AvailabilityCard extends StatelessWidget {
   const AvailabilityCard({
@@ -14,6 +16,8 @@ class AvailabilityCard extends StatelessWidget {
     required this.switchFunc,
     this.editButtonFunction,
     required this.editButtonRequired,
+    required this.deleteButtonRequired,
+    this.deleteButtonFunc,
   }) : super(key: key);
 
   final String? imageUrl;
@@ -22,6 +26,8 @@ class AvailabilityCard extends StatelessWidget {
   final Function switchFunc;
   final bool editButtonRequired;
   final Function? editButtonFunction;
+  final bool deleteButtonRequired;
+  final Function? deleteButtonFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +118,27 @@ class AvailabilityCard extends StatelessWidget {
                           : () {},
                     )
                   : const SizedBox(),
-              const SizedBox(),
+              deleteButtonRequired
+                  ? smallDeleteEleBtn(
+                      context: context,
+                      title: "Delete",
+                      onPressFunc: () {
+                        deleteButtonFunc != null
+                            ? deleteButtonFunc!()
+                            : customSnackBar(
+                                ctx: context,
+                                title: "No Function Provided",
+                                undoFunc: () {},
+                                error: true,
+                              );
+                      },
+                    )
+                  : const SizedBox(),
+              deleteButtonRequired
+                  ? SizedBox(
+                      height: ScreenSize.screenHeight(context) * .01,
+                    )
+                  : const SizedBox()
             ],
           ),
           SizedBox(

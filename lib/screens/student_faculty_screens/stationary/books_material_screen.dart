@@ -26,6 +26,8 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
     });
   }
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,22 +60,26 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
             );
           } else {
             return Consumer<BooksMaterialProvider>(
-              builder: (ctx, booksMaterialData, child) => RefreshIndicator(
-                onRefresh: () => _refreshItems(context),
-                child: SizedBox(
-                  height: ScreenSize.usableHeight(context),
-                  child: ListView.builder(
-                    itemBuilder: (ctx, i) => BooksMaterialCard(
-                      booksMaterial: booksMaterialData.booksMaterial[i],
-                      setStateFunc: () {
-                        setState(() {});
-                      },
-                      vendor: false,
+              builder: (ctx, booksMaterialData, child) => _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => _refreshItems(context),
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) => BooksMaterialCard(
+                            booksMaterial: booksMaterialData.booksMaterial[i],
+                            setStateFunc: () {
+                              setState(() {});
+                            },
+                            vendor: false,
+                          ),
+                          itemCount: booksMaterialData.booksMaterial.length,
+                        ),
+                      ),
                     ),
-                    itemCount: booksMaterialData.booksMaterial.length,
-                  ),
-                ),
-              ),
             );
           }
         },

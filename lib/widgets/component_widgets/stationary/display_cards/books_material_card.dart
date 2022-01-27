@@ -7,16 +7,18 @@ import '../../../../screens/other_screens/stationary_screens/updation_screens/ad
 import '../../../../widgets/ui_widgets/cards/item_card_v2.dart';
 
 class BooksMaterialCard extends StatefulWidget {
-  const BooksMaterialCard(
-      {Key? key,
-      required this.booksMaterial,
-      required this.setStateFunc,
-      required this.vendor})
-      : super(key: key);
+  const BooksMaterialCard({
+    Key? key,
+    required this.booksMaterial,
+    required this.setStateFunc,
+    required this.vendor,
+    this.deleteFunc,
+  }) : super(key: key);
 
   final BooksMaterial booksMaterial;
   final Function setStateFunc;
   final bool vendor;
+  final Function? deleteFunc;
   @override
   _BooksMaterialCardState createState() => _BooksMaterialCardState();
 }
@@ -44,6 +46,10 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
                         arguments: widget.booksMaterial.id);
                   }
                 : null,
+            showDeleteButton: widget.vendor,
+            deleteButtonFunction: () {
+              widget.deleteFunc != null ? widget.deleteFunc!() : null;
+            },
           ),
         ),
         const SizedBox(height: 10),

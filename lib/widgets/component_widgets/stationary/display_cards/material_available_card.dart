@@ -12,11 +12,13 @@ class MaterialAvailableCard extends StatefulWidget {
     required this.materialAvailable,
     required this.setStateFunc,
     required this.vendor,
+    this.deleteFunction,
   }) : super(key: key);
 
   final MaterialAvailable materialAvailable;
   final Function setStateFunc;
   final bool vendor;
+  final Function? deleteFunction;
   @override
   _MaterialAvailableCardState createState() => _MaterialAvailableCardState();
 }
@@ -45,6 +47,10 @@ class _MaterialAvailableCardState extends State<MaterialAvailableCard> {
                     );
                   }
                 : null,
+            showDeleteButton: widget.vendor,
+            deleteButtonFunction: () {
+              widget.deleteFunction != null ? widget.deleteFunction!() : null;
+            },
           ),
         ),
         const SizedBox(

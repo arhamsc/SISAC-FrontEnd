@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sisac/widgets/ui_widgets/buttons/small_button.dart';
+import 'package:sisac/widgets/ui_widgets/buttons/small_delete_button.dart';
 
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
@@ -12,6 +13,8 @@ class ItemCardV2 extends StatelessWidget {
     required this.itemName,
     required this.subtitles,
     required this.buttonsRequired,
+    required this.showDeleteButton,
+    this.deleteButtonFunction,
     this.buttonText,
     this.buttonFunction,
     this.largerItemName,
@@ -21,6 +24,8 @@ class ItemCardV2 extends StatelessWidget {
   final String imageUrl;
   final String itemName;
   final List<String> subtitles;
+  final Function? deleteButtonFunction;
+  final bool showDeleteButton;
   final bool? largerItemName;
   final bool buttonsRequired;
   //provide this if buttonsRequired is true
@@ -120,6 +125,25 @@ class ItemCardV2 extends StatelessWidget {
                         direction: Axis.horizontal,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          showDeleteButton
+                              ? smallDeleteEleBtn(
+                                  context: context,
+                                  title: "Delete",
+                                  onPressFunc: () {
+                                    deleteButtonFunction != null
+                                        ? deleteButtonFunction!()
+                                        : customSnackBar(
+                                            ctx: context,
+                                            title: "No Function Provided",
+                                            undoFunc: () {},
+                                            error: true,
+                                          );
+                                  },
+                                )
+                              : const SizedBox(),
+                          SizedBox(
+                            width: ScreenSize.screenWidth(context) * .05,
+                          ),
                           smallEleBtn(
                             context: context,
                             title: buttonText ?? "Edit",

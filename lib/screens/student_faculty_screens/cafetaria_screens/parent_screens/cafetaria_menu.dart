@@ -13,6 +13,7 @@ import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
+import '../../../../utils/helpers/http_exception.dart';
 
 class CafetariaMenu extends StatefulWidget {
   const CafetariaMenu({Key? key}) : super(key: key);
@@ -91,20 +92,20 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
           } else {
             return Consumer<MenuItemProvider>(
               builder: (ctx, menuData, child) => RefreshIndicator(
-                onRefresh: () => _refreshItems(context),
-                child: SizedBox(
-                  height: ScreenSize.usableHeight(context),
-                  child: ListView.builder(
-                    itemBuilder: (ctx, i) => MenuCard(
-                      menu: menuData.items[i],
-                      preOrder: availability,
-                      showBadge: menuData.recommendations.any(
-                          (element) => element.itemId == menuData.items[i].id),
+                      onRefresh: () => _refreshItems(context),
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) => MenuCard(
+                            menu: menuData.items[i],
+                            preOrder: availability,
+                            showBadge: menuData.recommendations.any((element) =>
+                                element.itemId == menuData.items[i].id),
+                          ),
+                          itemCount: menuData.items.length,
+                        ),
+                      ),
                     ),
-                    itemCount: menuData.items.length,
-                  ),
-                ),
-              ),
             );
           }
         },

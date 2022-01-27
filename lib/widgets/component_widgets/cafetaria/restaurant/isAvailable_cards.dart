@@ -11,11 +11,16 @@ import '../../../ui_widgets/cards/availability_card.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
 class IsAvailableCard extends StatefulWidget {
-  const IsAvailableCard({Key? key, required this.menu, required this.setFunc})
-      : super(key: key);
+  const IsAvailableCard({
+    Key? key,
+    required this.menu,
+    required this.setFunc,
+    required this.deleteFunc,
+  }) : super(key: key);
 
   final MenuItem menu;
   final Function setFunc;
+  final Function deleteFunc;
 
   @override
   _IsAvailableCardState createState() => _IsAvailableCardState();
@@ -73,6 +78,10 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
                 AddEditMenuItemScreen.routeName,
                 arguments: widget.menu.id,
               );
+            },
+            deleteButtonRequired: true,
+            deleteButtonFunc: () {
+              widget.deleteFunc();
             },
           ),
         ),

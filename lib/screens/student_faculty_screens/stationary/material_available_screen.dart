@@ -71,6 +71,7 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
                         setState(() {});
                       },
                       vendor: false,
+                      
                     ),
                     itemCount: booksMaterialData.materialsAvailable.length,
                   ),

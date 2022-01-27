@@ -23,11 +23,38 @@ class VendorMaterialAvailableScreen extends StatefulWidget {
 
 class _VendorMaterialAvailableScreenState
     extends State<VendorMaterialAvailableScreen> {
+  bool _isLoading = false;
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<MaterialAvailableProvider>(context, listen: false)
           .fetchAllMaterials();
     });
+  }
+
+  Future<void> deleteMaterialItem(
+      MaterialAvailableProvider matP, String id) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await matP.deleteMaterial(id);
+      setState(() {
+        _isLoading = false;
+      });
+      await dialog(
+        ctx: context,
+        errorMessage: "Successfully Deleted",
+        title: "Success",
+      );
+    } catch (error) {
+      await dialog(
+        ctx: context,
+        errorMessage: "Could not delete the Item",
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -57,7 +84,6 @@ class _VendorMaterialAvailableScreenState
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
                 tryAgainFunc: () => _refreshItems(context),
-                pop2Pages: true,
               ),
             );
             return RefreshIndicator(
@@ -68,23 +94,31 @@ class _VendorMaterialAvailableScreenState
             );
           } else {
             return Consumer<MaterialAvailableProvider>(
-              builder: (ctx, booksMaterialData, child) => RefreshIndicator(
-                onRefresh: () => _refreshItems(context),
-                child: SizedBox(
-                  height: ScreenSize.usableHeight(context),
-                  child: ListView.builder(
-                    itemBuilder: (ctx, i) => MaterialAvailableCard(
-                      materialAvailable:
-                          booksMaterialData.materialsAvailable[i],
-                      setStateFunc: () {
-                        setState(() {});
-                      },
-                      vendor: true,
+              builder: (ctx, materialAvailableData, child) => _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => _refreshItems(context),
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) => MaterialAvailableCard(
+                            materialAvailable:
+                                materialAvailableData.materialsAvailable[i],
+                            setStateFunc: () {
+                              setState(() {});
+                            },
+                            vendor: true,
+                            deleteFunction: () => deleteMaterialItem(
+                                materialAvailableData,
+                                materialAvailableData.materialsAvailable[i].id),
+                          ),
+                          itemCount:
+                              materialAvailableData.materialsAvailable.length,
+                        ),
+                      ),
                     ),
-                    itemCount: booksMaterialData.materialsAvailable.length,
-                  ),
-                ),
-              ),
             );
           }
         },

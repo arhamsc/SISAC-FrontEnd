@@ -118,7 +118,7 @@ class BooksMaterialProvider with ChangeNotifier {
         'book[name]': name,
         'book[price]': price,
         'book[edition]': edition,
-        'book[author]' : author,
+        'book[author]': author,
       });
 
       await req.send();
@@ -127,16 +127,17 @@ class BooksMaterialProvider with ChangeNotifier {
     }
   }
 
-  Future<void> patchBook(String id,
+  Future<void> patchBook(
+    String id,
     String name,
     String price,
     String author,
     String edition, {
-      required bool imageChanged,
-      File? image,
-    }) async {
-      final url = booksMaterialUrl(id);
-      if (imageChanged && image != null) {
+    required bool imageChanged,
+    File? image,
+  }) async {
+    final url = booksMaterialUrl(id);
+    if (imageChanged && image != null) {
       try {
         var req = http.MultipartRequest('PATCH', url);
 
@@ -188,5 +189,15 @@ class BooksMaterialProvider with ChangeNotifier {
         throw HttpException(error.toString());
       }
     }
+  }
+
+  Future<void> deleteBook(String id) async {
+    final url = booksMaterialUrl(id);
+    try {
+      final response = await http.delete(url, headers: _headers);
+      final data = req_url.checkResponseError(response);
+    } catch (error) {
+      throw HttpException(error.toString());
     }
+  }
 }

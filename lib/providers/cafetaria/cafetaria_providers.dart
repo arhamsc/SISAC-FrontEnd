@@ -175,6 +175,16 @@ class MenuItemProvider with ChangeNotifier {
     }
   }
 
+  Future<void> deleteMenuItem(String id) async {
+    final url = cafetariaUrl(id);
+    try {
+      final response = await http.delete(url, headers: _headers);
+      final data = req_url.checkResponseError(response);
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
   //method to get the recommended dishes from the data base.
   Future<void> getRecommendations() async {
     final url = cafetariaUrl('recommendation');
@@ -195,7 +205,6 @@ class MenuItemProvider with ChangeNotifier {
         );
       });
       _recommendations = loadedRecoms;
-      
     } catch (error) {
       throw HttpException(error.toString());
     }

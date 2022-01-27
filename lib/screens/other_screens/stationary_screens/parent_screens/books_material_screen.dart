@@ -28,6 +28,27 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
     });
   }
 
+  bool _isLoading = false;
+
+  Future<void> _deleteBook(BooksMaterialProvider bookP, String id) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await bookP.deleteBook(id);
+      setState(() {
+        _isLoading = false;
+      });
+      await dialog(
+          ctx: context, errorMessage: "Book Deleted", title: "Success");
+    } catch (error) {
+      await dialog(ctx: context, errorMessage: "Failed to delete the Book");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,23 +87,30 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
             );
           } else {
             return Consumer<BooksMaterialProvider>(
-              builder: (ctx, booksMaterialData, child) => RefreshIndicator(
-                onRefresh: () => _refreshItems(context),
-                child: SizedBox(
-                  height: ScreenSize.usableHeight(context),
-                  child: ListView.builder(
-                    itemBuilder: (ctx, i) => BooksMaterialCard(
-                      booksMaterial: booksMaterialData.booksMaterial[i],
-                      setStateFunc: () {
-                        setState(() {});
-                      },
-                      vendor: true,
+              builder: (ctx, booksMaterialData, child) => _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => _refreshItems(context),
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          itemBuilder: (ctx, i) => BooksMaterialCard(
+                            booksMaterial: booksMaterialData.booksMaterial[i],
+                            setStateFunc: () {
+                              setState(() {});
+                            },
+                            vendor: true,
+                            deleteFunc: () => _deleteBook(
+                              booksMaterialData,
+                              booksMaterialData.booksMaterial[i].id,
+                            ),
+                          ),
+                          itemCount: booksMaterialData.booksMaterial.length,
+                        ),
+                      ),
                     ),
-                    itemCount: booksMaterialData.booksMaterial.length,
-                    
-                  ),
-                ),
-              ),
             );
           }
         },

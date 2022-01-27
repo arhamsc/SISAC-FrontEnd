@@ -126,8 +126,7 @@ class MaterialAvailableProvider with ChangeNotifier {
     String id,
     String name,
     String price,
-    String materialType,
-{
+    String materialType, {
     required bool imageChanged,
     File? image,
   }) async {
@@ -181,6 +180,16 @@ class MaterialAvailableProvider with ChangeNotifier {
       } catch (error) {
         throw HttpException(error.toString());
       }
+    }
+  }
+
+  Future<void> deleteMaterial(String id) async {
+    final url = materialAvailableUrl(id);
+    try {
+      final response = await http.delete(url, headers: _headers);
+      final data = req_url.checkResponseError(response);
+    } catch (error) {
+      throw HttpException(error.toString());
     }
   }
 }

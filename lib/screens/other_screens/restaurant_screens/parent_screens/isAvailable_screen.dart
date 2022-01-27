@@ -11,6 +11,7 @@ import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
 
 import '../../../../../utils/helpers/error_dialog.dart';
 import '../../../../../utils/general/screen_size.dart';
+import '../../../../../utils/helpers/http_exception.dart';
 
 class IsAvailableScreen extends StatefulWidget {
   const IsAvailableScreen({Key? key}) : super(key: key);
@@ -21,6 +22,34 @@ class IsAvailableScreen extends StatefulWidget {
 }
 
 class _IsAvailableScreenState extends State<IsAvailableScreen> {
+
+  bool _isLoading = false;
+
+  Future<void> _deleteMenuFunc(MenuItemProvider menuP, String id) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await menuP.deleteMenuItem(id);
+      setState(() {
+        _isLoading = false;
+      });
+      await dialog(
+        ctx: context,
+        errorMessage: "Menu Item Deleted",
+        title: "Success",
+      );
+    } on HttpException catch (error) {
+      await dialog(
+        ctx: context,
+        errorMessage: error.message,
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +97,11 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
             );
           } else {
             return Consumer<MenuItemProvider>(
-              builder: (ctx, menuData, child) => RefreshIndicator(
+              builder: (ctx, menuData, child) => _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : RefreshIndicator(
                 onRefresh: () async {
                   setState(() {
                     menuData.fetchMenu();
@@ -82,6 +115,7 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
                       setFunc: () {
                         setState(() {});
                       },
+                      deleteFunc: () => _deleteMenuFunc(menuData, menuData.items[i].id,),
                       key: Key(menuData.items[i].id),
                     ),
                     itemCount: menuData.items.length,
