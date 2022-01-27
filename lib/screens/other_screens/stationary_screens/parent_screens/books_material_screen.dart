@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sisac/screens/other_screens/stationary_screens/updation_screens/add_edit_book_screen.dart';
 
-import '../../../providers/stationary/books_material_providers.dart';
+import '../../../../providers/stationary/books_material_providers.dart';
 
-import '../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
-import '../../../widgets/component_widgets/stationary/display_cards/books_material_card.dart';
+import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
+import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/stationary/display_cards/books_material_card.dart';
 
-import '../../../utils/helpers/error_dialog.dart';
-import '../../../utils/general/screen_size.dart';
+import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/general/screen_size.dart';
 
-class BooksMaterialScreen extends StatefulWidget {
-  const BooksMaterialScreen({Key? key}) : super(key: key);
-  static const routeName = '/stationary/booksMaterial';
+class VendorBooksMaterialScreen extends StatefulWidget {
+  const VendorBooksMaterialScreen({Key? key}) : super(key: key);
+  static const routeName = '/stationary/vendor/booksMaterial';
 
   @override
-  State<BooksMaterialScreen> createState() => _BooksMaterialScreenState();
+  State<VendorBooksMaterialScreen> createState() =>
+      _VendorBooksMaterialScreenState();
 }
 
-class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
+class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<BooksMaterialProvider>(context, listen: false)
@@ -30,10 +32,16 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-        title: "Stationary",
-        context: context,
-        subtitle: "Book Material",
-      ),
+          title: "Stationary",
+          context: context,
+          subtitle: "Book Material",
+          showAddIcon: true,
+          addButtonFunc: () {
+            Navigator.of(context).pushNamed(
+              AddEditStationaryItemScreen.routeName,
+              arguments: '',
+            );
+          }),
       body: FutureBuilder(
         future: Provider.of<BooksMaterialProvider>(context, listen: false)
             .fetchAllBooks(),
@@ -68,9 +76,10 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
                       setStateFunc: () {
                         setState(() {});
                       },
-                      vendor: false,
+                      vendor: true,
                     ),
                     itemCount: booksMaterialData.booksMaterial.length,
+                    
                   ),
                 ),
               ),
@@ -80,6 +89,7 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
       ),
       bottomNavigationBar: const BottomNav(
         isSelected: "Stationary",
+        showOnlyOne: true,
       ),
     );
   }

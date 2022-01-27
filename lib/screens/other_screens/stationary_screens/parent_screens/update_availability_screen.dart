@@ -121,7 +121,7 @@ class _UpdateAvailabilityScreenState extends State<UpdateAvailabilityScreen> {
         },
       ),
       bottomNavigationBar: const BottomNav(
-        isSelected: "Cafetaria",
+        isSelected: "Stationary",
         showOnlyOne: true,
       ),
     );

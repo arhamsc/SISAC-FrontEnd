@@ -28,6 +28,10 @@ import './screens/student_faculty_screens/stationary/material_available_screen.d
 //Stationary Screens - Vendor
 import './screens/other_screens/stationary_screens/parent_screens/stationary_home_screen.dart';
 import './screens/other_screens/stationary_screens/parent_screens/update_availability_screen.dart';
+import './screens/other_screens/stationary_screens/parent_screens/books_material_screen.dart';
+import 'screens/other_screens/stationary_screens/updation_screens/add_edit_book_screen.dart';
+import './screens/other_screens/stationary_screens/parent_screens/material_available_screen.dart';
+import './screens/other_screens/stationary_screens/updation_screens/add_edit_material_available_screen.dart';
 
 /* Utility imports */
 import './utils/general/customColor.dart';
@@ -168,6 +172,14 @@ class _MyAppState extends State<MyApp> {
             //Stationary Screens - Vendor Routes
             UpdateAvailabilityScreen.routeName: (ctx) =>
                 const UpdateAvailabilityScreen(),
+            VendorBooksMaterialScreen.routeName: (ctx) =>
+                const VendorBooksMaterialScreen(),
+            AddEditStationaryItemScreen.routeName: (ctx) =>
+                const AddEditStationaryItemScreen(),
+            VendorMaterialAvailableScreen.routeName: (ctx) =>
+                const VendorMaterialAvailableScreen(),
+            AddEditMaterialAvailableScreen.routeName: (ctx) =>
+                const AddEditMaterialAvailableScreen(),
           },
         ),
       ),

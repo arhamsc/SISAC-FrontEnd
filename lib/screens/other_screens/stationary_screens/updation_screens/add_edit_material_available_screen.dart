@@ -5,67 +5,69 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
-import '../../../../providers/cafetaria/restaurant_providers.dart';
+import '../../../../providers/stationary/material_available_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
 
 import '../../../../widgets/ui_widgets/inputs/form_input_text_field.dart';
 import '../../../../widgets/ui_widgets/inputs/form_image_input.dart';
+import '../../../../widgets/ui_widgets/inputs/input_dropdown.dart';
 
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/themes.dart';
+import '../../../../utils/general/customColor.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
 //This widget is for adding or editing menu Items
-class AddEditMenuItemScreen extends StatefulWidget {
-  static const routeName = '/cafetaria/restaurant/addEditMenuItem';
-  const AddEditMenuItemScreen({Key? key}) : super(key: key);
+class AddEditMaterialAvailableScreen extends StatefulWidget {
+  static const routeName = '/stationary/vendor/addEditMaterialAvailable';
+  const AddEditMaterialAvailableScreen({Key? key}) : super(key: key);
 
   @override
-  _AddEditMenuItemScreenState createState() => _AddEditMenuItemScreenState();
+  _AddEditMaterialAvailableScreenState createState() =>
+      _AddEditMaterialAvailableScreenState();
 }
 
-class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
-  File? _storedMenuImage;
-  final _formKey = GlobalKey<FormState>();
+class _AddEditMaterialAvailableScreenState
+    extends State<AddEditMaterialAvailableScreen> {
+  File? _storedStationaryImage;
+  final _formKey1 = GlobalKey<FormState>();
 
   //controllers
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
-  final _descriptionController = TextEditingController();
 
   bool _isInit = true;
   bool _isLoading = false;
   bool _imageChanged = false;
   bool _editing = false;
 
-  var _menuItem = MenuItem(
+  var _materialItem = MaterialAvailable(
     id: '',
     name: '',
-    description: '',
-    rating: 0,
     price: 0,
+    materialType: '',
     imageUrl: '',
-    isAvailable: false,
     imageFileName: '',
   );
 
   final _editedItem = {
     'name': '',
-    'description': '',
     'price': '',
+    'materialType': '',
     'image': null,
   };
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final menuId = ModalRoute.of(context)?.settings.arguments as String;
-      if (menuId.isNotEmpty) {
+      final materialId = ModalRoute.of(context)?.settings.arguments as String;
+      if (materialId.isNotEmpty) {
         _editing = true;
-        _menuItem = Provider.of<MenuItemProvider>(context).findMenuById(menuId);
+        _materialItem = Provider.of<MaterialAvailableProvider>(context)
+            .findMaterialById(materialId);
+        materialTypeDropDownValue = _materialItem.materialType;
       } else {
         _editing = false;
       }
@@ -88,90 +90,76 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     }
     setState(() {
       _imageChanged = true;
-      _storedMenuImage = _pickedImage != null ? File(_pickedImage.path) : null;
+      _storedStationaryImage =
+          _pickedImage != null ? File(_pickedImage.path) : null;
     });
   }
 
-  set nameSet(String name) {
-    _editedItem['name'] = name;
-  }
-
-  void setItem(String val, String fieldToSet) {
+  void setMaterialItem(String val, String fieldToSet) {
     switch (fieldToSet) {
       case "Name":
         {
-          _menuItem = MenuItem(
-            id: _menuItem.id,
+          _materialItem = MaterialAvailable(
+            id: _materialItem.id,
             name: val,
-            description: _menuItem.description,
-            rating: _menuItem.rating,
-            price: _menuItem.price,
-            imageUrl: _menuItem.imageUrl,
-            isAvailable: _menuItem.isAvailable,
-            imageFileName: _menuItem.imageFileName,
+            materialType: _materialItem.materialType,
+            price: _materialItem.price,
+            imageUrl: _materialItem.imageUrl,
+            imageFileName: _materialItem.imageFileName,
           );
           break;
         }
       case "Price":
         {
-          _menuItem = MenuItem(
-            id: _menuItem.id,
-            name: _menuItem.name,
-            description: _menuItem.description,
-            rating: _menuItem.rating,
+          _materialItem = MaterialAvailable(
+            id: _materialItem.id,
+            name: _materialItem.name,
+            materialType: _materialItem.materialType,
             price: int.parse(val),
-            imageUrl: _menuItem.imageUrl,
-            isAvailable: _menuItem.isAvailable,
-            imageFileName: _menuItem.imageFileName,
+            imageUrl: _materialItem.imageUrl,
+            imageFileName: _materialItem.imageFileName,
           );
           break;
         }
-      case "Description":
+      case "Material Type":
         {
-          _menuItem = MenuItem(
-            id: _menuItem.id,
-            name: _menuItem.name,
-            description: val,
-            rating: _menuItem.rating,
-            price: _menuItem.price,
-            imageUrl: _menuItem.imageUrl,
-            isAvailable: _menuItem.isAvailable,
-            imageFileName: _menuItem.imageFileName,
-          );
-          break;
+          materialTypeDropDownValue = val;
         }
     }
   }
 
-  Future<void> _saveForm(
-      {String? patchItemId,
-      String? patchItemName,
-      String? patchItemPrice,
-      String? patchItemDescription}) async {
-    final isValid = _formKey.currentState?.validate();
+  String materialTypeDropDownValue = 'Stationary';
+
+  Future<void> _saveForm({
+    String? patchItemId,
+    String? patchItemName,
+    String? patchItemPrice,
+    String? patchItemMaterialType,
+  }) async {
+    final isValid = _formKey1.currentState?.validate();
     if (isValid != null && !isValid) {
       return;
     }
-    _formKey.currentState!.save();
+    _formKey1.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     if (!_editing) {
       _editedItem['name'] = _nameController.text;
       _editedItem['price'] = _priceController.text;
-      _editedItem['description'] = _descriptionController.text;
+      _editedItem['materialType'] = materialTypeDropDownValue;
 
       try {
-        await Provider.of<RestaurantProvider>(context, listen: false)
-            .newMenuItem(
+        await Provider.of<MaterialAvailableProvider>(context, listen: false)
+            .newMaterial(
           _editedItem['name']!,
           _editedItem['price']!,
-          _editedItem['description']!,
-          _storedMenuImage!,
+          materialTypeDropDownValue,
+          _storedStationaryImage!,
         );
         await dialog(
           ctx: context,
-          errorMessage: "Menu Item Created",
+          errorMessage: "Material Created",
           title: "Success",
           pop2Pages: true,
         );
@@ -189,20 +177,20 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         if (patchItemId != null &&
             patchItemName != null &&
             patchItemPrice != null &&
-            patchItemDescription != null) {
+            patchItemMaterialType != null) {
           if (_imageChanged) {
-            await Provider.of<RestaurantProvider>(context, listen: false)
-                .patchMenuitem(
+            await Provider.of<MaterialAvailableProvider>(context, listen: false)
+                .patchMaterial(
               patchItemId,
               patchItemName,
               patchItemPrice,
-              patchItemDescription,
+              patchItemMaterialType,
               imageChanged: true,
-              image: _storedMenuImage,
+              image: _storedStationaryImage,
             );
             await dialog(
               ctx: context,
-              errorMessage: "Menu Item Edited",
+              errorMessage: "Material Edited",
               title: "Success",
               pop2Pages: true,
             );
@@ -210,17 +198,17 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
               _isLoading = false;
             });
           } else {
-            await Provider.of<RestaurantProvider>(context, listen: false)
-                .patchMenuitem(
+            await Provider.of<MaterialAvailableProvider>(context, listen: false)
+                .patchMaterial(
               patchItemId,
               patchItemName,
               patchItemPrice,
-              patchItemDescription,
+              patchItemMaterialType,
               imageChanged: false,
             );
             await dialog(
               ctx: context,
-              errorMessage: "Menu Item Edited",
+              errorMessage: "Material Edited",
               title: "Success",
               pop2Pages: true,
             );
@@ -230,7 +218,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
           }
         } else {
           await dialog(
-              ctx: context, errorMessage: "Patching Item not provided");
+              ctx: context, errorMessage: "Patching Material not provided");
         }
       } catch (error) {
         await dialog(ctx: context, errorMessage: error.toString());
@@ -241,11 +229,20 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     }
   }
 
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = const [
+      DropdownMenuItem(child: Text("Stationary"), value: "Stationary"),
+      DropdownMenuItem(child: Text("Food"), value: "Food"),
+      DropdownMenuItem(child: Text("Reference"), value: "Reference"),
+      DropdownMenuItem(child: Text("Service"), value: "Service"),
+    ];
+    return menuItems;
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -253,9 +250,9 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-        title: "Cafetaria",
+        title: "Stationary",
         context: context,
-        subtitle: _editing ? "Edit Menu Item" : "Add Menu Item",
+        subtitle: _editing ? "Edit Book" : "Add Book",
         showActions: false,
       ),
       body: SizedBox(
@@ -264,7 +261,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
           child: _isLoading
               ? const CircularProgressIndicator()
               : Form(
-                  key: _formKey,
+                  key: _formKey1,
                   child: SizedBox(
                     width: ScreenSize.screenWidth(context) * .76,
                     child: ListView(
@@ -272,39 +269,36 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                       children: [
                         FormInputTextField(
                           title: "Name",
-                          initialValue:
-                              _menuItem.name.isEmpty ? null : _menuItem.name,
-                          controller:
-                              _menuItem.name.isEmpty ? _nameController : null,
-                          setter: setItem,
+                          initialValue: _materialItem.name.isEmpty
+                              ? null
+                              : _materialItem.name,
+                          controller: _materialItem.name.isEmpty
+                              ? _nameController
+                              : null,
+                          setter: setMaterialItem,
                         ),
                         FormInputTextField(
                           title: "Price",
-                          initialValue: _menuItem.price == 0
+                          initialValue: _materialItem.price == 0
                               ? null
-                              : _menuItem.price.toString(),
+                              : _materialItem.price.toString(),
+                          controller: _materialItem.price == 0
+                              ? _priceController
+                              : null,
+                          setter: setMaterialItem,
                           numberKeyboard: true,
-                          controller:
-                              _menuItem.price == 0 ? _priceController : null,
-                          setter: setItem,
                         ),
                         FormImageInput(
-                          displayImage: _storedMenuImage,
+                          displayImage: _storedStationaryImage,
                           pickImageFunc: _getImage,
                           initialImage:
-                              !_imageChanged ? _menuItem.imageUrl : null,
+                              !_imageChanged ? _materialItem.imageUrl : null,
                         ),
-                        FormInputTextField(
-                          title: "Description",
-                          initialValue: _menuItem.description.isEmpty
-                              ? null
-                              : _menuItem.description,
-                          description: true,
-                          maxLines: 5,
-                          controller: _menuItem.description.isEmpty
-                              ? _descriptionController
-                              : null,
-                          setter: setItem,
+                        DropDownInputForm(
+                          dropDownMenuItems: dropdownItems,
+                          title: "Material Type",
+                          value: materialTypeDropDownValue,
+                          setter: setMaterialItem,
                         ),
                         SizedBox(
                           height: ScreenSize.screenHeight(context) * .02,
@@ -312,10 +306,10 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             await _saveForm(
-                              patchItemId: _menuItem.id,
-                              patchItemName: _menuItem.name,
-                              patchItemPrice: _menuItem.price.toString(),
-                              patchItemDescription: _menuItem.description,
+                              patchItemId: _materialItem.id,
+                              patchItemName: _materialItem.name,
+                              patchItemPrice: _materialItem.price.toString(),
+                              patchItemMaterialType: materialTypeDropDownValue,
                             );
                           },
                           child: const Text("Confirm"),
@@ -328,7 +322,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         ),
       ),
       bottomNavigationBar: const BottomNav(
-        isSelected: "Cafetaria",
+        isSelected: "Stationary",
         showOnlyOne: true,
       ),
     );

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../utils/general/customColor.dart';
-import '../../utils/general/themes.dart';
-import '../../utils/general/screen_size.dart';
+import '../../../utils/general/customColor.dart';
+import '../../../utils/general/themes.dart';
+import '../../../utils/general/screen_size.dart';
 
 class FormImageInput extends StatefulWidget {
   const FormImageInput(

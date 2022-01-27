@@ -1,9 +1,11 @@
 //This contains all the methods dealing with the materials that are available in the stationary.
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../../utils/helpers/http_exception.dart';
 
@@ -54,6 +56,10 @@ class MaterialAvailableProvider with ChangeNotifier {
     };
   }
 
+  MaterialAvailable findMaterialById(String id) {
+    return _materialAvailable.firstWhere((element) => element.id == id);
+  }
+
   //Method to fetch all the materials from the database.
   Future<void> fetchAllMaterials() async {
     final url = materialAvailableUrl();
@@ -79,6 +85,102 @@ class MaterialAvailableProvider with ChangeNotifier {
       _materialAvailable = loadedMaterials;
     } catch (error) {
       throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> newMaterial(
+    String name,
+    String price,
+    String materialType,
+    File image,
+  ) async {
+    final url = materialAvailableUrl();
+    try {
+      var req = http.MultipartRequest('POST', url);
+
+      req.files.add(http.MultipartFile(
+        'image', //form field name
+        image.readAsBytes().asStream(),
+        image.lengthSync(),
+        filename: image.path,
+        contentType: MediaType('image', 'jpeg'),
+      ));
+
+      req.headers.addAll({
+        'secret_token': _authToken,
+        "Content-type": "multipart/form-data",
+      });
+
+      req.fields.addAll({
+        'material[name]': name,
+        'material[price]': price,
+        'material[materialType]': materialType,
+      });
+      await req.send();
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> patchMaterial(
+    String id,
+    String name,
+    String price,
+    String materialType,
+{
+    required bool imageChanged,
+    File? image,
+  }) async {
+    final url = materialAvailableUrl(id);
+    if (imageChanged && image != null) {
+      try {
+        var req = http.MultipartRequest('PATCH', url);
+
+        req.files.add(http.MultipartFile(
+          'image', //form field name
+          image.readAsBytes().asStream(),
+          image.lengthSync(),
+          filename: image.path,
+          contentType: MediaType('image', 'jpeg'),
+        ));
+
+        req.headers.addAll({
+          'secret_token': _authToken,
+          "Content-type": "multipart/form-data",
+        });
+
+        req.fields.addAll({
+          'material[name]': name,
+          'material[price]': price,
+          'material[materialType]': materialType,
+        });
+
+        await req.send();
+      } catch (error) {
+        throw HttpException(error.toString());
+      }
+    } else {
+      try {
+        final response = await http.patch(
+          url,
+          headers: _headers,
+          body: jsonEncode(
+            {
+              'material': {
+                'name': name,
+                'price': price,
+                'materialType': materialType,
+              }
+            },
+          ),
+        );
+        final decodedData = jsonDecode(response.body);
+        if (decodedData['error'] != null) {
+          throw HttpException(decodedData['error']['message']);
+        }
+      } catch (error) {
+        throw HttpException(error.toString());
+      }
     }
   }
 }

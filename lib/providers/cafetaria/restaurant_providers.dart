@@ -106,8 +106,7 @@ class RestaurantProvider with ChangeNotifier {
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =
           OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
-      User loadedUser = User(id: '', name: '', role: '', username: '');
-      //print(decodedData);
+      User loadedUser = User(id: '', name: '', role: '', username: '',);
       decodedData.forEach(
         (key, value) {
           loadedOrderItems = [];
@@ -136,7 +135,6 @@ class RestaurantProvider with ChangeNotifier {
               return loadedOrderItems;
             },
           );
-          //print(loadedOrderItems);
           getLoadedUser() {
             for (var key in value['user'].keys) {
               loadedUser = User(
@@ -148,8 +146,6 @@ class RestaurantProvider with ChangeNotifier {
               return loadedUser;
             }
           }
-
-          //print(getLoadedUser());
           loadedOrders.add(
             ReceivedOrder(
               id: value['_id'],
@@ -163,20 +159,11 @@ class RestaurantProvider with ChangeNotifier {
               ),
             ),
           );
-          //print(loadedOrders);
         },
       );
       _receivedOrderItem = loadedOrderItems;
       _receivedOrders = loadedOrders;
-      //print(decodedData);
-      // _receivedOrders.forEach((element) {
-      //   print(element.user.name);
-      // });
-      // _receivedOrders.forEach((element) {
-      //   print(element.paymentStatus);
-      // });
       notifyListeners();
-      //print(decodedData);
     } catch (error) {
       throw HttpException(error.toString());
     }

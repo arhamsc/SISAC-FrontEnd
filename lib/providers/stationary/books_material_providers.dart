@@ -1,9 +1,11 @@
 //This contains all the methods related to the books material part of the stationary.
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../../utils/helpers/http_exception.dart';
 
@@ -56,6 +58,10 @@ class BooksMaterialProvider with ChangeNotifier {
     };
   }
 
+  BooksMaterial findBookById(String id) {
+    return _booksMaterial.firstWhere((element) => element.id == id);
+  }
+
   //Method to fetch all the books from the database.
   Future<void> fetchAllBooks() async {
     final url = booksMaterialUrl();
@@ -83,4 +89,104 @@ class BooksMaterialProvider with ChangeNotifier {
       throw HttpException(error.toString());
     }
   }
+
+  Future<void> newBook(
+    String name,
+    String price,
+    String author,
+    String edition,
+    File image,
+  ) async {
+    final url = booksMaterialUrl();
+    try {
+      var req = http.MultipartRequest('POST', url);
+
+      req.files.add(http.MultipartFile(
+        'image', //form field name
+        image.readAsBytes().asStream(),
+        image.lengthSync(),
+        filename: image.path,
+        contentType: MediaType('image', 'jpeg'),
+      ));
+
+      req.headers.addAll({
+        'secret_token': _authToken,
+        "Content-type": "multipart/form-data",
+      });
+
+      req.fields.addAll({
+        'book[name]': name,
+        'book[price]': price,
+        'book[edition]': edition,
+        'book[author]' : author,
+      });
+
+      await req.send();
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> patchBook(String id,
+    String name,
+    String price,
+    String author,
+    String edition, {
+      required bool imageChanged,
+      File? image,
+    }) async {
+      final url = booksMaterialUrl(id);
+      if (imageChanged && image != null) {
+      try {
+        var req = http.MultipartRequest('PATCH', url);
+
+        req.files.add(http.MultipartFile(
+          'image', //form field name
+          image.readAsBytes().asStream(),
+          image.lengthSync(),
+          filename: image.path,
+          contentType: MediaType('image', 'jpeg'),
+        ));
+
+        req.headers.addAll({
+          'secret_token': _authToken,
+          "Content-type": "multipart/form-data",
+        });
+
+        req.fields.addAll({
+          'book[name]': name,
+          'book[price]': price,
+          'book[edition]': edition,
+          'book[author]': author,
+        });
+
+        await req.send();
+      } catch (error) {
+        throw HttpException(error.toString());
+      }
+    } else {
+      try {
+        final response = await http.patch(
+          url,
+          headers: _headers,
+          body: jsonEncode(
+            {
+              'book': {
+                'name': name,
+                'price': price,
+                'edition': edition,
+                'author': author,
+              }
+            },
+          ),
+        );
+        final decodedData = jsonDecode(response.body);
+        if (decodedData['error'] != null) {
+          throw HttpException(decodedData['error']['message']);
+        }
+      } catch (error) {
+        throw HttpException(error.toString());
+      }
+    }
+    }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import './update_availability_screen.dart';
+import './books_material_screen.dart';
+import './material_available_screen.dart';
 
 import '../../../../widgets/component_widgets/home/home_main_card.dart';
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
-import '../../../../widgets/component_widgets/cafetaria/restaurant/restaurant_drawer.dart';
+import '../../../../widgets/component_widgets/stationary/vendor/stationary_drawer.dart';
 
 import '../../../../utils/general/customColor.dart';
 import '../../../../utils/general/screen_size.dart';
@@ -22,7 +24,7 @@ class StationaryHomeScreen extends StatelessWidget {
         context: context,
         subtitle: "Home - Vendor",
       ),
-      drawer: const RestaurantDrawer(),
+      drawer: const StationaryDrawer(),
       body: Column(
         children: [
           SizedBox(
@@ -40,8 +42,9 @@ class StationaryHomeScreen extends StatelessWidget {
                       mainTitle: "Update Availability",
                       buttonTitle: "Click to view",
                       buttonFunction: () {
-                        Navigator.of(context)
-                            .pushNamed(UpdateAvailabilityScreen.routeName);
+                        Navigator.of(context).pushNamed(
+                          UpdateAvailabilityScreen.routeName,
+                        );
                       },
                       bgColor: SecondaryPallete.primary,
                     ),
@@ -51,7 +54,11 @@ class StationaryHomeScreen extends StatelessWidget {
                     HomeMainCard(
                       mainTitle: "Books",
                       buttonTitle: "Click to update books",
-                      buttonFunction: () {},
+                      buttonFunction: () {
+                        Navigator.of(context).pushNamed(
+                          VendorBooksMaterialScreen.routeName,
+                        );
+                      },
                       bgColor: SecondaryPallete.primary,
                     ),
                     SizedBox(
@@ -60,7 +67,11 @@ class StationaryHomeScreen extends StatelessWidget {
                     HomeMainCard(
                       mainTitle: "Material",
                       buttonTitle: "Click to update material",
-                      buttonFunction: () {},
+                      buttonFunction: () {
+                        Navigator.of(context).pushNamed(
+                          VendorMaterialAvailableScreen.routeName,
+                        );
+                      },
                       bgColor: SecondaryPallete.primary,
                     ),
                     SizedBox(

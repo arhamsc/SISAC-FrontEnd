@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
-import '../../../../providers/cafetaria/restaurant_providers.dart';
+import '../../../../providers/stationary/books_material_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
@@ -19,42 +18,45 @@ import '../../../../utils/general/themes.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
 //This widget is for adding or editing menu Items
-class AddEditMenuItemScreen extends StatefulWidget {
-  static const routeName = '/cafetaria/restaurant/addEditMenuItem';
-  const AddEditMenuItemScreen({Key? key}) : super(key: key);
+class AddEditStationaryItemScreen extends StatefulWidget {
+  static const routeName = '/stationary/vendor/addEditStationaryItem';
+  const AddEditStationaryItemScreen({Key? key}) : super(key: key);
 
   @override
-  _AddEditMenuItemScreenState createState() => _AddEditMenuItemScreenState();
+  _AddEditStationaryItemScreenState createState() =>
+      _AddEditStationaryItemScreenState();
 }
 
-class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
-  File? _storedMenuImage;
-  final _formKey = GlobalKey<FormState>();
+class _AddEditStationaryItemScreenState
+    extends State<AddEditStationaryItemScreen> {
+  File? _storedStationaryImage;
+  final _formKey1 = GlobalKey<FormState>();
 
   //controllers
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _editionController = TextEditingController();
+  final _authorController = TextEditingController();
 
   bool _isInit = true;
   bool _isLoading = false;
   bool _imageChanged = false;
   bool _editing = false;
 
-  var _menuItem = MenuItem(
+  var _bookItem = BooksMaterial(
     id: '',
     name: '',
-    description: '',
-    rating: 0,
     price: 0,
+    author: '',
+    edition: 0,
     imageUrl: '',
-    isAvailable: false,
     imageFileName: '',
   );
 
   final _editedItem = {
     'name': '',
-    'description': '',
+    'author': '',
+    'edition': '',
     'price': '',
     'image': null,
   };
@@ -62,10 +64,11 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final menuId = ModalRoute.of(context)?.settings.arguments as String;
-      if (menuId.isNotEmpty) {
+      final bookId = ModalRoute.of(context)?.settings.arguments as String;
+      if (bookId.isNotEmpty) {
         _editing = true;
-        _menuItem = Provider.of<MenuItemProvider>(context).findMenuById(menuId);
+        _bookItem =
+            Provider.of<BooksMaterialProvider>(context).findBookById(bookId);
       } else {
         _editing = false;
       }
@@ -88,90 +91,101 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     }
     setState(() {
       _imageChanged = true;
-      _storedMenuImage = _pickedImage != null ? File(_pickedImage.path) : null;
+      _storedStationaryImage =
+          _pickedImage != null ? File(_pickedImage.path) : null;
     });
   }
 
-  set nameSet(String name) {
-    _editedItem['name'] = name;
-  }
-
-  void setItem(String val, String fieldToSet) {
+  void setBookItem(String val, String fieldToSet) {
     switch (fieldToSet) {
       case "Name":
         {
-          _menuItem = MenuItem(
-            id: _menuItem.id,
+          _bookItem = BooksMaterial(
+            id: _bookItem.id,
             name: val,
-            description: _menuItem.description,
-            rating: _menuItem.rating,
-            price: _menuItem.price,
-            imageUrl: _menuItem.imageUrl,
-            isAvailable: _menuItem.isAvailable,
-            imageFileName: _menuItem.imageFileName,
+            author: _bookItem.author,
+            edition: _bookItem.edition,
+            price: _bookItem.price,
+            imageUrl: _bookItem.imageUrl,
+            imageFileName: _bookItem.imageFileName,
           );
           break;
         }
       case "Price":
         {
-          _menuItem = MenuItem(
-            id: _menuItem.id,
-            name: _menuItem.name,
-            description: _menuItem.description,
-            rating: _menuItem.rating,
+          _bookItem = BooksMaterial(
+            id: _bookItem.id,
+            name: _bookItem.name,
+            author: _bookItem.author,
+            edition: _bookItem.edition,
             price: int.parse(val),
-            imageUrl: _menuItem.imageUrl,
-            isAvailable: _menuItem.isAvailable,
-            imageFileName: _menuItem.imageFileName,
+            imageUrl: _bookItem.imageUrl,
+            imageFileName: _bookItem.imageFileName,
           );
           break;
         }
-      case "Description":
+      case "Edition":
         {
-          _menuItem = MenuItem(
-            id: _menuItem.id,
-            name: _menuItem.name,
-            description: val,
-            rating: _menuItem.rating,
-            price: _menuItem.price,
-            imageUrl: _menuItem.imageUrl,
-            isAvailable: _menuItem.isAvailable,
-            imageFileName: _menuItem.imageFileName,
+          _bookItem = BooksMaterial(
+            id: _bookItem.id,
+            name: _bookItem.name,
+            edition: int.parse(val),
+            author: _bookItem.author,
+            price: _bookItem.price,
+            imageUrl: _bookItem.imageUrl,
+            imageFileName: _bookItem.imageFileName,
+          );
+          break;
+        }
+      case "Author":
+        {
+          _bookItem = BooksMaterial(
+            id: _bookItem.id,
+            name: _bookItem.name,
+            edition: _bookItem.edition,
+            author: val,
+            price: _bookItem.price,
+            imageUrl: _bookItem.imageUrl,
+            imageFileName: _bookItem.imageFileName,
           );
           break;
         }
     }
   }
 
-  Future<void> _saveForm(
-      {String? patchItemId,
-      String? patchItemName,
-      String? patchItemPrice,
-      String? patchItemDescription}) async {
-    final isValid = _formKey.currentState?.validate();
+  Future<void> _saveForm({
+    String? patchItemId,
+    String? patchItemName,
+    String? patchItemPrice,
+    String? patchItemAuthor,
+    String? patchItemEdition,
+  }) async {
+    final isValid = _formKey1.currentState?.validate();
     if (isValid != null && !isValid) {
       return;
     }
-    _formKey.currentState!.save();
+    _formKey1.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     if (!_editing) {
       _editedItem['name'] = _nameController.text;
       _editedItem['price'] = _priceController.text;
-      _editedItem['description'] = _descriptionController.text;
+      _editedItem['author'] = _authorController.text;
+      _editedItem['edition'] = _editionController.text;
 
       try {
-        await Provider.of<RestaurantProvider>(context, listen: false)
-            .newMenuItem(
+        await Provider.of<BooksMaterialProvider>(context, listen: false)
+            .newBook(
           _editedItem['name']!,
           _editedItem['price']!,
-          _editedItem['description']!,
-          _storedMenuImage!,
+          _editedItem['author']!,
+          _editedItem['edition']!,
+          _storedStationaryImage!,
         );
         await dialog(
           ctx: context,
-          errorMessage: "Menu Item Created",
+          errorMessage: "Book Created",
           title: "Success",
           pop2Pages: true,
         );
@@ -189,20 +203,22 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         if (patchItemId != null &&
             patchItemName != null &&
             patchItemPrice != null &&
-            patchItemDescription != null) {
+            patchItemAuthor != null &&
+            patchItemEdition != null) {
           if (_imageChanged) {
-            await Provider.of<RestaurantProvider>(context, listen: false)
-                .patchMenuitem(
+            await Provider.of<BooksMaterialProvider>(context, listen: false)
+                .patchBook(
               patchItemId,
               patchItemName,
               patchItemPrice,
-              patchItemDescription,
+              patchItemAuthor,
+              patchItemEdition,
               imageChanged: true,
-              image: _storedMenuImage,
+              image: _storedStationaryImage,
             );
             await dialog(
               ctx: context,
-              errorMessage: "Menu Item Edited",
+              errorMessage: "Book Edited",
               title: "Success",
               pop2Pages: true,
             );
@@ -210,17 +226,18 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
               _isLoading = false;
             });
           } else {
-            await Provider.of<RestaurantProvider>(context, listen: false)
-                .patchMenuitem(
+            await Provider.of<BooksMaterialProvider>(context, listen: false)
+                .patchBook(
               patchItemId,
               patchItemName,
               patchItemPrice,
-              patchItemDescription,
+              patchItemAuthor,
+              patchItemEdition,
               imageChanged: false,
             );
             await dialog(
               ctx: context,
-              errorMessage: "Menu Item Edited",
+              errorMessage: "Book Edited",
               title: "Success",
               pop2Pages: true,
             );
@@ -230,7 +247,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
           }
         } else {
           await dialog(
-              ctx: context, errorMessage: "Patching Item not provided");
+              ctx: context, errorMessage: "Patching Book not provided");
         }
       } catch (error) {
         await dialog(ctx: context, errorMessage: error.toString());
@@ -245,7 +262,8 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
-    _descriptionController.dispose();
+    _authorController.dispose();
+    _editionController.dispose();
     super.dispose();
   }
 
@@ -253,9 +271,9 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-        title: "Cafetaria",
+        title: "Stationary",
         context: context,
-        subtitle: _editing ? "Edit Menu Item" : "Add Menu Item",
+        subtitle: _editing ? "Edit Book" : "Add Book",
         showActions: false,
       ),
       body: SizedBox(
@@ -264,7 +282,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
           child: _isLoading
               ? const CircularProgressIndicator()
               : Form(
-                  key: _formKey,
+                  key: _formKey1,
                   child: SizedBox(
                     width: ScreenSize.screenWidth(context) * .76,
                     child: ListView(
@@ -273,38 +291,47 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                         FormInputTextField(
                           title: "Name",
                           initialValue:
-                              _menuItem.name.isEmpty ? null : _menuItem.name,
+                              _bookItem.name.isEmpty ? null : _bookItem.name,
                           controller:
-                              _menuItem.name.isEmpty ? _nameController : null,
-                          setter: setItem,
+                              _bookItem.name.isEmpty ? _nameController : null,
+                          setter: setBookItem,
+                        ),
+                        FormInputTextField(
+                          title: "Author",
+                          initialValue: _bookItem.author.isEmpty
+                              ? null
+                              : _bookItem.author,
+                          controller: _bookItem.author.isEmpty
+                              ? _authorController
+                              : null,
+                          setter: setBookItem,
+                        ),
+                        FormImageInput(
+                          displayImage: _storedStationaryImage,
+                          pickImageFunc: _getImage,
+                          initialImage:
+                              !_imageChanged ? _bookItem.imageUrl : null,
+                        ),
+                        FormInputTextField(
+                          title: "Edition",
+                          initialValue: _bookItem.edition == 0
+                              ? null
+                              : _bookItem.edition.toString(),
+                          controller: _bookItem.edition == 0
+                              ? _editionController
+                              : null,
+                          setter: setBookItem,
+                          numberKeyboard: true,
                         ),
                         FormInputTextField(
                           title: "Price",
-                          initialValue: _menuItem.price == 0
+                          initialValue: _bookItem.price == 0
                               ? null
-                              : _menuItem.price.toString(),
-                          numberKeyboard: true,
+                              : _bookItem.price.toString(),
                           controller:
-                              _menuItem.price == 0 ? _priceController : null,
-                          setter: setItem,
-                        ),
-                        FormImageInput(
-                          displayImage: _storedMenuImage,
-                          pickImageFunc: _getImage,
-                          initialImage:
-                              !_imageChanged ? _menuItem.imageUrl : null,
-                        ),
-                        FormInputTextField(
-                          title: "Description",
-                          initialValue: _menuItem.description.isEmpty
-                              ? null
-                              : _menuItem.description,
-                          description: true,
-                          maxLines: 5,
-                          controller: _menuItem.description.isEmpty
-                              ? _descriptionController
-                              : null,
-                          setter: setItem,
+                              _bookItem.price == 0 ? _priceController : null,
+                          setter: setBookItem,
+                          numberKeyboard: true,
                         ),
                         SizedBox(
                           height: ScreenSize.screenHeight(context) * .02,
@@ -312,10 +339,11 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             await _saveForm(
-                              patchItemId: _menuItem.id,
-                              patchItemName: _menuItem.name,
-                              patchItemPrice: _menuItem.price.toString(),
-                              patchItemDescription: _menuItem.description,
+                              patchItemId: _bookItem.id,
+                              patchItemName: _bookItem.name,
+                              patchItemPrice: _bookItem.price.toString(),
+                              patchItemAuthor: _bookItem.author,
+                              patchItemEdition: _bookItem.edition.toString(),
                             );
                           },
                           child: const Text("Confirm"),
@@ -328,7 +356,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         ),
       ),
       bottomNavigationBar: const BottomNav(
-        isSelected: "Cafetaria",
+        isSelected: "Stationary",
         showOnlyOne: true,
       ),
     );

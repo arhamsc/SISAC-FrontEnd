@@ -12,6 +12,7 @@ Future<dynamic> dialog({
     context: ctx,
     builder: (context) {
       return AlertDialog(
+        
         title: Text(title ?? "Error Occurred",
             style: Theme.of(context).textTheme.headline6?.copyWith(
                   color: SecondaryPallete.primary,
