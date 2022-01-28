@@ -9,6 +9,7 @@ import '../../utils/helpers/http_exception.dart';
 import './order_providers.dart';
 
 import '../../constants/request_url.dart' as req_url;
+
 class CartProvider with ChangeNotifier {
   late String _authToken;
   late String _userId;
@@ -114,7 +115,8 @@ class CartProvider with ChangeNotifier {
     });
     return total;
   }
- //Getter to get the total amount of the cart items
+
+  //Getter to get the total amount of the cart items
   int get totalAmount {
     var amt = 0;
     _cartItems.forEach((key, value) {
@@ -129,10 +131,16 @@ class CartProvider with ChangeNotifier {
   }
 
   //Method to make a order a.k.a make a POST request to the server to add in the received orders database
-  Future<void> makeOrder(List<MenuOrder> items, int amount, String pmtStatus,
-      String txnId, String timeStamp) async {
+  Future<void> makeOrder(
+    List<MenuOrder> items,
+    int amount,
+    String pmtStatus,
+    String txnId,
+    String timeStamp,
+  ) async {
     final url = orderUrl();
     try {
+      if (items.isEmpty) throw HttpException("Empty Cart");
       final response = await http.post(
         url,
         headers: _headers,

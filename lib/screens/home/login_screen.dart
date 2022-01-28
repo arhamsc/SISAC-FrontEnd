@@ -25,12 +25,11 @@ class LoginScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Consumer<Auth>(
-        builder: (ctx, authData, _) => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Expanded(child: SizedBox()),
-            Center(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Center(
               heightFactor: 2.0,
               child: Container(
                 height: ScreenSize.screenHeight(context) * 0.3,
@@ -44,12 +43,11 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const Expanded(child: SizedBox()),
-            LoginButtonContainer(
-              showModal: _showLoginModal,
-            ),
-          ],
-        ),
+          ),
+          LoginButtonContainer(
+            showModal: _showLoginModal,
+          ),
+        ],
       ),
     );
   }

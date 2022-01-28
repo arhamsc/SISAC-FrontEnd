@@ -25,79 +25,73 @@ class StationaryHomeScreen extends StatelessWidget {
         subtitle: "Home - Vendor",
       ),
       drawer: const StationaryDrawer(),
-      body: Column(
-        children: [
-          SizedBox(
-            height: ScreenSize.usableHeight(context),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: ScreenSize.screenHeight(context) * .01,
-                    ),
-                    HomeMainCard(
-                      mainTitle: "Update Availability",
-                      buttonTitle: "Click to view",
-                      buttonFunction: () {
-                        Navigator.of(context).pushNamed(
-                          UpdateAvailabilityScreen.routeName,
-                        );
-                      },
-                      bgColor: SecondaryPallete.primary,
-                    ),
-                    SizedBox(
-                      height: ScreenSize.screenHeight(context) * .02,
-                    ),
-                    HomeMainCard(
-                      mainTitle: "Books",
-                      buttonTitle: "Click to update books",
-                      buttonFunction: () {
-                        Navigator.of(context).pushNamed(
-                          VendorBooksMaterialScreen.routeName,
-                        );
-                      },
-                      bgColor: SecondaryPallete.primary,
-                    ),
-                    SizedBox(
-                      height: ScreenSize.screenHeight(context) * .02,
-                    ),
-                    HomeMainCard(
-                      mainTitle: "Material",
-                      buttonTitle: "Click to update material",
-                      buttonFunction: () {
-                        Navigator.of(context).pushNamed(
-                          VendorMaterialAvailableScreen.routeName,
-                        );
-                      },
-                      bgColor: SecondaryPallete.primary,
-                    ),
-                    SizedBox(
-                      height: ScreenSize.screenHeight(context) * .02,
-                    ),
-                    HomeMainCard(
-                      mainTitle: "Received Orders",
-                      buttonTitle: "Click to view orders",
-                      buttonFunction: () {},
-                      bgColor: SecondaryPallete.primary,
-                    ),
-                    SizedBox(
-                      height: ScreenSize.screenHeight(context) * .01,
-                    ),
-                  ],
+      body: SizedBox(
+        height: ScreenSize.usableHeight(context),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: ScreenSize.screenHeight(context) * .01,
                 ),
-              ),
+                HomeMainCard(
+                  mainTitle: "Update Availability",
+                  buttonTitle: "Click to view",
+                  buttonFunction: () {
+                    Navigator.of(context).pushNamed(
+                      UpdateAvailabilityScreen.routeName,
+                    );
+                  },
+                  bgColor: SecondaryPallete.primary,
+                ),
+                SizedBox(
+                  height: ScreenSize.screenHeight(context) * .02,
+                ),
+                HomeMainCard(
+                  mainTitle: "Books",
+                  buttonTitle: "Click to update books",
+                  buttonFunction: () {
+                    Navigator.of(context).pushNamed(
+                      VendorBooksMaterialScreen.routeName,
+                    );
+                  },
+                  bgColor: SecondaryPallete.primary,
+                ),
+                SizedBox(
+                  height: ScreenSize.screenHeight(context) * .02,
+                ),
+                HomeMainCard(
+                  mainTitle: "Material",
+                  buttonTitle: "Click to update material",
+                  buttonFunction: () {
+                    Navigator.of(context).pushNamed(
+                      VendorMaterialAvailableScreen.routeName,
+                    );
+                  },
+                  bgColor: SecondaryPallete.primary,
+                ),
+                SizedBox(
+                  height: ScreenSize.screenHeight(context) * .02,
+                ),
+                HomeMainCard(
+                  mainTitle: "Received Orders",
+                  buttonTitle: "Click to view orders",
+                  buttonFunction: () {},
+                  bgColor: SecondaryPallete.primary,
+                ),
+                SizedBox(
+                  height: ScreenSize.screenHeight(context) * .01,
+                ),
+              ],
             ),
           ),
-          const Expanded(
-            child: BottomNav(
-              isSelected: "Stationary",
-              showOnlyOne: true,
-            ),
-          ),
-        ],
+        ),
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Stationary",
+        showOnlyOne: true,
       ),
     );
   }

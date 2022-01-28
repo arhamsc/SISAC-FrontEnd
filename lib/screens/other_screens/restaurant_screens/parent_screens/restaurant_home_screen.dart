@@ -24,44 +24,38 @@ class RestaurantHomeScreen extends StatelessWidget {
         subtitle: "Home",
       ),
       drawer: const RestaurantDrawer(),
-      body: Column(
-        children: [
-          SizedBox(
-            height: ScreenSize.usableHeight(context),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  HomeMainCard(
-                    mainTitle: "Received Orders",
-                    buttonTitle: "Click to view",
-                    buttonFunction: () {
-                      Navigator.of(context)
-                          .pushNamed(ReceivedOrdersScreen.routeName);
-                    },
-                    bgColor: SecondaryPallete.primary,
-                  ),
-                  HomeMainCard(
-                    mainTitle: "Menu Availability",
-                    buttonTitle: "Click to update menu",
-                    buttonFunction: () {
-                      Navigator.of(context)
-                          .pushNamed(IsAvailableScreen.routeName);
-                    },
-                    bgColor: SecondaryPallete.primary,
-                  ),
-                ],
+      body: SizedBox(
+        height: ScreenSize.usableHeight(context),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              HomeMainCard(
+                mainTitle: "Received Orders",
+                buttonTitle: "Click to view",
+                buttonFunction: () {
+                  Navigator.of(context).pushNamed(
+                    ReceivedOrdersScreen.routeName,
+                  );
+                },
+                bgColor: SecondaryPallete.primary,
               ),
-            ),
+              HomeMainCard(
+                mainTitle: "Menu Availability",
+                buttonTitle: "Click to update menu",
+                buttonFunction: () {
+                  Navigator.of(context).pushNamed(IsAvailableScreen.routeName);
+                },
+                bgColor: SecondaryPallete.primary,
+              ),
+            ],
           ),
-          Expanded(
-            child: BottomNav(
-              isSelected: "Cafetaria",
-              showOnlyOne: true,
-            ),
-          ),
-        ],
+        ),
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Cafetaria",
+        showOnlyOne: true,
       ),
     );
   }
