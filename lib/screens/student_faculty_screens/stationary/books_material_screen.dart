@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import '../../../providers/stationary/books_material_providers.dart';
 
 import '../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../widgets/component_widgets/stationary/display_cards/books_material_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Stationary - Screen to View Books */
 class BooksMaterialScreen extends StatefulWidget {
   const BooksMaterialScreen({Key? key}) : super(key: key);
   static const routeName = '/stationary/booksMaterial';
@@ -19,6 +20,7 @@ class BooksMaterialScreen extends StatefulWidget {
 }
 
 class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
+  /* Pull to Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<BooksMaterialProvider>(context, listen: false)
@@ -30,6 +32,8 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pageController =
+        ModalRoute.of(context)?.settings.arguments as PageController;
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
         title: "Stationary",
@@ -69,6 +73,7 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
                       child: SizedBox(
                         height: ScreenSize.usableHeight(context),
                         child: ListView.builder(
+                          /* Card to Render Books */
                           itemBuilder: (ctx, i) => BooksMaterialCard(
                             booksMaterial: booksMaterialData.booksMaterial[i],
                             setStateFunc: () {
@@ -84,8 +89,9 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
           }
         },
       ),
-      bottomNavigationBar: const BottomNav(
+      bottomNavigationBar: BottomNav(
         isSelected: "Stationary",
+        pageController: pageController,
       ),
     );
   }

@@ -1,3 +1,4 @@
+/* Helper Exception class to throw Errors with custom message */
 class HttpException implements Exception {
   final String message;
 
@@ -5,7 +6,6 @@ class HttpException implements Exception {
 
   @override
   String toString() {
-    // TODO: implement toString
     return message;
   }
 }

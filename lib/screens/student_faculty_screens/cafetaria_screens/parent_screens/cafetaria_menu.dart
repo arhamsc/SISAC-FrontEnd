@@ -9,12 +9,12 @@ import '../functional_screens/cart_screen.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/menu_card.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
-import '../../../../utils/helpers/http_exception.dart';
 
+/* Cafetaria - Screen to view all Menu Items and Adding Menu Items to cart */
 class CafetariaMenu extends StatefulWidget {
   const CafetariaMenu({Key? key}) : super(key: key);
   static const routeName = '/cafetaria/menu';
@@ -26,6 +26,7 @@ class CafetariaMenu extends StatefulWidget {
 class _CafetariaMenuState extends State<CafetariaMenu> {
   @override
   void initState() {
+    /* Fetching the Menu Items at the time of initial Rendering */
     Future.delayed(Duration.zero, () {
       final menuP = Provider.of<MenuItemProvider>(context, listen: false);
       menuP.getRecommendations();
@@ -33,12 +34,14 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
     super.initState();
   }
 
+  /* Pull To Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
     });
   }
 
+  //Date and Time Range Logic for pre order restriction
   DateTime now = DateTime.now();
 
   DateTime availableDurationStart = DateFormat('yyyy-MM-dd hh:mm:ss').parseLoose(
@@ -59,6 +62,8 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final pageController =
+        ModalRoute.of(context)?.settings.arguments as PageController;
     final menuP = Provider.of<MenuItemProvider>(context, listen: false);
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
@@ -92,24 +97,26 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
           } else {
             return Consumer<MenuItemProvider>(
               builder: (ctx, menuData, child) => RefreshIndicator(
-                      onRefresh: () => _refreshItems(context),
-                      child: SizedBox(
-                        height: ScreenSize.usableHeight(context),
-                        child: ListView.builder(
-                          itemBuilder: (ctx, i) => MenuCard(
-                            menu: menuData.items[i],
-                            preOrder: availability,
-                            showBadge: menuData.recommendations.any((element) =>
-                                element.itemId == menuData.items[i].id),
-                          ),
-                          itemCount: menuData.items.length,
-                        ),
-                      ),
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    /* Card to render Menu Items */
+                    itemBuilder: (ctx, i) => MenuCard(
+                      menu: menuData.items[i],
+                      preOrder: availability,
+                      showBadge: menuData.recommendations.any(
+                          (element) => element.itemId == menuData.items[i].id),
                     ),
+                    itemCount: menuData.items.length,
+                  ),
+                ),
+              ),
             );
           }
         },
       ),
+      /* Add to Cart Button */
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed(CartScreen.routeName);
@@ -125,6 +132,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
           FloatingActionButtonLocation.miniCenterDocked,
       bottomNavigationBar: BottomNav(
         isSelected: "Cafetaria",
+        pageController: pageController,
       ),
     );
   }

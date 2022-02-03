@@ -13,6 +13,7 @@ import '../../utils/general/customColor.dart';
 import '../../utils/general/screen_size.dart' show ScreenSize;
 import '../../utils/helpers/http_exception.dart';
 
+/* Login Modal screen to collect credentials and send the authentication request */
 class LoginModalScreen extends StatelessWidget {
   const LoginModalScreen({Key? key}) : super(key: key);
 
@@ -28,8 +29,8 @@ class LoginModalScreen extends StatelessWidget {
         color: Palette.primaryDefault,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            const RoleRow(),
+          children: const [
+             RoleRow(),
             InputColumn(),
           ],
         ),
@@ -39,11 +40,14 @@ class LoginModalScreen extends StatelessWidget {
 }
 
 class InputColumn extends StatefulWidget {
-  static GlobalKey<FormState> _formKey = new GlobalKey();
+  static final GlobalKey<FormState> _formKey = GlobalKey();
+
+  const InputColumn({Key? key}) : super(key: key);
   @override
   State<InputColumn> createState() => _InputColumnState();
 }
 
+/* Credential Input Fields */
 class _InputColumnState extends State<InputColumn> {
   String? _username;
   String? _password;
@@ -55,7 +59,8 @@ class _InputColumnState extends State<InputColumn> {
     super.initState();
   }
 
-  String ScreenByRole(String role) {
+  //Getter to get the appropriate screen
+  String screenByRole(String role) {
     switch (role) {
       case "Other":
         return RestaurantHomeScreen.routeName;
@@ -69,6 +74,7 @@ class _InputColumnState extends State<InputColumn> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<Auth>(context);
+    /* Login Function to authenticate the user */
     Future<void> submitCred() async {
       try {
         setState(() {
@@ -80,7 +86,7 @@ class _InputColumnState extends State<InputColumn> {
           () {
             _isLoading = false;
             Navigator.of(context).pushReplacementNamed(
-              ScreenByRole(authProvider.getRole!),
+              screenByRole(authProvider.getRole!),
             );
           },
         );
@@ -107,6 +113,7 @@ class _InputColumnState extends State<InputColumn> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
+                    //Username input
                     const Text(
                       "Username",
                       style: TextStyle(
@@ -150,6 +157,7 @@ class _InputColumnState extends State<InputColumn> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
+                    //Password Input
                     const Text(
                       "Password",
                       style: TextStyle(
@@ -192,6 +200,7 @@ class _InputColumnState extends State<InputColumn> {
           ),
         ),
         const SizedBox(height: 30),
+        //Login Button
         ElevatedButton(
           onPressed: submitCred,
           child: _isLoading
@@ -205,6 +214,7 @@ class _InputColumnState extends State<InputColumn> {
   }
 }
 
+/* Displaying the role selectors */
 class RoleRow extends StatefulWidget {
   const RoleRow({
     Key? key,

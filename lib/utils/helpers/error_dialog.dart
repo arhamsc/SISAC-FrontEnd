@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../general/customColor.dart';
 
+/* Dialog Helper Widget to show a Success or Error Dialog */
 Future<dynamic> dialog({
   required BuildContext ctx,
   required String errorMessage,
@@ -12,7 +13,6 @@ Future<dynamic> dialog({
     context: ctx,
     builder: (context) {
       return AlertDialog(
-        
         title: Text(title ?? "Error Occurred",
             style: Theme.of(context).textTheme.headline6?.copyWith(
                   color: SecondaryPallete.primary,
@@ -22,15 +22,14 @@ Future<dynamic> dialog({
           tryAgainFunc != null
               ? TextButton(
                   onPressed: () {
-                    tryAgainFunc != null
-                        ? tryAgainFunc
-                        : Navigator.of(context).pop();
+                    tryAgainFunc();
                   },
-                  child: Text('Try Again',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          ?.copyWith(color: SecondaryPallete.primary)),
+                  child: Text(
+                    'Try Again',
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: SecondaryPallete.primary,
+                        ),
+                  ),
                 )
               : const SizedBox(),
           TextButton(

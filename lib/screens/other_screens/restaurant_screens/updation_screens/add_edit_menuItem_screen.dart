@@ -9,7 +9,7 @@ import '../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../widgets/ui_widgets/inputs/form_input_text_field.dart';
 import '../../../../widgets/ui_widgets/inputs/form_image_input.dart';
@@ -18,7 +18,7 @@ import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/themes.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
-//This widget is for adding or editing menu Items
+/* Restaurant - Add/Edit a Menu Item Screen */
 class AddEditMenuItemScreen extends StatefulWidget {
   static const routeName = '/cafetaria/restaurant/addEditMenuItem';
   const AddEditMenuItemScreen({Key? key}) : super(key: key);
@@ -41,6 +41,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   bool _imageChanged = false;
   bool _editing = false;
 
+  //Initial MenuItem
   var _menuItem = MenuItem(
     id: '',
     name: '',
@@ -52,6 +53,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     imageFileName: '',
   );
 
+  //Edited item to store newly created value 
   final _editedItem = {
     'name': '',
     'description': '',
@@ -62,6 +64,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      /* Checking for ID to split between Editing or Adding Functionality */
       final menuId = ModalRoute.of(context)?.settings.arguments as String;
       if (menuId.isNotEmpty) {
         _editing = true;
@@ -74,6 +77,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     super.didChangeDependencies();
   }
 
+  /* Image Getting function */
   Future<void> _getImage({
     bool camera = true,
   }) async {
@@ -96,6 +100,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     _editedItem['name'] = name;
   }
 
+  /* Function to set the MenuItem details when edited for various fields according to the given title */
   void setItem(String val, String fieldToSet) {
     switch (fieldToSet) {
       case "Name":
@@ -143,6 +148,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     }
   }
 
+  /* Saving form function to Send HTTP Request and trigger validators */
   Future<void> _saveForm(
       {String? patchItemId,
       String? patchItemName,
@@ -162,6 +168,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
       _editedItem['description'] = _descriptionController.text;
 
       try {
+        /* Creating new Menu Item Function from Provider */
         await Provider.of<RestaurantProvider>(context, listen: false)
             .newMenuItem(
           _editedItem['name']!,
@@ -191,6 +198,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
             patchItemPrice != null &&
             patchItemDescription != null) {
           if (_imageChanged) {
+            /* Patch the Menu Item if new Image Added */
             await Provider.of<RestaurantProvider>(context, listen: false)
                 .patchMenuitem(
               patchItemId,
@@ -210,6 +218,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
               _isLoading = false;
             });
           } else {
+            /* Patch Menu Item if image has not been changed */
             await Provider.of<RestaurantProvider>(context, listen: false)
                 .patchMenuitem(
               patchItemId,
@@ -270,6 +279,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
+                        //Name Input Widget
                         FormInputTextField(
                           title: "Name",
                           initialValue:
@@ -278,6 +288,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                               _menuItem.name.isEmpty ? _nameController : null,
                           setter: setItem,
                         ),
+                        //Price Input Widget
                         FormInputTextField(
                           title: "Price",
                           initialValue: _menuItem.price == 0
@@ -288,12 +299,14 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                               _menuItem.price == 0 ? _priceController : null,
                           setter: setItem,
                         ),
+                        //Image Input Widget
                         FormImageInput(
                           displayImage: _storedMenuImage,
                           pickImageFunc: _getImage,
                           initialImage:
                               !_imageChanged ? _menuItem.imageUrl : null,
                         ),
+                        //Description Input Widget
                         FormInputTextField(
                           title: "Description",
                           initialValue: _menuItem.description.isEmpty
@@ -309,6 +322,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
                         SizedBox(
                           height: ScreenSize.screenHeight(context) * .02,
                         ),
+                        //Confirmation Button
                         ElevatedButton(
                           onPressed: () async {
                             await _saveForm(

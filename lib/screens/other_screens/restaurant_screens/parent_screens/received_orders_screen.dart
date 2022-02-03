@@ -5,12 +5,13 @@ import '../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/restaurant/received_orders_card.dart';
 
 import '../../../../../utils/helpers/error_dialog.dart';
 import '../../../../../utils/general/screen_size.dart';
 
+/* Restaurant - View and Delete Received Orders Screen */
 class ReceivedOrdersScreen extends StatefulWidget {
   const ReceivedOrdersScreen({Key? key}) : super(key: key);
   static const routeName = '/cafetaria/restaurant/received_orders';
@@ -21,8 +22,10 @@ class ReceivedOrdersScreen extends StatefulWidget {
 
 class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
   Future<void> _refreshItems(BuildContext context) async {
-    return await Provider.of<RestaurantProvider>(context, listen: false)
-        .getReceivedOrders();
+    setState(() {
+      Provider.of<RestaurantProvider>(context, listen: false)
+          .getReceivedOrders();
+    });
   }
 
   @override
@@ -64,40 +67,33 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () => _refreshItems(context),
-              child: Column(
-                children: [
-                  Consumer2<RestaurantProvider, MenuItemProvider>(
-                    builder: (ctx, restaurantProvider, menuData, child) =>
-                        SingleChildScrollView(
-                      child: SizedBox(
-                        height: ScreenSize.usableHeight(context),
-                        child: ListView.builder(
-                          itemBuilder: (ctx, i) => RestaurantReceivedOrdersCard(
-                            order: restaurantProvider.receivedOrders[i],
-                            menu: menuData.items,
-                            index: i,
-                            setStateFunc: () {
-                              setState(() {});
-                            },
-                          ),
-                          itemCount: restaurantProvider.receivedOrders.length,
-                        ),
-                      ),
+            return Consumer2<RestaurantProvider, MenuItemProvider>(
+              builder: (ctx, restaurantProvider, menuData, child) =>
+                  RefreshIndicator(
+                onRefresh: () => _refreshItems(context),
+                child: SizedBox(
+                  height: ScreenSize.usableHeight(context),
+                  child: ListView.builder(
+                    /* Card to render Order Items */
+                    itemBuilder: (ctx, i) => RestaurantReceivedOrdersCard(
+                      order: restaurantProvider.receivedOrders[i],
+                      menu: menuData.items,
+                      index: i,
+                      setStateFunc: () {
+                        setState(() {});
+                      },
                     ),
+                    itemCount: restaurantProvider.receivedOrders.length,
                   ),
-                  Expanded(
-                    child: BottomNav(
-                      isSelected: "Cafetaria",
-                      showOnlyOne: true,
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: const BottomNav(
+        isSelected: "Cafetaria",
+        showOnlyOne: true,
       ),
     );
   }

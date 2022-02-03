@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sisac/utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Scaffold - Universal Base App Bar for all screens. Dynamically rendered content */
 class BaseAppBar {
   static getAppBar({
     required String title,
@@ -17,6 +18,7 @@ class BaseAppBar {
       toolbarHeight: ScreenSize.screenHeight(context) * 0.1,
       leadingWidth: 25,
       title: subtitle == null
+      //Title and Subtitle according to the condition
           ? Text(title)
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../providers/stationary/availability_providers.dart';
 
 import '../../../../../utils/general/screen_size.dart';
 import '../../../../../utils/general/customColor.dart';
 
+/* Stationary - Bluebook/Record Availability Card */
 class AvailabilityCard extends StatefulWidget {
-  AvailabilityCard(
-      {Key? key, required this.availableItems, required this.setFunc})
-      : super(key: key);
+  const AvailabilityCard({
+    Key? key,
+    required this.availableItems,
+    required this.setFunc,
+  }) : super(key: key);
 
   final Availability availableItems;
   final Function setFunc;
@@ -27,7 +29,6 @@ class _AvailabilityCardState extends State<AvailabilityCard> {
 
   @override
   Widget build(BuildContext context) {
-    final menuP = Provider.of<AvailabilityProvider>(context);
     return Column(
       key: widget.key,
       children: [
@@ -65,48 +66,46 @@ class _AvailabilityCardState extends State<AvailabilityCard> {
                 ),
                 Row(
                   children: [
-                    Container(
-                      child: Center(
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: widget.availableItems.isAvailable
-                                  ? Colors.green
-                                  : Colors.red,
-                              radius: 5,
-                            ),
-                            const SizedBox(width: 5),
-                            Wrap(
-                              direction: Axis.vertical,
-                              children: [
-                                widget.availableItems.isAvailable
-                                    ? Text(
-                                        'Available',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2!
-                                            .copyWith(
-                                              color: Palette.quinaryDefault,
-                                              fontSize: 16,
-                                            ),
-                                      )
-                                    : Text(
-                                        'Unavailable',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2!
-                                            .copyWith(
-                                              color: Palette.quinaryDefault,
-                                              fontSize: 16,
-                                            ),
-                                      ),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
+                    Center(
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: widget.availableItems.isAvailable
+                                ? Colors.green
+                                : Colors.red,
+                            radius: 5,
+                          ),
+                          const SizedBox(width: 5),
+                          Wrap(
+                            direction: Axis.vertical,
+                            children: [
+                              widget.availableItems.isAvailable
+                                  ? Text(
+                                      'Available',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .copyWith(
+                                            color: Palette.quinaryDefault,
+                                            fontSize: 16,
+                                          ),
+                                    )
+                                  : Text(
+                                      'Unavailable',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .copyWith(
+                                            color: Palette.quinaryDefault,
+                                            fontSize: 16,
+                                          ),
+                                    ),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                        ],
                       ),
                     ),
                   ],

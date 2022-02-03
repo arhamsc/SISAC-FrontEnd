@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../general/customColor.dart';
 
-void customSnackBar(
-    {required BuildContext ctx,
-    required String title,
-    required Function undoFunc,
-    bool error = false}) {
+/* Helper Snack Bar widget */
+
+void customSnackBar({
+  required BuildContext ctx,
+  required String title,
+  required Function undoFunc,
+  bool error = false,
+}) {
   ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
   ScaffoldMessenger.of(ctx).showSnackBar(
     SnackBar(

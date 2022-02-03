@@ -65,10 +65,7 @@ class MaterialAvailableProvider with ChangeNotifier {
     final url = materialAvailableUrl();
     try {
       final response = await http.get(url, headers: _headers);
-      final decodedData = jsonDecode(response.body);
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       List<MaterialAvailable> loadedMaterials = [];
       decodedData.forEach((key, value) {
         loadedMaterials.add(
@@ -173,10 +170,7 @@ class MaterialAvailableProvider with ChangeNotifier {
             },
           ),
         );
-        final decodedData = jsonDecode(response.body);
-        if (decodedData['error'] != null) {
-          throw HttpException(decodedData['error']['message']);
-        }
+        req_url.checkResponseError(response);
       } catch (error) {
         throw HttpException(error.toString());
       }
@@ -187,7 +181,7 @@ class MaterialAvailableProvider with ChangeNotifier {
     final url = materialAvailableUrl(id);
     try {
       final response = await http.delete(url, headers: _headers);
-      final data = req_url.checkResponseError(response);
+      req_url.checkResponseError(response);
     } catch (error) {
       throw HttpException(error.toString());
     }

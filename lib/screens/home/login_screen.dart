@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../utils/general/screen_size.dart' show ScreenSize;
 
 import '../../widgets/component_widgets/login_form/bottom_container.dart';
 import '../../widgets/modal_screens/login_modal_screen.dart';
 
-import '../../providers/user_provider.dart';
-
+/* Login Screen */
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    /* Modal Screen for Credential Input */
     void _showLoginModal(BuildContext ctx) {
       showModalBottomSheet(
         context: ctx,
         isScrollControlled: true,
         builder: (_) {
-          return LoginModalScreen();
+          return const LoginModalScreen();
         },
       );
     }
@@ -28,6 +27,7 @@ class LoginScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          /* SISAC logo */
           Expanded(
             child: Center(
               heightFactor: 2.0,
@@ -44,6 +44,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
           ),
+          /* Login Modal Screen Activator Widget */
           LoginButtonContainer(
             showModal: _showLoginModal,
           ),

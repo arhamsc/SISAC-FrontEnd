@@ -6,6 +6,7 @@ import '../../../../../providers/cafetaria/order_providers.dart';
 import '../../../../../../utils/general/screen_size.dart';
 import '../../../../../../utils/general/customColor.dart';
 
+/* Cafetaria - Individual order card  */
 class OrderCard extends StatefulWidget {
   const OrderCard({Key? key, required this.order, required this.orderNum})
       : super(key: key);
@@ -18,6 +19,7 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
+  //toggle the animated container
   var _expanded = false;
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class _OrderCardState extends State<OrderCard> {
         Center(
           child: Stack(
             children: [
+              //Container to view the order items in a particular order
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
                 height: _expanded ? ScreenSize.screenHeight(context) * .4 : 0,
@@ -57,7 +60,7 @@ class _OrderCardState extends State<OrderCard> {
                             ),
                             const SizedBox(height: 20),
                             ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (ctx, index) => Padding(
                                 padding: const EdgeInsets.all(5.0),
@@ -79,6 +82,7 @@ class _OrderCardState extends State<OrderCard> {
                   ),
                 ),
               ),
+              //View overall order details
               Container(
                 height: ScreenSize.screenHeight(context) * .12,
                 width: ScreenSize.screenWidth(context) * .85,
@@ -115,6 +119,7 @@ class _OrderCardState extends State<OrderCard> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
+                                          //Order Number
                                           Text(
                                             "Order: ${(widget.orderNum + 1).toString()}",
                                             style: Theme.of(context)
@@ -124,6 +129,7 @@ class _OrderCardState extends State<OrderCard> {
                                                     fontWeight:
                                                         FontWeight.w500),
                                           ),
+                                          //Total Order Amount
                                           Text(
                                             "\u{20B9} ${(widget.order.totalAmount).toString()}\u2070\u2070",
                                             style: Theme.of(context)
@@ -149,6 +155,7 @@ class _OrderCardState extends State<OrderCard> {
                                 width: 5,
                               ),
                               Center(
+                                //Payment Status
                                 child: Text(
                                   "Payment: ${widget.order.paymentStatus}",
                                 ),
@@ -172,6 +179,7 @@ class _OrderCardState extends State<OrderCard> {
                                           vertical: 5,
                                           horizontal: 20,
                                         ),
+                                        //Order Date
                                         child: Text(
                                           "Ordered On: ${DateFormat('dd-MM-yyyy - kk:mm').format(widget.order.createdOn)}",
                                         ),
@@ -180,13 +188,14 @@ class _OrderCardState extends State<OrderCard> {
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
-                                        color: Palette.quaternaryDefault,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
+                                      color: Palette.quaternaryDefault,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     height: ScreenSize.screenHeight(context) *
                                         0.035,
                                     width:
                                         ScreenSize.screenWidth(context) * .08,
+                                    //Toggle expanded state
                                     child: IconButton(
                                       padding: const EdgeInsets.all(0),
                                       color: Palette.quinaryDefault,

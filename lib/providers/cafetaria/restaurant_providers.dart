@@ -98,10 +98,7 @@ class RestaurantProvider with ChangeNotifier {
     final url = restaurantUrl();
     try {
       final response = await http.get(url, headers: _headers);
-      final decodedData = jsonDecode(response.body);
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       List<ReceivedOrder> loadedOrders = [];
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =
@@ -253,10 +250,7 @@ class RestaurantProvider with ChangeNotifier {
             },
           ),
         );
-        final decodedData = jsonDecode(response.body);
-        if (decodedData['error'] != null) {
-          throw HttpException(decodedData['error']['message']);
-        }
+        req_url.checkResponseError(response);
       } catch (error) {
         throw HttpException(error.toString());
       }
@@ -268,15 +262,10 @@ class RestaurantProvider with ChangeNotifier {
     final url = restaurantUrl(id);
     try {
       final response = await http.delete(url, headers: _headers);
-      final decodedData = jsonDecode(response.body);
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       if (decodedData['message'] != null) {
         throw HttpException(decodedData['message']);
       }
-
-      //print(decodedData);
     } catch (error) {
       throw HttpException(error.toString());
     }

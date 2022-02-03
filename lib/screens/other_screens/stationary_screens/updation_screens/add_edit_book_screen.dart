@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../providers/stationary/books_material_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../widgets/ui_widgets/inputs/form_input_text_field.dart';
 import '../../../../widgets/ui_widgets/inputs/form_image_input.dart';
@@ -17,7 +17,7 @@ import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/themes.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
-//This widget is for adding or editing menu Items
+/* Stationary - Add/Edit Books */
 class AddEditStationaryItemScreen extends StatefulWidget {
   static const routeName = '/stationary/vendor/addEditStationaryItem';
   const AddEditStationaryItemScreen({Key? key}) : super(key: key);
@@ -43,6 +43,7 @@ class _AddEditStationaryItemScreenState
   bool _imageChanged = false;
   bool _editing = false;
 
+  //Initial Book Data
   var _bookItem = BooksMaterial(
     id: '',
     name: '',
@@ -53,6 +54,7 @@ class _AddEditStationaryItemScreenState
     imageFileName: '',
   );
 
+  //Data to store new Book details
   final _editedItem = {
     'name': '',
     'author': '',
@@ -64,6 +66,7 @@ class _AddEditStationaryItemScreenState
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      /* Arguments Check to split Add or Edit functionality */
       final bookId = ModalRoute.of(context)?.settings.arguments as String;
       if (bookId.isNotEmpty) {
         _editing = true;
@@ -77,6 +80,7 @@ class _AddEditStationaryItemScreenState
     super.didChangeDependencies();
   }
 
+  /* Image getting function */
   Future<void> _getImage({
     bool camera = true,
   }) async {
@@ -96,6 +100,7 @@ class _AddEditStationaryItemScreenState
     });
   }
 
+  /* Book Data setter to fields according to the given title */
   void setBookItem(String val, String fieldToSet) {
     switch (fieldToSet) {
       case "Name":
@@ -153,6 +158,7 @@ class _AddEditStationaryItemScreenState
     }
   }
 
+  /* Save form function to trigger HTTP request */
   Future<void> _saveForm({
     String? patchItemId,
     String? patchItemName,
@@ -175,6 +181,7 @@ class _AddEditStationaryItemScreenState
       _editedItem['edition'] = _editionController.text;
 
       try {
+        /* Function to insert a new book */
         await Provider.of<BooksMaterialProvider>(context, listen: false)
             .newBook(
           _editedItem['name']!,
@@ -206,6 +213,7 @@ class _AddEditStationaryItemScreenState
             patchItemAuthor != null &&
             patchItemEdition != null) {
           if (_imageChanged) {
+            /* Function to patch the book if there is a new Image */
             await Provider.of<BooksMaterialProvider>(context, listen: false)
                 .patchBook(
               patchItemId,
@@ -226,6 +234,7 @@ class _AddEditStationaryItemScreenState
               _isLoading = false;
             });
           } else {
+            /* Function to patch the book if there is no new Image */
             await Provider.of<BooksMaterialProvider>(context, listen: false)
                 .patchBook(
               patchItemId,
@@ -288,6 +297,7 @@ class _AddEditStationaryItemScreenState
                     child: ListView(
                       shrinkWrap: true,
                       children: [
+                        //Name Input Widget
                         FormInputTextField(
                           title: "Name",
                           initialValue:
@@ -296,6 +306,7 @@ class _AddEditStationaryItemScreenState
                               _bookItem.name.isEmpty ? _nameController : null,
                           setter: setBookItem,
                         ),
+                        //Author Input Widget
                         FormInputTextField(
                           title: "Author",
                           initialValue: _bookItem.author.isEmpty
@@ -306,12 +317,14 @@ class _AddEditStationaryItemScreenState
                               : null,
                           setter: setBookItem,
                         ),
+                        //Image Input Image
                         FormImageInput(
                           displayImage: _storedStationaryImage,
                           pickImageFunc: _getImage,
                           initialImage:
                               !_imageChanged ? _bookItem.imageUrl : null,
                         ),
+                        //Edition Input Image
                         FormInputTextField(
                           title: "Edition",
                           initialValue: _bookItem.edition == 0
@@ -323,6 +336,7 @@ class _AddEditStationaryItemScreenState
                           setter: setBookItem,
                           numberKeyboard: true,
                         ),
+                        //Price Input Image
                         FormInputTextField(
                           title: "Price",
                           initialValue: _bookItem.price == 0
@@ -336,6 +350,7 @@ class _AddEditStationaryItemScreenState
                         SizedBox(
                           height: ScreenSize.screenHeight(context) * .02,
                         ),
+                        //Confirm Button
                         ElevatedButton(
                           onPressed: () async {
                             await _saveForm(

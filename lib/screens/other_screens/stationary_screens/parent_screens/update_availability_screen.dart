@@ -5,11 +5,12 @@ import '../../../../providers/stationary/availability_providers.dart';
 
 import '../../../../widgets/component_widgets/stationary/vendor/update_availability_item_card.dart';
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../../utils/helpers/error_dialog.dart';
 import '../../../../../utils/general/screen_size.dart';
 
+/* Stationary - Screen to Update Bluebook/Record Availability */
 class UpdateAvailabilityScreen extends StatefulWidget {
   const UpdateAvailabilityScreen({Key? key}) : super(key: key);
   static const routeName = '/stationary/vendor/updateAvailability';
@@ -22,6 +23,7 @@ class UpdateAvailabilityScreen extends StatefulWidget {
 class _UpdateAvailabilityScreenState extends State<UpdateAvailabilityScreen> {
   bool _isLoading = false;
 
+  /* Patching whether it is available or not function */
   Future<void> updateAvailabilityFunc(
     AvailabilityProvider avalP,
     String id,
@@ -98,6 +100,7 @@ class _UpdateAvailabilityScreenState extends State<UpdateAvailabilityScreen> {
                 child: SizedBox(
                   height: ScreenSize.usableHeight(context),
                   child: ListView.builder(
+                    /* Card to render the items */
                     itemBuilder: (ctx, i) => UpdateIsAvailableCard(
                       itemName: availabilityData.availableItems[i].materialType,
                       setFunc: () {

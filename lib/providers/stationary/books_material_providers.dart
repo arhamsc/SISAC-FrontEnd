@@ -67,10 +67,7 @@ class BooksMaterialProvider with ChangeNotifier {
     final url = booksMaterialUrl();
     try {
       final response = await http.get(url, headers: _headers);
-      final decodedData = jsonDecode(response.body);
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       List<BooksMaterial> loadedBooks = [];
       decodedData.forEach((key, value) {
         loadedBooks.add(
@@ -181,10 +178,7 @@ class BooksMaterialProvider with ChangeNotifier {
             },
           ),
         );
-        final decodedData = jsonDecode(response.body);
-        if (decodedData['error'] != null) {
-          throw HttpException(decodedData['error']['message']);
-        }
+        req_url.checkResponseError(response);
       } catch (error) {
         throw HttpException(error.toString());
       }
@@ -195,7 +189,7 @@ class BooksMaterialProvider with ChangeNotifier {
     final url = booksMaterialUrl(id);
     try {
       final response = await http.delete(url, headers: _headers);
-      final data = req_url.checkResponseError(response);
+      req_url.checkResponseError(response);
     } catch (error) {
       throw HttpException(error.toString());
     }

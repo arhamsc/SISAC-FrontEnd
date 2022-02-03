@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import '../../../providers/stationary/material_available_providers.dart';
 
 import '../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../widgets/component_widgets/stationary/display_cards/material_available_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Stationary - Screen to View Material */
 class MaterialAvailableScreen extends StatefulWidget {
   const MaterialAvailableScreen({Key? key}) : super(key: key);
   static const routeName = '/stationary/materialAvailable';
@@ -20,6 +21,7 @@ class MaterialAvailableScreen extends StatefulWidget {
 }
 
 class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
+  /* Pull to Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<MaterialAvailableProvider>(context, listen: false)
@@ -29,6 +31,8 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pageController =
+        ModalRoute.of(context)?.settings.arguments as PageController;
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
         title: "Stationary",
@@ -64,6 +68,7 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
                 child: SizedBox(
                   height: ScreenSize.usableHeight(context),
                   child: ListView.builder(
+                    /* Card to Render the Material */
                     itemBuilder: (ctx, i) => MaterialAvailableCard(
                       materialAvailable:
                           booksMaterialData.materialsAvailable[i],
@@ -71,7 +76,6 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
                         setState(() {});
                       },
                       vendor: false,
-                      
                     ),
                     itemCount: booksMaterialData.materialsAvailable.length,
                   ),
@@ -81,8 +85,9 @@ class _MaterialAvailableScreenState extends State<MaterialAvailableScreen> {
           }
         },
       ),
-      bottomNavigationBar: const BottomNav(
+      bottomNavigationBar: BottomNav(
         isSelected: "Stationary",
+        pageController: pageController,
       ),
     );
   }

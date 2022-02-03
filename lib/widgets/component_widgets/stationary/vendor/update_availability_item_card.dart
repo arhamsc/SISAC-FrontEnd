@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../ui_widgets/cards/availability_card.dart';
 
+/* Stationary - Vendor - Updating Bluebook / Records */
 class UpdateIsAvailableCard extends StatefulWidget {
   const UpdateIsAvailableCard({
     Key? key,
@@ -28,6 +29,7 @@ class _UpdateIsAvailableCardState extends State<UpdateIsAvailableCard> {
       children: [
         const SizedBox(height: 10),
         Center(
+          //Custom Switch Availability Card
           child: AvailabilityCard(
             itemName: widget.itemName,
             isAvailable: widget.isAvailable,

@@ -5,6 +5,7 @@ import '../../../providers/user_provider.dart';
 
 import '../../../utils/general/customColor.dart';
 
+/* Scaffold - Custom AppDrawer for Student/faculty */
 class AppDrawer extends StatelessWidget {
   const AppDrawer({
     Key? key,
@@ -36,6 +37,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Center(
+                    //Name
                     child: Text(
                       authData.getUser.name,
                       style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -47,6 +49,7 @@ class AppDrawer extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      //Username
                       Text(
                         authData.getUser.username,
                         style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -54,6 +57,7 @@ class AppDrawer extends StatelessWidget {
                               color: Palette.tertiaryDefault,
                             ),
                       ),
+                      //Role
                       Text(
                         'Role: ${authData.getUser.role}',
                         style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -70,6 +74,7 @@ class AppDrawer extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
+                  //Widget Navigation List Tiles
                   ListTile(
                     leading: const Icon(
                       Icons.calendar_today,
@@ -84,6 +89,7 @@ class AppDrawer extends StatelessWidget {
                       color: Palette.tertiaryDefault,
                       size: 32,
                     ),
+                    //Individual Page controllers
                     onTap: () {
                       pageController.animateToPage(0,
                           duration: const Duration(milliseconds: 500),

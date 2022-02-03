@@ -10,6 +10,7 @@ import '../../../../../widgets/ui_widgets/cards/item_card.dart';
 
 import '../../../../../../utils/general/customColor.dart';
 
+/* Cafetaria - Card to view and rate a menu item */
 class RatingCard extends StatefulWidget {
   const RatingCard({Key? key, required this.menu, required this.setStateFunc})
       : super(key: key);
@@ -22,6 +23,7 @@ class RatingCard extends StatefulWidget {
 }
 
 class _RatingCardState extends State<RatingCard> {
+  /* Getter to get the current rating */
   num get rating {
     return widget.menu.rating;
   }
@@ -36,6 +38,7 @@ class _RatingCardState extends State<RatingCard> {
       children: [
         const SizedBox(height: 10),
         Center(
+          //Custom Item Card widget
           child: ItemCard(
             imageUrl: widget.menu.imageUrl,
             itemName: widget.menu.name,
@@ -48,6 +51,7 @@ class _RatingCardState extends State<RatingCard> {
             expanded: true,
             expandedChildTitle: "Rate",
             expandedChild: [
+              //Animated Container or base container elements
               Center(
                 child: RatingBar(
                   ratingWidget: RatingWidget(
@@ -65,6 +69,7 @@ class _RatingCardState extends State<RatingCard> {
                     ),
                   ),
                   initialRating: rating.toDouble(),
+                  //update current rating
                   onRatingUpdate: (rat) async {
                     setState(
                       () {
@@ -93,11 +98,13 @@ class _RatingCardState extends State<RatingCard> {
                       _isLoading = true;
                     });
                     try {
+                      /* Update rating functions */
                       await menuData.updateRating(widget.menu.id, newRating);
                       await dialog(
-                          ctx: context,
-                          errorMessage: "Thank you for rating",
-                          title: "Success");
+                        ctx: context,
+                        errorMessage: "Thank you for rating",
+                        title: "Success",
+                      );
                       setState(() {
                         _isLoading = false;
                       });

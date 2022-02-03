@@ -6,6 +6,7 @@ import '../../../../screens/other_screens/stationary_screens/updation_screens/ad
 
 import '../../../../widgets/ui_widgets/cards/item_card_v2.dart';
 
+/* Stationary - Books Card */
 class BooksMaterialCard extends StatefulWidget {
   const BooksMaterialCard({
     Key? key,
@@ -30,6 +31,7 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
       children: [
         const SizedBox(height: 10),
         Center(
+          //Custom Item Card
           child: ItemCardV2(
             imageUrl: widget.booksMaterial.imageUrl,
             itemName: widget.booksMaterial.name,
@@ -40,10 +42,12 @@ class _BooksMaterialCardState extends State<BooksMaterialCard> {
             ],
             buttonsRequired: widget.vendor,
             buttonFunction: widget.vendor
+                //Edit screen Push
                 ? () {
                     Navigator.of(context).pushNamed(
-                        AddEditStationaryItemScreen.routeName,
-                        arguments: widget.booksMaterial.id);
+                      AddEditStationaryItemScreen.routeName,
+                      arguments: widget.booksMaterial.id,
+                    );
                   }
                 : null,
             showDeleteButton: widget.vendor,

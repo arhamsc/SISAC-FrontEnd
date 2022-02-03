@@ -14,6 +14,7 @@ import '../../../../widgets/component_widgets/cafetaria/student_faculty/cart/car
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
+/* Cafetaria - Cart Screen */
 class CartScreen extends StatelessWidget {
   static const routeName = '/cafetaria/cart';
   const CartScreen({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class CartScreen extends StatelessWidget {
         );
     //End********* */
 
+    /* Function to find a Menu Item By Id */
     MenuItem findMenuItem(String id) {
       final menuP = Provider.of<MenuItemProvider>(context, listen: false);
       final item = menuP.items.firstWhere((element) => element.id == id);
@@ -45,6 +47,7 @@ class CartScreen extends StatelessWidget {
 
     final cartP = Provider.of<CartProvider>(context);
 
+    /* Function to place an Order */
     Future<void> _placeOrder() async {
       _isLoading = true;
       try {
@@ -78,6 +81,7 @@ class CartScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 10),
+            //Cart Overview Widget
             CartOverViewCard(
               totalAmount: cartP.totalAmount,
               totalItems: cartP.totalItems,
@@ -85,13 +89,14 @@ class CartScreen extends StatelessWidget {
               isLoading: _isLoading,
             ),
             const SizedBox(height: 10),
+            //Cart Items Display Widget
             cartP.cartItems.isEmpty
                 ? const Center(
                     child: Text("No Cart Items"),
                   )
                 : Expanded(
                     child: SingleChildScrollView(
-                      child: Container(
+                      child: SizedBox(
                         height: ScreenSize.screenHeight(context) * .6,
                         child: ListView.builder(
                           itemBuilder: (ctx, index) => CartItemCard(

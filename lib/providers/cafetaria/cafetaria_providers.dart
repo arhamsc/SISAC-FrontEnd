@@ -84,15 +84,8 @@ class MenuItemProvider with ChangeNotifier {
     try {
       //HTTP package is used to send the requests.
       final response = await http.get(url, headers: _headers);
-      var decodedData = json.decode(response.body) as Map<String, dynamic>;
-      if (decodedData['error'] != null) {
-        //print(decodedData);
-        throw HttpException(decodedData['error']['message']);
-      }
-      // print(decodedData);
+      var decodedData = req_url.checkResponseError(response);
       List<MenuItem> loadedItems = [];
-      // print(decodedData);
-      //print(decodedData['items']);
       //Looping over the decoded data to store the values in the local List
       decodedData.forEach(
         (key, value) {
@@ -120,7 +113,6 @@ class MenuItemProvider with ChangeNotifier {
 
 //Method to update the rating of a dish.
   Future<void> updateRating(String menuId, num rating) async {
-    //print(menuId);
     final url = cafetariaUrl('$menuId/rate');
     try {
       final response = await http.post(
@@ -132,7 +124,7 @@ class MenuItemProvider with ChangeNotifier {
           },
         ),
       );
-      //print(response.body);
+      req_url.checkResponseError(response);
     } catch (error) {
       throw HttpException(error.toString());
     }
@@ -161,10 +153,7 @@ class MenuItemProvider with ChangeNotifier {
           },
         ),
       );
-      final decodedData = jsonDecode(response.body);
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       if (response.statusCode >= 400) {
         currentStatus = oldStatus;
         notifyListeners();
@@ -190,10 +179,7 @@ class MenuItemProvider with ChangeNotifier {
     final url = cafetariaUrl('recommendation');
     try {
       final response = await http.get(url, headers: _headers);
-      final decodedData = json.decode(response.body) as Map<String, dynamic>;
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       List<Recommendations> loadedRecoms = [];
       decodedData.forEach((key, value) {
         loadedRecoms.add(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../utils/general/customColor.dart';
 
+/* Badge Widget to display on recommended menu items */
 class Badge extends StatelessWidget {
   const Badge({
     Key? key,
@@ -21,7 +22,6 @@ class Badge extends StatelessWidget {
           top: 2,
           child: Container(
             padding: const EdgeInsets.all(3.0),
-            // color: Theme.of(context).accentColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Palette.quinaryDefault,

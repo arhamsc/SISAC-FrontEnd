@@ -6,12 +6,13 @@ import '../../../../providers/stationary/material_available_providers.dart';
 import '../../../../screens/other_screens/stationary_screens/updation_screens/add_edit_material_available_screen.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/stationary/display_cards/material_available_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
 
+/* Stationary - Screen to Add/Edit Materials Available */
 class VendorMaterialAvailableScreen extends StatefulWidget {
   const VendorMaterialAvailableScreen({Key? key}) : super(key: key);
   static const routeName = '/stationary/vendor/materials_available';
@@ -24,6 +25,7 @@ class VendorMaterialAvailableScreen extends StatefulWidget {
 class _VendorMaterialAvailableScreenState
     extends State<VendorMaterialAvailableScreen> {
   bool _isLoading = false;
+  /* Pull to refresh function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<MaterialAvailableProvider>(context, listen: false)
@@ -31,6 +33,7 @@ class _VendorMaterialAvailableScreenState
     });
   }
 
+  /* Delete material function */
   Future<void> deleteMaterialItem(
       MaterialAvailableProvider matP, String id) async {
     setState(() {
@@ -103,6 +106,7 @@ class _VendorMaterialAvailableScreenState
                       child: SizedBox(
                         height: ScreenSize.usableHeight(context),
                         child: ListView.builder(
+                          /* Card to Render Material */
                           itemBuilder: (ctx, i) => MaterialAvailableCard(
                             materialAvailable:
                                 materialAvailableData.materialsAvailable[i],

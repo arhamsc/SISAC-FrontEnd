@@ -5,12 +5,13 @@ import 'isAvailable_screen.dart';
 
 import '../../../../widgets/component_widgets/home/home_main_card.dart';
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/restaurant/restaurant_drawer.dart';
 
 import '../../../../utils/general/customColor.dart';
 import '../../../../utils/general/screen_size.dart';
 
+/* Restaurant - Home Screen */
 class RestaurantHomeScreen extends StatelessWidget {
   static const routeName = 'cafetaria/restaurant';
   const RestaurantHomeScreen({Key? key}) : super(key: key);
@@ -31,6 +32,7 @@ class RestaurantHomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              /* Received Orders Widget */
               HomeMainCard(
                 mainTitle: "Received Orders",
                 buttonTitle: "Click to view",
@@ -41,6 +43,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                 },
                 bgColor: SecondaryPallete.primary,
               ),
+              /* Menu Updation Widget */
               HomeMainCard(
                 mainTitle: "Menu Availability",
                 buttonTitle: "Click to update menu",

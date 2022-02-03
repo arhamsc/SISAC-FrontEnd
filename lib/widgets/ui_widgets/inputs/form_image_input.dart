@@ -6,13 +6,14 @@ import '../../../utils/general/customColor.dart';
 import '../../../utils/general/themes.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Custom Form Image Input Widget to select the image from gallery or camera */
 class FormImageInput extends StatefulWidget {
-  const FormImageInput(
-      {Key? key,
-      required this.displayImage,
-      required this.pickImageFunc,
-      this.initialImage})
-      : super(key: key);
+  const FormImageInput({
+    Key? key,
+    required this.displayImage,
+    required this.pickImageFunc,
+    this.initialImage,
+  }) : super(key: key);
   final File? displayImage;
   final String? initialImage;
   final Function pickImageFunc;
@@ -55,6 +56,7 @@ class _FormImageInputState extends State<FormImageInput> {
                             fit: BoxFit.fill,
                           ),
                         )
+                        //If the image already exists or not
                       : widget.displayImage != null
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -74,6 +76,7 @@ class _FormImageInputState extends State<FormImageInput> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  //Elevated button to select from camera
                   SizedBox(
                     height: ScreenSize.screenHeight(context) * .06,
                     width: double.infinity,
@@ -87,6 +90,7 @@ class _FormImageInputState extends State<FormImageInput> {
                       ),
                     ),
                   ),
+                  //Elevated button to select from gallery
                   SizedBox(
                     height: ScreenSize.screenHeight(context) * .06,
                     width: double.infinity,

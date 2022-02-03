@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 import '../../../../utils/general/customColor.dart';
 import '../../../../utils/general/screen_size.dart';
 
+/* Bottom Navigation Bar for Any Child Screen */
 class BottomNav extends StatefulWidget {
-  const BottomNav({Key? key, required this.isSelected, this.showOnlyOne})
-      : super(key: key);
+  const BottomNav({
+    Key? key,
+    required this.isSelected,
+    this.showOnlyOne,
+    this.pageController,
+  }) : super(key: key);
 
   final String isSelected;
   final bool? showOnlyOne;
+  final PageController? pageController;
 
   @override
   _BottomNavState createState() => _BottomNavState();
 }
 
 class _BottomNavState extends State<BottomNav> {
+  /* Getter to get the current selected screen */
   String get selectedIcon {
     var selected;
     switch (widget.isSelected) {
@@ -37,16 +44,29 @@ class _BottomNavState extends State<BottomNav> {
     return selected;
   }
 
+  //Show only one if there is a specific role
   bool get _showOnlyOne {
     return widget.showOnlyOne != null;
   }
 
   @override
   Widget build(BuildContext context) {
+    //Widget map according to the current screen
     Map<String, Widget> widgetSelector = {
       'TimeTable': IconButton(
         icon: const Icon(Icons.calendar_today),
-        onPressed: () {},
+        onPressed: () {
+          widget.pageController != null
+              ? {
+                  Navigator.of(context).pop(),
+                  widget.pageController!.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  )
+                }
+              : null;
+        },
         color: selectedIcon == "TimeTable"
             ? Palette.quinaryDefault
             : Palette.tertiaryDefault,
@@ -54,7 +74,18 @@ class _BottomNavState extends State<BottomNav> {
       ),
       'Announcements': IconButton(
         icon: const Icon(Icons.announcement_outlined),
-        onPressed: () {},
+        onPressed: () {
+          widget.pageController != null
+              ? {
+                  Navigator.of(context).pop(),
+                  widget.pageController!.animateToPage(
+                    1,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  )
+                }
+              : null;
+        },
         color: selectedIcon == "Announcements"
             ? Palette.quinaryDefault
             : Palette.tertiaryDefault,
@@ -62,7 +93,18 @@ class _BottomNavState extends State<BottomNav> {
       ),
       'Home': IconButton(
         icon: const Icon(Icons.home),
-        onPressed: () {},
+        onPressed: () {
+          widget.pageController != null
+              ? {
+                  Navigator.of(context).pop(),
+                  widget.pageController!.animateToPage(
+                    2,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  )
+                }
+              : null;
+        },
         color: selectedIcon == "Home"
             ? Palette.quinaryDefault
             : Palette.tertiaryDefault,
@@ -70,7 +112,18 @@ class _BottomNavState extends State<BottomNav> {
       ),
       'Stationary': IconButton(
         icon: const Icon(Icons.menu_book_outlined),
-        onPressed: () {},
+        onPressed: () {
+          widget.pageController != null
+              ? {
+                  Navigator.of(context).pop(),
+                  widget.pageController!.animateToPage(
+                    3,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  )
+                }
+              : null;
+        },
         color: selectedIcon == "Stationary"
             ? Palette.quinaryDefault
             : Palette.tertiaryDefault,
@@ -78,7 +131,18 @@ class _BottomNavState extends State<BottomNav> {
       ),
       'Cafetaria': IconButton(
         icon: const Icon(Icons.coffee_outlined),
-        onPressed: () {},
+        onPressed: () {
+          widget.pageController != null
+              ? {
+                  Navigator.of(context).pop(),
+                  widget.pageController!.animateToPage(
+                    4,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  )
+                }
+              : null;
+        },
         color: selectedIcon == "Cafetaria"
             ? Palette.quinaryDefault
             : Palette.tertiaryDefault,
@@ -86,6 +150,7 @@ class _BottomNavState extends State<BottomNav> {
       ),
     };
 
+    //Showing the particular icon if only one is true
     List<Widget>? showIcon(String selected, bool showOnlyOne) {
       if (_showOnlyOne && _showOnlyOne == true) {
         List<Widget> returningWid = [];
@@ -128,12 +193,13 @@ class _BottomNavState extends State<BottomNav> {
         ),
       ),
       child: Row(
-          mainAxisAlignment: !_showOnlyOne
-              ? MainAxisAlignment.spaceAround
-              : MainAxisAlignment.center,
-          children:
-              // TODO: Implement Navigation to the main screen in each buttons
-              showIcon(selectedIcon, _showOnlyOne)!.toList()),
+        mainAxisAlignment: !_showOnlyOne
+            ? MainAxisAlignment.spaceAround
+            : MainAxisAlignment.center,
+        children:
+            // TODO: Implement Navigation to the main screen in each buttons
+            showIcon(selectedIcon, _showOnlyOne)!.toList(),
+      ),
     );
   }
 }

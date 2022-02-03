@@ -163,11 +163,7 @@ class CartProvider with ChangeNotifier {
           },
         ),
       );
-      var decodedData = json.decode(response.body) as Map<String, dynamic>;
-      if (decodedData['error'] != null) {
-        //print(decodedData['error']['message']);
-        throw HttpException(decodedData['error']['message']);
-      }
+      var decodedData = req_url.checkResponseError(response);
       _cartItems = {};
       notifyListeners();
     } catch (error) {

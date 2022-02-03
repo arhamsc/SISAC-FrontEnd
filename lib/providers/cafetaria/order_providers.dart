@@ -86,10 +86,7 @@ class OrderProvider with ChangeNotifier {
     final url = orderUrl();
     try {
       final response = await http.get(url, headers: _headers);
-      final decodedData = jsonDecode(response.body) as Map<String, dynamic>;
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       List<Order> loadedOrders = [];
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =

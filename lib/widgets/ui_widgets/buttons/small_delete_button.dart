@@ -4,6 +4,7 @@ import '../../../utils/general/themes.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Small Elevated Button for Deleting */
 Widget smallDeleteEleBtn({
   required BuildContext context,
   required String title,

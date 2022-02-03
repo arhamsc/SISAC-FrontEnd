@@ -6,6 +6,7 @@ import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/helpers/snack_bar.dart';
 
+/* Custom Item Card 2nd Version for more plain usage */
 class ItemCardV2 extends StatelessWidget {
   const ItemCardV2({
     Key? key,

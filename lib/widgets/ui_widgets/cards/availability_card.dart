@@ -7,6 +7,7 @@ import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/helpers/snack_bar.dart';
 
+/* Custom universal availability card with switch */
 class AvailabilityCard extends StatelessWidget {
   const AvailabilityCard({
     Key? key,
@@ -50,6 +51,7 @@ class AvailabilityCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           imageUrl != null
+          //Display Image if required
               ? Container(
                   width: ScreenSize.screenWidth(context) * .25,
                   decoration: BoxDecoration(
@@ -73,6 +75,7 @@ class AvailabilityCard extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
+                //Item Name
                 Text(
                   itemName,
                   style: Theme.of(context)
@@ -80,6 +83,7 @@ class AvailabilityCard extends StatelessWidget {
                       .headline5!
                       .copyWith(fontWeight: FontWeight.w500),
                 ),
+                //If available or not
                 Text(
                   isAvailable ? 'Available' : 'Not Available',
                   style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -99,6 +103,7 @@ class AvailabilityCard extends StatelessWidget {
                 height: ScreenSize.screenHeight(context) * 0.04,
                 width: ScreenSize.screenWidth(context) * .08,
                 child: Center(
+                  //Switch Widget to Switch the availability
                   child: Switch(
                     value: isAvailable,
                     onChanged: (_) => switchFunc(),
@@ -109,7 +114,9 @@ class AvailabilityCard extends StatelessWidget {
                   ),
                 ),
               ),
+              //If editing button is required
               editButtonRequired
+              //Custom Small Elevated button
                   ? smallEleBtn(
                       context: context,
                       title: "Edit",
@@ -118,7 +125,9 @@ class AvailabilityCard extends StatelessWidget {
                           : () {},
                     )
                   : const SizedBox(),
+                  //If delete button required
               deleteButtonRequired
+              //Custom Small delete button
                   ? smallDeleteEleBtn(
                       context: context,
                       title: "Delete",

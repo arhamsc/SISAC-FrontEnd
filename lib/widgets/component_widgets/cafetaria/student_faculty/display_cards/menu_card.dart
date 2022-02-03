@@ -10,6 +10,7 @@ import '../../../../extra/badge.dart';
 
 import '../../../../../utils/helpers/snack_bar.dart';
 
+/* Cafetaria - Card widget to display the menu items and add to cart functionality */
 class MenuCard extends StatefulWidget {
   const MenuCard({
     Key? key,
@@ -33,6 +34,7 @@ class _MenuCardState extends State<MenuCard> {
       children: [
         const SizedBox(height: 10),
         Center(
+          //Custom Item Card widget
           child: ItemCard(
             imageUrl: widget.menu.imageUrl,
             itemName: widget.menu.name,
@@ -44,6 +46,7 @@ class _MenuCardState extends State<MenuCard> {
             buttonOneFunction: () {},
             expanded: true,
             buttonTwoText: "Add to Cart",
+            /* Add to Cart Function */
             buttonTwoFunction: widget.menu.isAvailable && widget.preOrder
                 ? () {
                     cartP.addCartItem(

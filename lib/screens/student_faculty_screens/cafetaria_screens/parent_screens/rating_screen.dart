@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/rating_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
 
+/* Cafetaria - Screen to Rate Menu Item */
 class RatingScreen extends StatefulWidget {
   static const routeName = '/cafetaria/ratings';
   const RatingScreen({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class RatingScreen extends StatefulWidget {
 }
 
 class _RatingScreenState extends State<RatingScreen> {
+  /* Pull to Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
@@ -27,10 +29,14 @@ class _RatingScreenState extends State<RatingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final orderP = Provider.of<OrderProvider>(context);
+    final pageController =
+        ModalRoute.of(context)?.settings.arguments as PageController;
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-          title: "Cafetaria", context: context, subtitle: "Orders"),
+        title: "Cafetaria",
+        context: context,
+        subtitle: "Orders",
+      ),
       body: FutureBuilder(
         future:
             Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
@@ -60,6 +66,7 @@ class _RatingScreenState extends State<RatingScreen> {
                 child: SizedBox(
                   height: ScreenSize.usableHeight(context),
                   child: ListView.builder(
+                    /* Card to render Menu Items */
                     itemBuilder: (ctx, i) => RatingCard(
                       key: Key(menuData.items[i].id),
                       menu: menuData.items[i],
@@ -75,8 +82,9 @@ class _RatingScreenState extends State<RatingScreen> {
           }
         },
       ),
-      bottomNavigationBar: const BottomNav(
+      bottomNavigationBar: BottomNav(
         isSelected: "Cafetaria",
+        pageController: pageController,
       ),
     );
   }

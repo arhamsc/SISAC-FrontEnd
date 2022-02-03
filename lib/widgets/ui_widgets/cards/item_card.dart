@@ -6,6 +6,7 @@ import '../buttons/small_button.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Custom Item Card 1st Version */
 class ItemCard extends StatefulWidget {
   const ItemCard({
     Key? key,

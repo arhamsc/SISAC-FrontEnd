@@ -9,6 +9,7 @@ import '../../../../screens/other_screens/stationary_screens/parent_screens/upda
 
 import '../../../../utils/general/customColor.dart';
 
+/* Stationary - Vendor - App Drawer */
 class StationaryDrawer extends StatelessWidget {
   const StationaryDrawer({
     Key? key,
@@ -37,6 +38,7 @@ class StationaryDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Center(
+                    //Name
                     child: Text(
                       authData.getUser.name,
                       style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -49,12 +51,14 @@ class StationaryDrawer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
+                        //Username
                         authData.getUser.username,
                         style: Theme.of(context).textTheme.headline5!.copyWith(
                               fontWeight: FontWeight.w500,
                               color: Palette.tertiaryDefault,
                             ),
                       ),
+                      //Role
                       Text(
                         'Role: ${authData.getUser.role}',
                         style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -71,6 +75,7 @@ class StationaryDrawer extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
+                  //Navigation List Tiles
                   ListTile(
                     leading: const Icon(
                       Icons.receipt_long_outlined,
@@ -146,6 +151,7 @@ class StationaryDrawer extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              //Logout Button
               Center(
                 child: ElevatedButton(
                   onPressed: () {

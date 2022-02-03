@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../utils/general/customColor.dart';
 import '../../../../../utils/general/screen_size.dart';
 
+/* Cafetaria - Cart Overview Card to display overall cart amount/no of items and placing order */
 class CartOverViewCard extends StatefulWidget {
   const CartOverViewCard({
     Key? key,
@@ -49,6 +50,7 @@ class _CartOverViewCardState extends State<CartOverViewCard> {
               RichText(
                 text: TextSpan(
                   children: [
+                    //Subtotal - Overall cart amount
                     TextSpan(
                       text: 'Subtotal',
                       style: Theme.of(context)
@@ -70,6 +72,7 @@ class _CartOverViewCardState extends State<CartOverViewCard> {
               RichText(
                 text: TextSpan(
                   children: [
+                    //Total number of items
                     TextSpan(
                       text: 'Items',
                       style: Theme.of(context)
@@ -89,6 +92,7 @@ class _CartOverViewCardState extends State<CartOverViewCard> {
               ),
             ],
           ),
+          //Button to submit the Order
           ElevatedButton(
             onPressed: () {
               setState(() {

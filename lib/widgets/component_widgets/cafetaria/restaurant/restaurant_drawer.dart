@@ -8,6 +8,7 @@ import '../../../../screens/other_screens/restaurant_screens/parent_screens/isAv
 
 import '../../../../utils/general/customColor.dart';
 
+/* Restaurant - App Drawer */
 class RestaurantDrawer extends StatelessWidget {
   const RestaurantDrawer({
     Key? key,
@@ -35,6 +36,7 @@ class RestaurantDrawer extends StatelessWidget {
                         .copyWith(fontStyle: FontStyle.italic),
                   ),
                   const SizedBox(height: 30),
+                  //Display Name
                   Center(
                     child: Text(
                       authData.getUser.name,
@@ -47,6 +49,7 @@ class RestaurantDrawer extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      //Username
                       Text(
                         authData.getUser.username,
                         style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -54,6 +57,7 @@ class RestaurantDrawer extends StatelessWidget {
                               color: Palette.tertiaryDefault,
                             ),
                       ),
+                      //Role
                       Text(
                         'Role: ${authData.getUser.role}',
                         style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -63,6 +67,7 @@ class RestaurantDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
+                  //Navigation List Tiles
                   const Divider(
                     color: Palette.primaryDefault,
                     height: 20,
@@ -120,6 +125,7 @@ class RestaurantDrawer extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              //Logout Button
               Center(
                 child: ElevatedButton(
                   onPressed: () {

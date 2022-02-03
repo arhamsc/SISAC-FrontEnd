@@ -47,12 +47,11 @@ import './providers/stationary/books_material_providers.dart';
 import './providers/stationary/material_available_providers.dart';
 import './providers/cafetaria/cart_provider.dart';
 
-//Main function of the app, dart syntax. It is where the execution begins, similar to C.
 void main() {
   runApp(const MyApp());
 }
 
-//this is the ROOT widget which contains all our themes, routes, provider declarations and home screen.
+/* Root Widget */
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -61,13 +60,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //Below the multiple providers used in this project
+    /* Multiple Providers registered to handle state */
     return MultiProvider(
       providers: [
-        //Auth provider, it is also the base of all other providers as we pass the login token to other providers also
+        /* Base Auth Provider to supply token to other Providers */
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
@@ -79,7 +77,7 @@ class _MyAppState extends State<MyApp> {
               authProvider.getUserId,
             ),
         ),
-        //these providers depend on Auth provider
+        /* Other Providers but dependent on Auth Provider for Token */
         ChangeNotifierProxyProvider<Auth, OrderProvider>(
           create: (context) => OrderProvider(),
           update: (ctx, authProvider, orderProvider) => orderProvider!
@@ -129,11 +127,10 @@ class _MyAppState extends State<MyApp> {
             ),
         )
       ],
-      //Consumer auth is from Provider package
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           title: 'SISAC',
-          //below is the Theme data for the app, the actual specification in defined in Utility -> General folder.
+          /* App Theme Data - Individual Config in theme.dart and customColor.dart */
           theme: ThemeData(
             appBarTheme: AppBarThemes.appBarTheme(),
             scaffoldBackgroundColor: Palette.primaryDefault,
@@ -141,9 +138,9 @@ class _MyAppState extends State<MyApp> {
             elevatedButtonTheme: ButtonThemes.elevatedButton,
             bottomAppBarTheme: AppBarThemes.bottomNav(),
           ),
-          //below is the home route or the home page
+          /* Home Page Widget */
           home: HomePage(auth: auth),
-          //All the named routes are declared here.
+          /* Named Routes Registering */
           routes: {
             //Home Screen Routes
             TabScreen.routeName: (ctx) => const TabScreen(),
@@ -187,7 +184,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-//This is the Sub Root widget which will render the required screen according to the conditions
+/* Home Screen Widget - Different Entry points based on role */
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.auth}) : super(key: key);
   final Auth auth;
@@ -196,7 +193,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget ScreenByRole(String role) {
+  Widget screenByRole(String role) {
     switch (role) {
       case "Other":
         return const RestaurantHomeScreen();
@@ -210,7 +207,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return widget.auth.isAuth
-        ? ScreenByRole(widget.auth.getRole ?? "Student")
+        ? screenByRole(widget.auth.getRole ?? "Student")
         : FutureBuilder(
             future: widget.auth.tryAutoLogin(context),
             builder: (ctx, authResultSnapShot) =>

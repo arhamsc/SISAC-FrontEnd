@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
 
+/* Custom TextForm Widget for form inputs */
 class FormInputTextField extends StatelessWidget {
-  FormInputTextField({
+  const FormInputTextField({
     Key? key,
     required this.title,
     this.description,
@@ -20,7 +21,7 @@ class FormInputTextField extends StatelessWidget {
   final int? maxLines;
   final bool? numberKeyboard;
   final Function? setter;
-  TextEditingController? controller;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +33,13 @@ class FormInputTextField extends StatelessWidget {
             vertical: ScreenSize.screenHeight(context) * .005,
             horizontal: ScreenSize.screenWidth(context) * .02,
           ),
+          //Title
           child: Text(
             title,
             style: Theme.of(context).textTheme.headline5,
           ),
         ),
+        //TextForm
         SizedBox(
           height: description != null && maxLines != null && description!
               ? null
@@ -45,6 +48,7 @@ class FormInputTextField extends StatelessWidget {
             initialValue: initialValue,
             textAlignVertical: TextAlignVertical.top,
             style: const TextStyle(color: Palette.quinaryDefault),
+            //For description
             maxLines: description != null && maxLines != null && description!
                 ? maxLines
                 : 1,

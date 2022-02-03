@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/* Custom Colour Pallette for SISAC */
 class Palette {
   static const MaterialColor primaryDefault = MaterialColor(
     0xFF11052C,

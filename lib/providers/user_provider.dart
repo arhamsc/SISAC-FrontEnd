@@ -65,12 +65,7 @@ class Auth with ChangeNotifier {
         },
       );
       //below the data is being decoded from the response
-      final decodedData = json.decode(response.body);
-      //print(decodedData);
-      if (decodedData['error'] != null) {
-        // print(decodedData['error']['message']);
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       //creating a new user to store it locally in the list to access the role and token
       final newUser = User(
         id: decodedData['id'],
@@ -79,10 +74,6 @@ class Auth with ChangeNotifier {
         name: decodedData['name'],
       );
       _user = newUser;
-      //if there is an error then it is thrown here
-      if (json.decode(response.body)['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
       _token = decodedData['token'];
       _userId = decodedData['id'];
       _role = decodedData['role'];

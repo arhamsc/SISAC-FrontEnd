@@ -5,12 +5,13 @@ import '../../../../providers/cafetaria/order_providers.dart';
 import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/order_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
 
+/* Cafetaria - Screen to View individual User Orders */
 class OrderScreen extends StatefulWidget {
   static const routeName = '/cafetaria/orders';
   const OrderScreen({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
+
+  /* Pull to Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<OrderProvider>(context, listen: false).fetchUserOrders();
@@ -39,7 +42,8 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final orderP = Provider.of<OrderProvider>(context);
+    final pageController =
+        ModalRoute.of(context)?.settings.arguments as PageController;
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
           title: "Cafetaria", context: context, subtitle: "Orders"),
@@ -73,6 +77,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   height: ScreenSize.usableHeight(context),
                   child: ListView.builder(
                     itemBuilder: (ctx, i) =>
+                    /* Card to Render Orders */
                         OrderCard(order: orderData.userOrders[i], orderNum: i),
                     itemCount: orderData.userOrders.length,
                   ),
@@ -82,8 +87,9 @@ class _OrderScreenState extends State<OrderScreen> {
           }
         },
       ),
-      bottomNavigationBar: const BottomNav(
+      bottomNavigationBar: BottomNav(
         isSelected: "Cafetaria",
+        pageController: pageController,
       ),
     );
   }

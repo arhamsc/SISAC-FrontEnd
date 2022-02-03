@@ -10,6 +10,7 @@ import '../../../ui_widgets/cards/availability_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 
+/* Restaurant - IsAvailable Card - To update availability and edit the menu Item */
 class IsAvailableCard extends StatefulWidget {
   const IsAvailableCard({
     Key? key,
@@ -33,6 +34,7 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
     return widget.menu.isAvailable;
   }
 
+  /* Menu Item Update Function */
   Future<void> updateMenu(MenuItemProvider menuItemP, String id) async {
     try {
       setState(() {
@@ -61,6 +63,7 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
       children: [
         const SizedBox(height: 10),
         Center(
+          //Custom Universal Availability Widget
           child: AvailabilityCard(
             imageUrl: widget.menu.imageUrl,
             itemName: widget.menu.name,

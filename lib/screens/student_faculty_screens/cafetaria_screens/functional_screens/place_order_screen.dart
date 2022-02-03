@@ -7,7 +7,7 @@ import 'package:sisac/utils/helpers/error_dialog.dart';
 import '../../../../providers/cafetaria/order_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../utils/general/customColor.dart';
 import '../../../../utils/general/screen_size.dart';

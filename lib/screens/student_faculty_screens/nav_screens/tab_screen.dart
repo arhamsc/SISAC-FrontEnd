@@ -13,6 +13,7 @@ import '../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../widgets/component_widgets/scaffold/bottom_bar.dart';
 import '../../../widgets/component_widgets/scaffold/app_drawer.dart';
 
+/* Tab Screen - Contains the Scaffold and Bottom Navigation Bar for all the navigation pages(pages) */
 class TabScreen extends StatefulWidget {
   static const routeName = '/home';
   const TabScreen({
@@ -23,10 +24,10 @@ class TabScreen extends StatefulWidget {
   State<TabScreen> createState() => _TabScreenState();
 }
 
-class _TabScreenState extends State<TabScreen>
-    with SingleTickerProviderStateMixin {
+class _TabScreenState extends State<TabScreen> {
   List<Map<String, dynamic>>? _pages;
 
+  //current page index which is the Home Screen
   int _selectedPageIndex = 2;
 
   PageController? _tabController;
@@ -45,6 +46,7 @@ class _TabScreenState extends State<TabScreen>
 
   @override
   Widget build(BuildContext context) {
+    //List of pages and their Screens to be rendered
     _pages = [
       {
         'page': TimeTableScreen(
@@ -79,16 +81,21 @@ class _TabScreenState extends State<TabScreen>
     ];
 
     return Scaffold(
-      drawer: AppDrawer(pageController: _tabController!,),
+      drawer: AppDrawer(
+        pageController: _tabController!,
+      ),
       appBar: BaseAppBar.getAppBar(
           title: _pages![_selectedPageIndex]['title'], context: context),
       body: ExpandablePageView(
         controller: _tabController,
         onPageChanged: (newPage) {
-          setState(() {
-            _selectedPageIndex = newPage;
-          });
+          setState(
+            () {
+              _selectedPageIndex = newPage;
+            },
+          );
         },
+        //Dynamically rendered pages according to the bottom navigation bar
         children: _pages!
             .map(
               (element) => Container(
@@ -101,6 +108,7 @@ class _TabScreenState extends State<TabScreen>
             .toList(),
       ),
       extendBody: true,
+      //Bottom navigation bar to render the pages
       bottomNavigationBar: BottomNavBar(
         currentPageIndex: _selectedPageIndex,
         selectPage: selectPage,
@@ -108,17 +116,3 @@ class _TabScreenState extends State<TabScreen>
     );
   }
 }
-
-/**
- * 
- * ElevatedButton(
-                onPressed: () {
-                  try {
-                    authData.logout(context);
-                  } catch (error) {
-                    throw HttpException(error.toString());
-                  }
-                },
-                child: Text("Logout"),
-              ),
- */

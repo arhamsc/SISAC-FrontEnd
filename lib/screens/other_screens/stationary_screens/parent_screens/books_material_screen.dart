@@ -5,12 +5,13 @@ import 'package:sisac/screens/other_screens/stationary_screens/updation_screens/
 import '../../../../providers/stationary/books_material_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/stationary/display_cards/books_material_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
 
+/* Stationary - Screen to Add/Edit Books */
 class VendorBooksMaterialScreen extends StatefulWidget {
   const VendorBooksMaterialScreen({Key? key}) : super(key: key);
   static const routeName = '/stationary/vendor/booksMaterial';
@@ -21,6 +22,7 @@ class VendorBooksMaterialScreen extends StatefulWidget {
 }
 
 class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
+  /* Pull To Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
       Provider.of<BooksMaterialProvider>(context, listen: false)
@@ -30,6 +32,7 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
 
   bool _isLoading = false;
 
+  /* Deleting a book Function */
   Future<void> _deleteBook(BooksMaterialProvider bookP, String id) async {
     setState(() {
       _isLoading = true;
@@ -53,16 +56,17 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-          title: "Stationary",
-          context: context,
-          subtitle: "Book Material",
-          showAddIcon: true,
-          addButtonFunc: () {
-            Navigator.of(context).pushNamed(
-              AddEditStationaryItemScreen.routeName,
-              arguments: '',
-            );
-          }),
+        title: "Stationary",
+        context: context,
+        subtitle: "Book Material",
+        showAddIcon: true,
+        addButtonFunc: () {
+          Navigator.of(context).pushNamed(
+            AddEditStationaryItemScreen.routeName,
+            arguments: '',
+          );
+        },
+      ),
       body: FutureBuilder(
         future: Provider.of<BooksMaterialProvider>(context, listen: false)
             .fetchAllBooks(),
@@ -96,6 +100,7 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
                       child: SizedBox(
                         height: ScreenSize.usableHeight(context),
                         child: ListView.builder(
+                          /* Card to render Books */
                           itemBuilder: (ctx, i) => BooksMaterialCard(
                             booksMaterial: booksMaterialData.booksMaterial[i],
                             setStateFunc: () {

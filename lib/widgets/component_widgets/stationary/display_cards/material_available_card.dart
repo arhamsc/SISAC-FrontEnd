@@ -6,6 +6,7 @@ import '../../../../screens/other_screens/stationary_screens/updation_screens/ad
 
 import '../../../../widgets/ui_widgets/cards/item_card_v2.dart';
 
+/* Stationary - Material Card */
 class MaterialAvailableCard extends StatefulWidget {
   const MaterialAvailableCard({
     Key? key,
@@ -30,6 +31,7 @@ class _MaterialAvailableCardState extends State<MaterialAvailableCard> {
       children: [
         const SizedBox(height: 10),
         Center(
+          //Custom Item card
           child: ItemCardV2(
             imageUrl: widget.materialAvailable.imageUrl,
             itemName: widget.materialAvailable.name,

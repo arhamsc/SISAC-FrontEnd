@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../providers/stationary/material_available_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/cafetaria/bottom_nav.dart';
+import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../widgets/ui_widgets/inputs/form_input_text_field.dart';
 import '../../../../widgets/ui_widgets/inputs/form_image_input.dart';
@@ -16,10 +16,9 @@ import '../../../../widgets/ui_widgets/inputs/input_dropdown.dart';
 
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/themes.dart';
-import '../../../../utils/general/customColor.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 
-//This widget is for adding or editing menu Items
+/* Stationary - Add/Edit Materials */
 class AddEditMaterialAvailableScreen extends StatefulWidget {
   static const routeName = '/stationary/vendor/addEditMaterialAvailable';
   const AddEditMaterialAvailableScreen({Key? key}) : super(key: key);
@@ -43,6 +42,7 @@ class _AddEditMaterialAvailableScreenState
   bool _imageChanged = false;
   bool _editing = false;
 
+  //Initial Material Data
   var _materialItem = MaterialAvailable(
     id: '',
     name: '',
@@ -52,6 +52,7 @@ class _AddEditMaterialAvailableScreenState
     imageFileName: '',
   );
 
+  //Variable to store new Material data
   final _editedItem = {
     'name': '',
     'price': '',
@@ -62,6 +63,7 @@ class _AddEditMaterialAvailableScreenState
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      /* Arguments Check to split Add or Edit functionality */
       final materialId = ModalRoute.of(context)?.settings.arguments as String;
       if (materialId.isNotEmpty) {
         _editing = true;
@@ -76,6 +78,7 @@ class _AddEditMaterialAvailableScreenState
     super.didChangeDependencies();
   }
 
+  //Function to get a new Image
   Future<void> _getImage({
     bool camera = true,
   }) async {
@@ -95,6 +98,7 @@ class _AddEditMaterialAvailableScreenState
     });
   }
 
+  //Setting Material item data
   void setMaterialItem(String val, String fieldToSet) {
     switch (fieldToSet) {
       case "Name":
@@ -130,6 +134,7 @@ class _AddEditMaterialAvailableScreenState
 
   String materialTypeDropDownValue = 'Stationary';
 
+  /* Function to trigger HTTP request */
   Future<void> _saveForm({
     String? patchItemId,
     String? patchItemName,
@@ -150,6 +155,7 @@ class _AddEditMaterialAvailableScreenState
       _editedItem['materialType'] = materialTypeDropDownValue;
 
       try {
+        /* Function to create a new Material */
         await Provider.of<MaterialAvailableProvider>(context, listen: false)
             .newMaterial(
           _editedItem['name']!,
@@ -179,6 +185,7 @@ class _AddEditMaterialAvailableScreenState
             patchItemPrice != null &&
             patchItemMaterialType != null) {
           if (_imageChanged) {
+            /* Function to patch a material if Image has changed */
             await Provider.of<MaterialAvailableProvider>(context, listen: false)
                 .patchMaterial(
               patchItemId,
@@ -198,6 +205,7 @@ class _AddEditMaterialAvailableScreenState
               _isLoading = false;
             });
           } else {
+            /* Function to patch the Material if image has NOT changed */
             await Provider.of<MaterialAvailableProvider>(context, listen: false)
                 .patchMaterial(
               patchItemId,
@@ -229,6 +237,7 @@ class _AddEditMaterialAvailableScreenState
     }
   }
 
+  //Drop down item list for material type
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = const [
       DropdownMenuItem(child: Text("Stationary"), value: "Stationary"),
@@ -267,6 +276,7 @@ class _AddEditMaterialAvailableScreenState
                     child: ListView(
                       shrinkWrap: true,
                       children: [
+                        //Material Name Input Widget
                         FormInputTextField(
                           title: "Name",
                           initialValue: _materialItem.name.isEmpty
@@ -277,6 +287,7 @@ class _AddEditMaterialAvailableScreenState
                               : null,
                           setter: setMaterialItem,
                         ),
+                        //Material Price Input Widget
                         FormInputTextField(
                           title: "Price",
                           initialValue: _materialItem.price == 0
@@ -288,12 +299,14 @@ class _AddEditMaterialAvailableScreenState
                           setter: setMaterialItem,
                           numberKeyboard: true,
                         ),
+                        //Image Input Widget
                         FormImageInput(
                           displayImage: _storedStationaryImage,
                           pickImageFunc: _getImage,
                           initialImage:
                               !_imageChanged ? _materialItem.imageUrl : null,
                         ),
+                        //Material Type dropdown
                         DropDownInputForm(
                           dropDownMenuItems: dropdownItems,
                           title: "Material Type",
@@ -303,6 +316,7 @@ class _AddEditMaterialAvailableScreenState
                         SizedBox(
                           height: ScreenSize.screenHeight(context) * .02,
                         ),
+                        //Confirm Button
                         ElevatedButton(
                           onPressed: () async {
                             await _saveForm(

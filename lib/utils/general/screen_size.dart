@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/* Helper Class to get the Screen Size */
 class ScreenSize {
   static mediaQ(BuildContext ctx) {
     return MediaQuery.of(ctx);
@@ -15,6 +16,7 @@ class ScreenSize {
     return mediaQ.size.width;
   }
 
+  //To get the screen size minus the app bar and bottom bar height
   static usableHeight(BuildContext context) {
     final appBarHeight = AppBar().preferredSize.height;
     final bottomHeight = ScreenSize.screenHeight(context) * 0.17;

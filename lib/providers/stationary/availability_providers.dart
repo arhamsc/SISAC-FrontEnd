@@ -53,11 +53,7 @@ class AvailabilityProvider with ChangeNotifier {
     final url = availabilityUrl();
     try {
       final response = await http.get(url, headers: _headers);
-      final decodedData = jsonDecode(response.body);
-
-      if (decodedData['error'] != null) {
-        throw HttpException(decodedData['error']['message']);
-      }
+      final decodedData = req_url.checkResponseError(response);
       List<Availability> loadedItems = [];
       decodedData.forEach(
         (key, value) {

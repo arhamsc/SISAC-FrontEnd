@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import './customColor.dart';
-import './screen_size.dart' show ScreenSize;
 
+/* Custom Theme setting for Typography and Buttons */
+//Typography Themes
 class TextThemes {
   static const TextTheme customText = TextTheme(
     headline6: TextStyle(
@@ -36,7 +37,9 @@ class TextThemes {
   );
 }
 
+//Button Themes
 class ButtonThemes {
+  //Normal Elevated Button Style
   static ElevatedButtonThemeData elevatedButton = ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(Palette.secondaryDefault),
@@ -57,6 +60,8 @@ class ButtonThemes {
       ),
     ),
   );
+  
+  //Small Elevated Button Style
   static ButtonStyle elevatedButtonSmall = ButtonStyle(
     backgroundColor: MaterialStateProperty.all(Palette.secondaryDefault),
     foregroundColor: MaterialStateProperty.all(Palette.tertiaryDefault),
@@ -76,6 +81,8 @@ class ButtonThemes {
     ),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
   );
+
+  //Input Elevated Button Style
   static ButtonStyle elevatedButtonInput = ButtonStyle(
     backgroundColor: MaterialStateProperty.all(Palette.quaternaryDefault),
     foregroundColor: MaterialStateProperty.all(Palette.quinaryDefault),
@@ -95,6 +102,8 @@ class ButtonThemes {
     ),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
   );
+
+  //Confirmation Elevated Button Style
   static ButtonStyle elevatedButtonConfirmation = ButtonStyle(
     backgroundColor: MaterialStateProperty.all(Palette.quaternaryDefault),
     foregroundColor: MaterialStateProperty.all(Palette.quinaryDefault),
@@ -116,6 +125,7 @@ class ButtonThemes {
   );
 }
 
+//AppBar Theme
 class AppBarThemes {
   static AppBarTheme appBarTheme() {
     return AppBarTheme(
@@ -132,7 +142,7 @@ class AppBarThemes {
   }
 
   static BottomAppBarTheme bottomNav() {
-    return BottomAppBarTheme(
+    return const BottomAppBarTheme(
       color: Palette.senaryDefault,
     );
   }

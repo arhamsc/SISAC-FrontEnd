@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 
+/* Home Screen Main/Big Cards Widget */
 class HomeMainCard extends StatelessWidget {
   const HomeMainCard({
     Key? key,

@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 
+/* Home Screen Small Row Cards */
 class HomeRowCards extends StatefulWidget {
-  HomeRowCards({Key? key, required this.pageController}) : super(key: key);
-  PageController pageController;
+  const HomeRowCards({
+    Key? key,
+    required this.pageController,
+  }) : super(key: key);
+  final PageController pageController;
 
   @override
   State<HomeRowCards> createState() => _HomeRowCardsState();
@@ -14,47 +18,50 @@ class HomeRowCards extends StatefulWidget {
 class _HomeRowCardsState extends State<HomeRowCards> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            const SizedBox(width: 10),
-            RowCard(
-              title: "Workshops/Seminars",
-              gestureFunction: () {},
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          const SizedBox(width: 10),
+          //Workshop Card
+          RowCard(
+            title: "Workshops/Seminars",
+            gestureFunction: () {},
+          ),
+          const SizedBox(width: 10),
+          //Announcement Card
+          RowCard(
+            title: "Announcement",
+            gestureFunction: () => widget.pageController.animateToPage(
+              1,
+              duration: const Duration(microseconds: 500),
+              curve: Curves.easeInOut,
             ),
-            const SizedBox(width: 10),
-            RowCard(
-              title: "Announcement",
-              gestureFunction: () => widget.pageController.animateToPage(
-                1,
-                duration: const Duration(microseconds: 500),
-                curve: Curves.easeInOut,
-              ),
+          ),
+          const SizedBox(width: 10),
+          //Resources Card
+          RowCard(
+            title: "Resources",
+            gestureFunction: () {},
+          ),
+          const SizedBox(width: 10),
+          //Stationary Card
+          RowCard(
+            title: "Stationary",
+            gestureFunction: () => widget.pageController.animateToPage(
+              3,
+              duration: const Duration(microseconds: 500),
+              curve: Curves.easeInOut,
             ),
-            const SizedBox(width: 10),
-            RowCard(
-              title: "Resources",
-              gestureFunction: () {},
-            ),
-            const SizedBox(width: 10),
-            RowCard(
-              title: "Stationary",
-              gestureFunction: () => widget.pageController.animateToPage(
-                3,
-                duration: const Duration(microseconds: 500),
-                curve: Curves.easeInOut,
-              ),
-            ),
-            const SizedBox(width: 10),
-          ],
-        ),
+          ),
+          const SizedBox(width: 10),
+        ],
       ),
     );
   }
 }
 
+/* Individual Row Card WIdget */
 class RowCard extends StatefulWidget {
   const RowCard({
     Key? key,
