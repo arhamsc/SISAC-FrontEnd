@@ -1,5 +1,5 @@
 # SISAC
-
+![Dart](https://img.shields.io/badge/Flutter%20-Dart-brightgreen?style=flat-square&logo=dart)
 ### Student Information System And Cafeteria
 
 <p align = "center"><img src="./assets/images/SISAC.png" width="200"></p>
