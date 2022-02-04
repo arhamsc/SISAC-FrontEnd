@@ -245,6 +245,7 @@ class Auth with ChangeNotifier {
       await prefs.setString('userData', userData);
       notifyListeners();
     } catch (error) {
+      logout(context);
       throw HttpException(error.toString());
     }
   }
