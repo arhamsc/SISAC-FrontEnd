@@ -8,8 +8,6 @@ import 'package:http/http.dart' as http;
 
 import '../utils/helpers/http_exception.dart';
 
-import '../screens/home/login_screen.dart';
-
 import '../constants/request_url.dart' as req_url;
 
 //Model for the User info which will be received from the server
@@ -33,6 +31,7 @@ class User {
 //Model for Authentication info which will be stored of a user
 class Auth with ChangeNotifier {
   String? _token;
+  String? _refreshToken;
   DateTime? _expiryDate;
   String? _userId;
   Timer? _authTimer;
@@ -75,6 +74,7 @@ class Auth with ChangeNotifier {
       );
       _user = newUser;
       _token = decodedData['token'];
+      _refreshToken = decodedData['refreshToken'];
       _userId = decodedData['id'];
       _role = decodedData['role'];
       _username = decodedData['username'];
@@ -85,12 +85,13 @@ class Auth with ChangeNotifier {
         ),
       );
       //Calling auto logout to start the timer for to automatically logout.
-      _autoLogout(context);
+      autoLogout(context);
 
       //Using Shared preferences package to store the required info for authentication in local memory.
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
         'token': _token,
+        'refreshToken': _refreshToken,
         'userId': _userId,
         'expiryDate': _expiryDate?.toIso8601String(),
         'role': _role,
@@ -137,35 +138,42 @@ class Auth with ChangeNotifier {
 
     _token = extractedData['token'] as String;
     _userId = extractedData['userId'] as String;
+    _refreshToken = extractedData['refreshToken'] as String;
     _role = extractedData['role'] as String;
     _name = extractedData['name'] as String;
     _username = extractedData['username'] as String;
     _expiryDate = expiryDate;
-    final newUser =
-        User(id: _userId!, name: _name!, role: _role!, username: _username!);
+    final newUser = User(
+      id: _userId!,
+      name: _name!,
+      role: _role!,
+      username: _username!,
+    );
     _user = newUser;
     notifyListeners();
 
     //Calling auto logout cuz this is also kind of a login itself.
-    _autoLogout(context);
+    autoLogout(context);
     return true;
   }
 
   //Method for logging out the user on the User's request
   Future<void> logout(BuildContext context) async {
+    //After logout the app screen is navigated to the Login screen.
+    Navigator.of(context).popUntil(ModalRoute.withName('/'));
     //Setting all the authentication variables to null to logout.
     _token = null;
+    _refreshToken = null;
     _userId = null;
     _expiryDate = null;
     _role = null;
     _username = null;
 
     if (_authTimer != null) {
-      _authTimer?.cancel();
+      _authTimer!.cancel();
       _authTimer = null;
     }
-    //After logout the app screen is navigated to the Login screen.
-    Navigator.of(context).popUntil(ModalRoute.withName('/'));
+
     notifyListeners();
 
     //deleting the user instance stored in the memory.
@@ -174,20 +182,75 @@ class Auth with ChangeNotifier {
   }
 
   //Method to trigger autoLogout, which will start a timer from when it is called and the duration of the timer is the expiry time of the token received from the server. After the timer is up it will call the logout method.
-  void _autoLogout(BuildContext context) {
+  void autoLogout(BuildContext context) {
     if (_authTimer != null) {
-      _authTimer?.cancel();
+      _authTimer!.cancel();
     }
     final timeToExpire = _expiryDate?.difference(DateTime.now()).inSeconds;
     _authTimer = Timer(
       Duration(seconds: timeToExpire as int),
-      () => logout(context),
+      () => {refreshTokenLogin(context)},
     );
+  }
+
+  Future<void> refreshTokenLogin(BuildContext context) async {
+    final url = req_url.url('refreshToken');
+
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode(
+          {
+            'refreshToken': _refreshToken,
+          },
+        ),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      final decodedData = req_url.checkResponseError(response);
+      //creating a new user to store it locally in the list to access the role and token
+      final newUser = User(
+        id: decodedData['id'],
+        username: decodedData['username'],
+        role: decodedData['role'],
+        name: decodedData['name'],
+      );
+      _user = newUser;
+      _token = decodedData['token'];
+      _refreshToken = decodedData['refreshToken'];
+      _userId = decodedData['id'];
+      _role = decodedData['role'];
+      _username = decodedData['username'];
+      _name = decodedData['name'];
+      _expiryDate = DateTime.now().add(
+        Duration(
+          milliseconds: decodedData['expiresIn'],
+        ),
+      );
+      //Calling auto logout to start the timer for to automatically logout.
+      autoLogout(context);
+
+      //Using Shared preferences package to store the required info for authentication in local memory.
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'refreshToken': _refreshToken,
+        'userId': _userId,
+        'expiryDate': _expiryDate?.toIso8601String(),
+        'role': _role,
+        'name': _name,
+        'username': _username
+      });
+      await prefs.setString('userData', userData);
+      notifyListeners();
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
   }
 
   //Getter to get user role
   String? get getRole {
-    // print(_role);
     return _role;
   }
 

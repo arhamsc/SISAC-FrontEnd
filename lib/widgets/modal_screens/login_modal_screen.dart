@@ -30,7 +30,7 @@ class LoginModalScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: const [
-             RoleRow(),
+            RoleRow(),
             InputColumn(),
           ],
         ),
