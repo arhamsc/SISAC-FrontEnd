@@ -10,6 +10,7 @@ import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/stationary/display_cards/material_available_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/confirmation_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
 
 /* Stationary - Screen to Add/Edit Materials Available */
@@ -34,7 +35,7 @@ class _VendorMaterialAvailableScreenState
   }
 
   /* Delete material function */
-  Future<void> deleteMaterialItem(
+  Future<void> _deleteMaterialItem(
       MaterialAvailableProvider matP, String id) async {
     setState(() {
       _isLoading = true;
@@ -58,6 +59,20 @@ class _VendorMaterialAvailableScreenState
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _showDeleteDialog(
+      MaterialAvailableProvider matP, String id) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmationDialog(
+          title: "Are you sure?",
+          content: "Deleting a menu item.",
+          confirmationFunction: () => _deleteMaterialItem(matP, id),
+        );
+      },
+    );
   }
 
   @override
@@ -114,7 +129,7 @@ class _VendorMaterialAvailableScreenState
                               setState(() {});
                             },
                             vendor: true,
-                            deleteFunction: () => deleteMaterialItem(
+                            deleteFunction: () => _showDeleteDialog(
                                 materialAvailableData,
                                 materialAvailableData.materialsAvailable[i].id),
                           ),

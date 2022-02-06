@@ -12,6 +12,7 @@ import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../../utils/helpers/error_dialog.dart';
 import '../../../../../utils/general/screen_size.dart';
 import '../../../../../utils/helpers/http_exception.dart';
+import '../../../../utils/helpers/confirmation_dialog.dart';
 
 /* Restaurant - Menu Item Availability Updation Screen */
 class IsAvailableScreen extends StatefulWidget {
@@ -23,7 +24,6 @@ class IsAvailableScreen extends StatefulWidget {
 }
 
 class _IsAvailableScreenState extends State<IsAvailableScreen> {
-
   bool _isLoading = false;
   /* Delete Menu Item Handler */
   Future<void> _deleteMenuFunc(MenuItemProvider menuP, String id) async {
@@ -49,6 +49,20 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  /* Show Confirmation Dialog */
+  Future<void> _showDeleteDialog(MenuItemProvider menuP, String id) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmationDialog(
+          title: "Are you sure?",
+          content: "Deleting a menu item.",
+          confirmationFunction: () => _deleteMenuFunc(menuP, id),
+        );
+      },
+    );
   }
 
   @override
@@ -102,29 +116,32 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                    /* Refresh Indicator to use pull to refresh */
+                  /* Refresh Indicator to use pull to refresh */
                   : RefreshIndicator(
-                onRefresh: () async {
-                  setState(() {
-                    menuData.fetchMenu();
-                  });
-                },
-                child: SizedBox(
-                  height: ScreenSize.usableHeight(context),
-                  child: ListView.builder(
-                    /* Card widget to render the Menu Items with Necessary Details */
-                    itemBuilder: (ctx, i) => IsAvailableCard(
-                      menu: menuData.items[i],
-                      setFunc: () {
-                        setState(() {});
+                      onRefresh: () async {
+                        setState(() {
+                          menuData.fetchMenu();
+                        });
                       },
-                      deleteFunc: () => _deleteMenuFunc(menuData, menuData.items[i].id,),
-                      key: Key(menuData.items[i].id),
+                      child: SizedBox(
+                        height: ScreenSize.usableHeight(context),
+                        child: ListView.builder(
+                          /* Card widget to render the Menu Items with Necessary Details */
+                          itemBuilder: (ctx, i) => IsAvailableCard(
+                            menu: menuData.items[i],
+                            setFunc: () {
+                              setState(() {});
+                            },
+                            deleteFunc: () => _showDeleteDialog(
+                              menuData,
+                              menuData.items[i].id,
+                            ),
+                            key: Key(menuData.items[i].id),
+                          ),
+                          itemCount: menuData.items.length,
+                        ),
+                      ),
                     ),
-                    itemCount: menuData.items.length,
-                  ),
-                ),
-              ),
             );
           }
         },

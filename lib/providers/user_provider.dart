@@ -1,4 +1,6 @@
 //This contains all the methods related to the User authentication
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -62,7 +64,7 @@ class Auth with ChangeNotifier {
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
-      );
+      ).timeout(const Duration(seconds: 20));
       //below the data is being decoded from the response
       final decodedData = req_url.checkResponseError(response);
       //creating a new user to store it locally in the list to access the role and token
@@ -100,6 +102,10 @@ class Auth with ChangeNotifier {
       });
       await prefs.setString('userData', userData);
       notifyListeners();
+    } on SocketException catch (_) {
+      throw HttpException("Server Down");
+    } on TimeoutException catch (_) {
+      throw HttpException("Failed to get response from the server");
     } catch (error) {
       rethrow;
     }

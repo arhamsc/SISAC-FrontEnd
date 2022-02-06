@@ -12,7 +12,9 @@ import '../../../../widgets/component_widgets/cafetaria/student_faculty/cart/car
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/cart/cart_item_card.dart';
 
 import '../../../../utils/general/screen_size.dart';
+import '../../../../utils/general/customColor.dart';
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/confirmation_dialog.dart';
 
 /* Cafetaria - Cart Screen */
 class CartScreen extends StatelessWidget {
@@ -71,6 +73,20 @@ class CartScreen extends StatelessWidget {
       }
     }
 
+    /* Show Confirmation Dialog */
+    Future<void> _showOrderDialog(num amt) async {
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return ConfirmationDialog(
+            title: "Placing the Order!",
+            content: "Total amount: $amt, Do you confirm?",
+            confirmationFunction: () => _placeOrder(),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
         title: 'Cafetaria',
@@ -85,14 +101,22 @@ class CartScreen extends StatelessWidget {
             CartOverViewCard(
               totalAmount: cartP.totalAmount,
               totalItems: cartP.totalItems,
-              submitOrder: _placeOrder,
+              submitOrder: () => _showOrderDialog(cartP.totalAmount),
               isLoading: _isLoading,
             ),
             const SizedBox(height: 10),
             //Cart Items Display Widget
             cartP.cartItems.isEmpty
-                ? const Center(
-                    child: Text("No Cart Items"),
+                ? Expanded(
+                    child: Center(
+                      child: Text(
+                        "No Cart Items",
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ),
                   )
                 : Expanded(
                     child: SingleChildScrollView(

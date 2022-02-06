@@ -79,7 +79,7 @@ class CartProvider with ChangeNotifier {
   void deleteCartItem(String id, int price, {bool deleteWhole = false}) {
     int findQty(String key) {
       int qty = 0;
-      for (var keys in _cartItems.keys) {
+      for (var _ in _cartItems.keys) {
         qty = _cartItems[key]!.quantity;
       }
       return qty;

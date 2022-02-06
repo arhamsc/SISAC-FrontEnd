@@ -10,6 +10,7 @@ import '../../../../widgets/component_widgets/stationary/display_cards/books_mat
 
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/general/screen_size.dart';
+import '../../../../utils/helpers/confirmation_dialog.dart';
 
 /* Stationary - Screen to Add/Edit Books */
 class VendorBooksMaterialScreen extends StatefulWidget {
@@ -50,6 +51,19 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _showDeleteDialog(BooksMaterialProvider bookP, String id) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmationDialog(
+          title: "Are you sure?",
+          content: "Deleting the book!",
+          confirmationFunction: () => _deleteBook(bookP, id),
+        );
+      },
+    );
   }
 
   @override
@@ -107,7 +121,7 @@ class _VendorBooksMaterialScreenState extends State<VendorBooksMaterialScreen> {
                               setState(() {});
                             },
                             vendor: true,
-                            deleteFunc: () => _deleteBook(
+                            deleteFunc: () => _showDeleteDialog(
                               booksMaterialData,
                               booksMaterialData.booksMaterial[i].id,
                             ),

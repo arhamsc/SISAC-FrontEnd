@@ -129,6 +129,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'SISAC',
           /* App Theme Data - Individual Config in theme.dart and customColor.dart */
           theme: ThemeData(

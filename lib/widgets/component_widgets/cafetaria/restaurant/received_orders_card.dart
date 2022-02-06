@@ -9,6 +9,7 @@ import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/customColor.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/confirmation_dialog.dart';
 
 /* Restaurant - Received Orders card to View and Delete Orders */
 class RestaurantReceivedOrdersCard extends StatefulWidget {
@@ -42,7 +43,7 @@ class _RestaurantReceivedOrdersCardState
   bool _isLoading = false;
 
   /* Function to delete an Order */
-  Future<void> deleteOrder(RestaurantProvider rest, String id) async {
+  Future<void> _deleteOrder(RestaurantProvider rest, String id) async {
     try {
       setState(() {
         _isLoading = true;
@@ -60,6 +61,19 @@ class _RestaurantReceivedOrdersCardState
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _showDeleteDialog(RestaurantProvider rest, String id) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmationDialog(
+          title: "Is the order ready?",
+          content: "Notifying the customer...",
+          confirmationFunction: () => _deleteOrder(rest, id),
+        );
+      },
+    );
   }
 
   @override
@@ -125,7 +139,7 @@ class _RestaurantReceivedOrdersCardState
                             //Button toe delete the order
                             ElevatedButton(
                               onPressed: () async {
-                                await deleteOrder(restP, widget.order.id);
+                                await _showDeleteDialog(restP, widget.order.id);
                                 widget.setStateFunc();
                               },
                               child: const Text('Prepared'),
