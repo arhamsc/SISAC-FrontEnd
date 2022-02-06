@@ -49,6 +49,7 @@ class ReceivedOrder {
   final String paymentStatus;
   final String transactionId;
   final DateTime createdOn;
+  final String orderStatus;
   ReceivedOrder({
     required this.id,
     required this.user,
@@ -57,6 +58,7 @@ class ReceivedOrder {
     required this.paymentStatus,
     required this.transactionId,
     required this.createdOn,
+    required this.orderStatus,
   });
 }
 
@@ -82,6 +84,10 @@ class RestaurantProvider with ChangeNotifier {
     return [..._receivedOrders];
   }
 
+  List<ReceivedOrder> get pendingOrders {
+    return [..._receivedOrders.where((e) => e.orderStatus != "Completed")];
+  }
+
   List<ReceivedOrderItem> get receivedOrderItem {
     return [..._receivedOrderItem];
   }
@@ -103,14 +109,19 @@ class RestaurantProvider with ChangeNotifier {
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =
           OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
-      User loadedUser = User(id: '', name: '', role: '', username: '',);
+      User loadedUser = User(
+        id: '',
+        name: '',
+        role: '',
+        username: '',
+      );
       decodedData.forEach(
         (key, value) {
           loadedOrderItems = [];
           value['orderItems'].forEach(
             (val) {
               getLoadedOrderedItem() {
-                for (var key in val['orderedItem'].keys) {
+                for (var _ in val['orderedItem'].keys) {
                   loadedOrderedItems = OrderedItems(
                     id: val['orderedItem']['_id'],
                     name: val['orderedItem']['name'],
@@ -143,6 +154,7 @@ class RestaurantProvider with ChangeNotifier {
               return loadedUser;
             }
           }
+
           loadedOrders.add(
             ReceivedOrder(
               id: value['_id'],
@@ -151,6 +163,7 @@ class RestaurantProvider with ChangeNotifier {
               totalAmount: value['amount'],
               paymentStatus: value['paymentStatus'],
               transactionId: value['transactionId'],
+              orderStatus: value['orderStatus'],
               createdOn: DateTime.parse(
                 value['createdOn'],
               ),
@@ -258,14 +271,11 @@ class RestaurantProvider with ChangeNotifier {
   }
 
   //Method to delete a particular order from the Database after it has been prepared.
-  Future<void> deleteOrder(String id) async {
-    final url = restaurantUrl(id);
+  Future<void> deleteOrder(String id, String orderStatus) async {
+    final url = restaurantUrl("$id?orderStatus=$orderStatus");
     try {
-      final response = await http.delete(url, headers: _headers);
-      final decodedData = req_url.checkResponseError(response);
-      if (decodedData['message'] != null) {
-        throw HttpException(decodedData['message']);
-      }
+      final response = await http.patch(url, headers: _headers);
+      req_url.checkResponseError(response);
     } catch (error) {
       throw HttpException(error.toString());
     }

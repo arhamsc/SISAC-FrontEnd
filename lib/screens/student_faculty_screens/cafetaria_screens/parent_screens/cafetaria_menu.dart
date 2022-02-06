@@ -104,7 +104,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                     /* Card to render Menu Items */
                     itemBuilder: (ctx, i) => MenuCard(
                       menu: menuData.items[i],
-                      preOrder: availability,
+                      preOrder: true,
                       showBadge: menuData.recommendations.any(
                           (element) => element.itemId == menuData.items[i].id),
                     ),

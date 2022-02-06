@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:659614678651:android:95a02c3fb7eb409a432cde",
+        "mobilesdk_app_id": "1:659614678651:android:5c19472ad1400aad432cde",
         "android_client_info": {
-          "package_name": "com.sisac.app"
+          "package_name": "com.example.sisac"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "659614678651-qontp4q3n9kirpervpbc08cpgvmc4ea0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "659614678651-7e8mufdh731ue9malq1ok1cae3hdks1d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sisac.app"
+              }
             }
           ]
         }

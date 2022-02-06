@@ -4,6 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sisac/providers/cafetaria/cafetaria_providers.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /* Screen imports */
 //Home Screens
@@ -47,7 +50,14 @@ import './providers/stationary/books_material_providers.dart';
 import './providers/stationary/material_available_providers.dart';
 import './providers/cafetaria/cart_provider.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
@@ -185,6 +195,46 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+/* Firebase Cloud Messaging Push Notification Setup for Android */
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+Future<void> setLocalNotification() async {
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description:
+        'This channel is used for important notifications.', // description
+    importance: Importance.max,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()!
+      .createNotificationChannel(channel);
+  FirebaseMessaging.onMessage.listen(
+    (RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: "@mipmap/ic_launcher",
+            ),
+          ),
+        );
+      }
+    },
+  );
+}
+
 /* Home Screen Widget - Different Entry points based on role */
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.auth}) : super(key: key);
@@ -194,6 +244,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    Future.delayed(
+      Duration.zero,
+      () => Provider.of<Auth>(context, listen: false).produceFCMToken(),
+    );
+    setLocalNotification();
+    super.initState();
+  }
+
   Widget screenByRole(String role) {
     switch (role) {
       case "Other":

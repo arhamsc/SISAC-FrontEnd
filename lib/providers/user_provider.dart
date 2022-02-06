@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../utils/helpers/http_exception.dart';
 
@@ -40,11 +41,53 @@ class Auth with ChangeNotifier {
   String? _role;
   String? _name;
   String? _username;
+  String? _fcmToken;
 
   User? _user;
 
   User get getUser {
     return _user!;
+  }
+
+  String get fcmToken {
+    return _fcmToken ?? '';
+  }
+
+  //Getter to get user role
+  String? get getRole {
+    return _role;
+  }
+
+  //Getter to get UserId
+  String? get getUserId {
+    return _userId;
+  }
+
+//Getter to get if token is present or not with some local validation.
+  String? get token {
+    if (_expiryDate != null &&
+        _expiryDate!.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
+
+  //Getter to authenticate if the token is present in the local memory.
+  bool get isAuth {
+    return _token != null;
+  }
+
+  Future<void> produceFCMToken() async {
+    final fcm = FirebaseMessaging.instance;
+    final pushToken = await fcm.getToken();
+    //For IOS
+    fcm.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    _fcmToken = pushToken;
   }
 
 //Method to Login the user after authentication from the server.
@@ -63,8 +106,11 @@ class Auth with ChangeNotifier {
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
+          'fcmToken':
+              _fcmToken!, //sending the Cloud Messaging Token to store in database
         },
       ).timeout(const Duration(seconds: 20));
+
       //below the data is being decoded from the response
       final decodedData = req_url.checkResponseError(response);
       //creating a new user to store it locally in the list to access the role and token
@@ -111,21 +157,6 @@ class Auth with ChangeNotifier {
     }
   }
 
-  //Getter to get if token is present or not with some local validation.
-  String? get token {
-    if (_expiryDate != null &&
-        _expiryDate!.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
-    return null;
-  }
-
-  //Getter to authenticate if the token is present in the local memory.
-  bool get isAuth {
-    return _token != null;
-  }
-
   //Method to auto login the User by checking the user info stored in the local memory.
   Future<bool> tryAutoLogin(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
@@ -165,26 +196,43 @@ class Auth with ChangeNotifier {
 
   //Method for logging out the user on the User's request
   Future<void> logout(BuildContext context) async {
-    //After logout the app screen is navigated to the Login screen.
-    Navigator.of(context).popUntil(ModalRoute.withName('/'));
-    //Setting all the authentication variables to null to logout.
-    _token = null;
-    _refreshToken = null;
-    _userId = null;
-    _expiryDate = null;
-    _role = null;
-    _username = null;
+    final url = req_url.url('logout');
+    try {
+      final response = await http.post(url, headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'secret_token': _token ?? '',
+      });
+      final res = req_url.checkResponseError(response);
 
-    if (_authTimer != null) {
-      _authTimer!.cancel();
-      _authTimer = null;
+      print(res);
+
+      //After logout the app screen is navigated to the Login screen.
+      Navigator.of(context).popUntil(ModalRoute.withName('/'));
+      //Setting all the authentication variables to null to logout.
+      _token = null;
+      _refreshToken = null;
+      _userId = null;
+      _expiryDate = null;
+      _role = null;
+      _username = null;
+      _fcmToken = null; //need not save in shared preferences
+
+      await FirebaseMessaging.instance.deleteToken();
+
+      if (_authTimer != null) {
+        _authTimer!.cancel();
+        _authTimer = null;
+      }
+
+      produceFCMToken();
+      notifyListeners();
+
+      //deleting the user instance stored in the memory.
+      final prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+    } catch (error) {
+      throw HttpException(error.toString());
     }
-
-    notifyListeners();
-
-    //deleting the user instance stored in the memory.
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
   }
 
   //Method to trigger autoLogout, which will start a timer from when it is called and the duration of the timer is the expiry time of the token received from the server. After the timer is up it will call the logout method.
@@ -254,15 +302,5 @@ class Auth with ChangeNotifier {
       logout(context);
       throw HttpException(error.toString());
     }
-  }
-
-  //Getter to get user role
-  String? get getRole {
-    return _role;
-  }
-
-  //Getter to get UserId
-  String? get getUserId {
-    return _userId;
   }
 }

@@ -13,6 +13,7 @@ import '../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../widgets/component_widgets/scaffold/bottom_bar.dart';
 import '../../../widgets/component_widgets/scaffold/app_drawer.dart';
 
+
 /* Tab Screen - Contains the Scaffold and Bottom Navigation Bar for all the navigation pages(pages) */
 class TabScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -25,7 +26,6 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-
   List<Map<String, dynamic>>? _pages;
 
   //current page index which is the Home Screen
@@ -36,7 +36,15 @@ class _TabScreenState extends State<TabScreen> {
   @override
   void initState() {
     _tabController = PageController(initialPage: _selectedPageIndex);
+   
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+
+    super.didChangeDependencies();
   }
 
   void selectPage(int index) {

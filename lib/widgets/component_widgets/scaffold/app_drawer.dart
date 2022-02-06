@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sisac/utils/helpers/error_dialog.dart';
+import 'package:sisac/utils/helpers/http_exception.dart';
 
 import '../../../providers/user_provider.dart';
 
@@ -7,7 +9,7 @@ import '../../../utils/general/customColor.dart';
 
 /* Scaffold - Custom AppDrawer for Student/faculty */
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({
+  AppDrawer({
     Key? key,
     required this.pageController,
   }) : super(key: key);
@@ -187,9 +189,11 @@ class AppDrawer extends StatelessWidget {
                       size: 32,
                     ),
                     onTap: () {
-                      pageController.animateToPage(4,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut);
+                      pageController.animateToPage(
+                        4,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
                       Navigator.of(context).pop();
                     },
                   ),
@@ -202,17 +206,54 @@ class AppDrawer extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    authData.logout(context);
-                  },
-                  child: const Text("Logout"),
-                ),
-              )
+              LogoutWidget(
+                authP: authData,
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class LogoutWidget extends StatefulWidget {
+  const LogoutWidget({
+    Key? key,
+    required this.authP,
+  }) : super(key: key);
+
+  final Auth authP;
+  @override
+  State<LogoutWidget> createState() => _LogoutWidgetState();
+}
+
+class _LogoutWidgetState extends State<LogoutWidget> {
+  bool _isLoading = false;
+
+  Future<void> _logoutHandler(Auth authP, BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await authP.logout(context);
+      _isLoading = false;
+    } on HttpException catch (_) {
+      setState(() {
+        _isLoading = false;
+      });
+      await dialog(ctx: context, errorMessage: "Failed to Logout");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () => _logoutHandler(widget.authP, context),
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : const Text("Logout"),
       ),
     );
   }

@@ -8,9 +8,6 @@ import '../../../../providers/cafetaria/restaurant_providers.dart';
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/customColor.dart';
 
-import '../../../../utils/helpers/error_dialog.dart';
-import '../../../../utils/helpers/confirmation_dialog.dart';
-
 /* Restaurant - Received Orders card to View and Delete Orders */
 class RestaurantReceivedOrdersCard extends StatefulWidget {
   const RestaurantReceivedOrdersCard({
@@ -19,12 +16,14 @@ class RestaurantReceivedOrdersCard extends StatefulWidget {
     required this.order,
     required this.index,
     required this.setStateFunc,
+    required this.deleteOrder,
   }) : super(key: key);
 
   final List<MenuItem> menu;
   final ReceivedOrder order;
   final int index;
   final Function setStateFunc;
+  final Function deleteOrder;
 
   @override
   _RestaurantReceivedOrdersCardState createState() =>
@@ -40,45 +39,8 @@ class _RestaurantReceivedOrdersCardState
     return widget.order.menuOrders[widget.index].items.imageUrl;
   }
 
-  bool _isLoading = false;
-
-  /* Function to delete an Order */
-  Future<void> _deleteOrder(RestaurantProvider rest, String id) async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      var res = await rest.deleteOrder(id);
-      await dialog(
-          ctx: context, errorMessage: "Order Completed", title: "Success");
-      await rest.getReceivedOrders();
-      setState(() {
-        _isLoading = false;
-      });
-    } on HttpException catch (error) {
-      await dialog(ctx: context, errorMessage: error.message, title: "Success");
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _showDeleteDialog(RestaurantProvider rest, String id) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return ConfirmationDialog(
-          title: "Is the order ready?",
-          content: "Notifying the customer...",
-          confirmationFunction: () => _deleteOrder(rest, id),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final restP = Provider.of<RestaurantProvider>(context);
     return Column(
       children: [
         const SizedBox(height: 25),
@@ -139,7 +101,7 @@ class _RestaurantReceivedOrdersCardState
                             //Button toe delete the order
                             ElevatedButton(
                               onPressed: () async {
-                                await _showDeleteDialog(restP, widget.order.id);
+                                widget.deleteOrder();
                                 widget.setStateFunc();
                               },
                               child: const Text('Prepared'),
@@ -230,23 +192,20 @@ class _RestaurantReceivedOrdersCardState
                           height: ScreenSize.screenHeight(context) * 0.04,
                           width: ScreenSize.screenWidth(context) * .08,
                           child: Center(
-                            child: !_isLoading
-                                ? IconButton(
-                                    padding: const EdgeInsets.all(0),
-                                    color: Palette.quinaryDefault,
-                                    icon: _expanded
-                                        ? const Icon(Icons.arrow_drop_up)
-                                        : const Icon(Icons.arrow_drop_down),
-                                    onPressed: () async {
-                                      //toggle expanded boolean
-                                      setState(() {
-                                        _expanded = !_expanded;
-                                      });
-                                    },
-                                    splashRadius: 1,
-                                  )
-                                : const CircularProgressIndicator(),
-                          ),
+                              child: IconButton(
+                            padding: const EdgeInsets.all(0),
+                            color: Palette.quinaryDefault,
+                            icon: _expanded
+                                ? const Icon(Icons.arrow_drop_up)
+                                : const Icon(Icons.arrow_drop_down),
+                            onPressed: () async {
+                              //toggle expanded boolean
+                              setState(() {
+                                _expanded = !_expanded;
+                              });
+                            },
+                            splashRadius: 1,
+                          )),
                         ),
                         const SizedBox(),
                       ],
