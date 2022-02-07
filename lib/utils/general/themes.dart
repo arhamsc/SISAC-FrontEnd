@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import './customColor.dart';
+import './screen_size.dart';
 
 /* Custom Theme setting for Typography and Buttons */
 //Typography Themes
 class TextThemes {
-  static const TextTheme customText = TextTheme(
+  static final TextTheme customText = TextTheme(
     headline6: TextStyle(
       fontFamily: "Montserrat",
-      fontSize: 24,
+      fontSize: 20.sp,
       fontWeight: FontWeight.bold,
       color: Palette.quinaryDefault,
     ),
     headline5: TextStyle(
       fontFamily: "Montserrat",
-      fontSize: 18,
+      fontSize: 14.sp,
       fontWeight: FontWeight.bold,
       color: Palette.quinaryDefault,
     ),
     headline4: TextStyle(
       fontFamily: "Montserrat",
-      fontSize: 30,
+      fontSize: 24.sp,
       fontWeight: FontWeight.bold,
       color: Palette.quinaryDefault,
     ),
     bodyText1: TextStyle(
       fontFamily: "Karla",
-      fontSize: 20,
+      fontSize: 16.sp,
       color: Palette.tertiaryDefault,
     ),
     bodyText2: TextStyle(
       fontFamily: "Karla",
-      fontSize: 14,
+      fontSize: 10.sp,
       color: Palette.tertiaryDefault,
     ),
   );
@@ -48,9 +50,9 @@ class ButtonThemes {
         TextThemes.customText.bodyText1?.copyWith(fontWeight: FontWeight.bold),
       ),
       padding: MaterialStateProperty.all(
-        const EdgeInsets.symmetric(
-          vertical: 15,
-          horizontal: 100,
+        EdgeInsets.symmetric(
+          vertical: 11.sp,
+          horizontal: 70.sp,
         ),
       ),
       shape: MaterialStateProperty.all(
@@ -60,7 +62,7 @@ class ButtonThemes {
       ),
     ),
   );
-  
+
   //Small Elevated Button Style
   static ButtonStyle elevatedButtonSmall = ButtonStyle(
     backgroundColor: MaterialStateProperty.all(Palette.secondaryDefault),
@@ -69,9 +71,9 @@ class ButtonThemes {
       TextThemes.customText.bodyText2!.copyWith(fontSize: 11),
     ),
     padding: MaterialStateProperty.all(
-      const EdgeInsets.symmetric(
+      EdgeInsets.symmetric(
         vertical: 0,
-        horizontal: 15,
+        horizontal: 11.sp,
       ),
     ),
     shape: MaterialStateProperty.all(
@@ -87,7 +89,7 @@ class ButtonThemes {
     backgroundColor: MaterialStateProperty.all(Palette.quaternaryDefault),
     foregroundColor: MaterialStateProperty.all(Palette.quinaryDefault),
     textStyle: MaterialStateProperty.all(
-      TextThemes.customText.bodyText2!.copyWith(fontSize: 15),
+      TextThemes.customText.bodyText2!.copyWith(fontSize: 11.sp),
     ),
     padding: MaterialStateProperty.all(
       const EdgeInsets.symmetric(

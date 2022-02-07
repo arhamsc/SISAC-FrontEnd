@@ -9,6 +9,7 @@ import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/order_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/loader.dart';
 import '../../../../utils/general/screen_size.dart';
 
 /* Cafetaria - Screen to View individual User Orders */
@@ -21,7 +22,6 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-
   /* Pull to Refresh Function */
   Future<void> _refreshItems(BuildContext context) async {
     setState(() {
@@ -52,13 +52,14 @@ class _OrderScreenState extends State<OrderScreen> {
             .fetchUserOrders(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: SISACLoader());
           } else if (dataSnapShot.error != null) {
             Future.delayed(
               Duration.zero,
               () => dialog(
                 ctx: context,
                 errorMessage: dataSnapShot.error.toString(),
+                title: "No Orders",
                 tryAgainFunc: () => _refreshItems(context),
                 pop2Pages: true,
               ),
@@ -77,7 +78,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   height: ScreenSize.usableHeight(context),
                   child: ListView.builder(
                     itemBuilder: (ctx, i) =>
-                    /* Card to Render Orders */
+                        /* Card to Render Orders */
                         OrderCard(order: orderData.userOrders[i], orderNum: i),
                     itemCount: orderData.userOrders.length,
                   ),

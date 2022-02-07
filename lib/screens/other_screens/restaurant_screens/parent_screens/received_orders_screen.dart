@@ -11,6 +11,7 @@ import '../../../../widgets/component_widgets/cafetaria/restaurant/received_orde
 import '../../../../../utils/helpers/error_dialog.dart';
 import '../../../../../utils/helpers/http_exception.dart';
 import '../../../../../utils/helpers/confirmation_dialog.dart';
+import '../../../../../utils/helpers/loader.dart';
 import '../../../../../utils/general/screen_size.dart';
 
 /* Restaurant - View and Delete Received Orders Screen */
@@ -93,7 +94,7 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
             .getReceivedOrders(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: SISACLoader());
           } else if (dataSnapShot.error != null) {
             Future.delayed(
               Duration.zero,

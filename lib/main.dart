@@ -7,6 +7,7 @@ import 'package:sisac/providers/cafetaria/cafetaria_providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sizer/sizer.dart';
 
 /* Screen imports */
 //Home Screens
@@ -138,57 +139,60 @@ class _MyAppState extends State<MyApp> {
         )
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'SISAC',
-          /* App Theme Data - Individual Config in theme.dart and customColor.dart */
-          theme: ThemeData(
-            appBarTheme: AppBarThemes.appBarTheme(),
-            scaffoldBackgroundColor: Palette.primaryDefault,
-            textTheme: TextThemes.customText,
-            elevatedButtonTheme: ButtonThemes.elevatedButton,
-            bottomAppBarTheme: AppBarThemes.bottomNav(),
+        builder: (ctx, auth, _) => Sizer(
+          builder: (context, orientation, deviceType) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'SISAC',
+            /* App Theme Data - Individual Config in theme.dart and customColor.dart */
+            theme: ThemeData(
+              appBarTheme: AppBarThemes.appBarTheme(),
+              scaffoldBackgroundColor: Palette.primaryDefault,
+              textTheme: TextThemes.customText,
+              elevatedButtonTheme: ButtonThemes.elevatedButton,
+              bottomAppBarTheme: AppBarThemes.bottomNav(),
+            ),
+            /* Home Page Widget */
+            home: HomePage(auth: auth),
+            /* Named Routes Registering */
+            routes: {
+              //Home Screen Routes
+              TabScreen.routeName: (ctx) => const TabScreen(),
+              LoginScreen.routeName: (ctx) => const LoginScreen(),
+              RestaurantHomeScreen.routeName: (ctx) =>
+                  const RestaurantHomeScreen(),
+              StationaryHomeScreen.routeName: (ctx) =>
+                  const StationaryHomeScreen(),
+              //Cafetaria Screens - Consumer Routes
+              CafetariaMenu.routeName: (ctx) => const CafetariaMenu(),
+              PlaceOrderScreen.routeName: (ctx) => const PlaceOrderScreen(),
+              OrderScreen.routeName: (ctx) => const OrderScreen(),
+              RatingScreen.routeName: (ctx) => const RatingScreen(),
+              CartScreen.routeName: (ctx) => const CartScreen(),
+              //Cafetaria Screens - Vendor Routes
+              ReceivedOrdersScreen.routeName: (ctx) =>
+                  const ReceivedOrdersScreen(),
+              IsAvailableScreen.routeName: (ctx) => const IsAvailableScreen(),
+              AddEditMenuItemScreen.routeName: (ctx) =>
+                  const AddEditMenuItemScreen(),
+              //Stationary Screens - Consumer Routes
+              AvailabilityScreen.routeName: (ctx) => const AvailabilityScreen(),
+              BooksMaterialScreen.routeName: (ctx) =>
+                  const BooksMaterialScreen(),
+              MaterialAvailableScreen.routeName: (ctx) =>
+                  const MaterialAvailableScreen(),
+              //Stationary Screens - Vendor Routes
+              UpdateAvailabilityScreen.routeName: (ctx) =>
+                  const UpdateAvailabilityScreen(),
+              VendorBooksMaterialScreen.routeName: (ctx) =>
+                  const VendorBooksMaterialScreen(),
+              AddEditStationaryItemScreen.routeName: (ctx) =>
+                  const AddEditStationaryItemScreen(),
+              VendorMaterialAvailableScreen.routeName: (ctx) =>
+                  const VendorMaterialAvailableScreen(),
+              AddEditMaterialAvailableScreen.routeName: (ctx) =>
+                  const AddEditMaterialAvailableScreen(),
+            },
           ),
-          /* Home Page Widget */
-          home: HomePage(auth: auth),
-          /* Named Routes Registering */
-          routes: {
-            //Home Screen Routes
-            TabScreen.routeName: (ctx) => const TabScreen(),
-            LoginScreen.routeName: (ctx) => const LoginScreen(),
-            RestaurantHomeScreen.routeName: (ctx) =>
-                const RestaurantHomeScreen(),
-            StationaryHomeScreen.routeName: (ctx) =>
-                const StationaryHomeScreen(),
-            //Cafetaria Screens - Consumer Routes
-            CafetariaMenu.routeName: (ctx) => const CafetariaMenu(),
-            PlaceOrderScreen.routeName: (ctx) => const PlaceOrderScreen(),
-            OrderScreen.routeName: (ctx) => const OrderScreen(),
-            RatingScreen.routeName: (ctx) => const RatingScreen(),
-            CartScreen.routeName: (ctx) => const CartScreen(),
-            //Cafetaria Screens - Vendor Routes
-            ReceivedOrdersScreen.routeName: (ctx) =>
-                const ReceivedOrdersScreen(),
-            IsAvailableScreen.routeName: (ctx) => const IsAvailableScreen(),
-            AddEditMenuItemScreen.routeName: (ctx) =>
-                const AddEditMenuItemScreen(),
-            //Stationary Screens - Consumer Routes
-            AvailabilityScreen.routeName: (ctx) => const AvailabilityScreen(),
-            BooksMaterialScreen.routeName: (ctx) => const BooksMaterialScreen(),
-            MaterialAvailableScreen.routeName: (ctx) =>
-                const MaterialAvailableScreen(),
-            //Stationary Screens - Vendor Routes
-            UpdateAvailabilityScreen.routeName: (ctx) =>
-                const UpdateAvailabilityScreen(),
-            VendorBooksMaterialScreen.routeName: (ctx) =>
-                const VendorBooksMaterialScreen(),
-            AddEditStationaryItemScreen.routeName: (ctx) =>
-                const AddEditStationaryItemScreen(),
-            VendorMaterialAvailableScreen.routeName: (ctx) =>
-                const VendorMaterialAvailableScreen(),
-            AddEditMaterialAvailableScreen.routeName: (ctx) =>
-                const AddEditMaterialAvailableScreen(),
-          },
         ),
       ),
     );

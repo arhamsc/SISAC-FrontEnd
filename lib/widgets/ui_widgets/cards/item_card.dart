@@ -1,10 +1,10 @@
 /* Item Card Variant 1 */
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../buttons/small_button.dart';
 
 import '../../../utils/general/customColor.dart';
-import '../../../utils/general/screen_size.dart';
 
 /* Custom Item Card 1st Version */
 class ItemCard extends StatefulWidget {
@@ -55,8 +55,8 @@ class _ItemCardState extends State<ItemCard> {
       children: [
         AnimatedContainer(
           duration: const Duration(milliseconds: 500),
-          height: _expanded ? ScreenSize.screenHeight(context) * .4 : 0,
-          width: ScreenSize.screenWidth(context) * .85,
+          height: _expanded ? 40.h : 0,
+          width: 93.w,
           decoration: BoxDecoration(
             color: Palette.senaryDefault,
             borderRadius: BorderRadius.circular(10),
@@ -77,7 +77,7 @@ class _ItemCardState extends State<ItemCard> {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 2.1.h),
                       widget.expanded
                           ? Column(
                               children: widget.expandedChild != null
@@ -93,8 +93,8 @@ class _ItemCardState extends State<ItemCard> {
           ),
         ),
         Container(
-          height: ScreenSize.screenHeight(context) * .108,
-          width: ScreenSize.screenWidth(context) * .85,
+          height: 11.h,
+          width: 93.w,
           decoration: BoxDecoration(
             color: SecondaryPallete.primary,
             borderRadius: BorderRadius.circular(10),
@@ -110,7 +110,7 @@ class _ItemCardState extends State<ItemCard> {
           child: Row(
             children: [
               Container(
-                width: ScreenSize.screenWidth(context) * .25,
+                width: 25.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
@@ -123,12 +123,12 @@ class _ItemCardState extends State<ItemCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 10),
+                    SizedBox(height: 1.h),
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const SizedBox(width: 10),
+                          SizedBox(width: 5.sp),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -155,7 +155,7 @@ class _ItemCardState extends State<ItemCard> {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 10)
+                          SizedBox(width: 2.3.w)
                         ],
                       ),
                     ),
@@ -177,7 +177,7 @@ class _ItemCardState extends State<ItemCard> {
                                           false,
                                 )
                               : const SizedBox(),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 2.3.w),
                           smallEleBtn(
                             context: context,
                             title: !widget.expanded
@@ -197,7 +197,7 @@ class _ItemCardState extends State<ItemCard> {
                                     widget.buttonOneFunction();
                                   },
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 2.3.w),
                         ],
                       ),
                     ),

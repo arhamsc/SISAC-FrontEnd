@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
@@ -85,8 +86,8 @@ class _RowCardState extends State<RowCard> {
       },
       style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(0)),
       child: Container(
-        width: ScreenSize.screenWidth(context) * .37,
-        height: ScreenSize.screenHeight(context) * .15,
+        width: 40.w,
+        height: 15.h,
         decoration: BoxDecoration(
           color: Palette.quinaryDefault,
           borderRadius: BorderRadius.circular(5),

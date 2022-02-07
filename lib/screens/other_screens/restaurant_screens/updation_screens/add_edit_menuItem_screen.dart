@@ -17,6 +17,7 @@ import '../../../../widgets/ui_widgets/inputs/form_image_input.dart';
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/themes.dart';
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/loader.dart';
 
 /* Restaurant - Add/Edit a Menu Item Screen */
 class AddEditMenuItemScreen extends StatefulWidget {
@@ -271,7 +272,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         height: ScreenSize.usableHeight(context),
         child: Center(
           child: _isLoading
-              ? const CircularProgressIndicator()
+              ? SISACLoader()
               : Form(
                   key: _formKey,
                   child: SizedBox(

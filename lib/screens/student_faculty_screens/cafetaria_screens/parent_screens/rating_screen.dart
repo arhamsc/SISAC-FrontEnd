@@ -8,6 +8,7 @@ import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_cards/rating_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/loader.dart';
 import '../../../../utils/general/screen_size.dart';
 
 /* Cafetaria - Screen to Rate Menu Item */
@@ -42,7 +43,7 @@ class _RatingScreenState extends State<RatingScreen> {
             Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: SISACLoader());
           } else if (dataSnapShot.error != null) {
             Future.delayed(Duration.zero, () {
               dialog(

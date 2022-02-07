@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../utils/general/customColor.dart';
 
@@ -18,17 +19,17 @@ class Badge extends StatelessWidget {
       children: [
         child,
         Positioned(
-          left: 20,
-          top: 2,
+          left: 3.w,
+          top: .2.h,
           child: Container(
             padding: const EdgeInsets.all(3.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Palette.quinaryDefault,
             ),
-            constraints: const BoxConstraints(
-              minWidth: 20,
-              minHeight: 20,
+            constraints: BoxConstraints(
+              minWidth: 4.6.w,
+              minHeight: 2.1.h,
             ),
             child: const Icon(
               Icons.star,

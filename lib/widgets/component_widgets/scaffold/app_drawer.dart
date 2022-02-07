@@ -6,6 +6,7 @@ import 'package:sisac/utils/helpers/http_exception.dart';
 import '../../../providers/user_provider.dart';
 
 import '../../../utils/general/customColor.dart';
+import '../../../utils/helpers/loader.dart';
 
 /* Scaffold - Custom AppDrawer for Student/faculty */
 class AppDrawer extends StatelessWidget {
@@ -252,7 +253,9 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       child: ElevatedButton(
         onPressed: () => _logoutHandler(widget.authP, context),
         child: _isLoading
-            ? const CircularProgressIndicator()
+            ? SISACLoader(
+                size: 40,
+              )
             : const Text("Logout"),
       ),
     );

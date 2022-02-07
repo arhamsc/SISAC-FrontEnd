@@ -12,6 +12,7 @@ import '../../providers/user_provider.dart';
 import '../../utils/general/customColor.dart';
 import '../../utils/general/screen_size.dart' show ScreenSize;
 import '../../utils/helpers/http_exception.dart';
+import '../../utils/helpers/loader.dart';
 
 /* Login Modal screen to collect credentials and send the authentication request */
 class LoginModalScreen extends StatelessWidget {
@@ -201,12 +202,14 @@ class _InputColumnState extends State<InputColumn> {
         ),
         const SizedBox(height: 30),
         //Login Button
-        ElevatedButton(
-          onPressed: submitCred,
-          child: _isLoading
-              ? const CircularProgressIndicator(color: SecondaryPallete.primary)
-              : const Text("Sign In"),
-        ),
+        _isLoading
+            ? SISACLoader(
+                size: 40,
+              )
+            : ElevatedButton(
+                onPressed: submitCred,
+                child: const Text("Sign In"),
+              ),
         const SizedBox(height: 5),
         const Text("Forgot Password?"),
       ],
@@ -241,7 +244,29 @@ class _RoleRowState extends State<RoleRow> {
     return Container(
       width: double.infinity,
       color: SecondaryPallete.primary,
-      child: ToggleButtons(
+      child: SizedBox(
+        height: ScreenSize.screenHeight(context) * .055,
+        child: Center(
+          child: Text(
+            "Login",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+enum Roles { Student, Faculty, Other }
+
+extension ParseToString on Roles {
+  String enumToString() {
+    return toString().split('.').last;
+  }
+}
+
+/*
+ToggleButtons(
         children: _roleList
             .map<Widget>(
               (role) => Container(
@@ -272,15 +297,4 @@ class _RoleRowState extends State<RoleRow> {
           _selectedRole = Roles.values[index];
         },
         fillColor: SecondaryPallete.tertiary,
-      ),
-    );
-  }
-}
-
-enum Roles { Student, Faculty, Other }
-
-extension ParseToString on Roles {
-  String enumToString() {
-    return toString().split('.').last;
-  }
-}
+      ) */

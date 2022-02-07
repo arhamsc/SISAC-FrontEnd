@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
@@ -23,7 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(0),
-      height: ScreenSize.screenHeight(context) * 0.1,
+      height: 10.h,
       //Clip to make the upper rounded borders
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -32,15 +33,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.all(0),
-              padding: const EdgeInsets.only(bottom: 25),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 0,
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(0),
+                padding: EdgeInsets.only(bottom: 2.h),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 0,
+                    color: Palette.senaryDefault,
+                  ),
                   color: Palette.senaryDefault,
                 ),
-                color: Palette.senaryDefault,
               ),
             ),
             //Navigation Bar
@@ -76,24 +79,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
               selectedItemColor: Palette.quinaryDefault,
               showUnselectedLabels: true,
               backgroundColor: Palette.senaryDefault,
-              iconSize: 24,
+              iconSize: 20.sp,
               onTap: widget.selectPage,
               currentIndex: widget.currentPageIndex,
               selectedIconTheme: const IconThemeData(size: 30),
             ),
-            //To cover up the below space and center the nav items
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 0,
-                    color: Palette.senaryDefault,
-                  ),
-                  color: Palette.senaryDefault,
-                ),
-                margin: const EdgeInsets.all(0),
-              ),
-            )
           ],
         ),
       ),

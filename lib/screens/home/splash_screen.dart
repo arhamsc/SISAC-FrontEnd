@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/helpers/loader.dart';
+
 /* Splash Screen to show loading state while login */
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -8,10 +10,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          "Loading....",
-          style: Theme.of(context).textTheme.headline6,
-        ),
+        child: SISACLoader(),
       ),
     );
   }

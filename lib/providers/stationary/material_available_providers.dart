@@ -66,6 +66,9 @@ class MaterialAvailableProvider with ChangeNotifier {
     try {
       final response = await http.get(url, headers: _headers);
       final decodedData = req_url.checkResponseError(response);
+      if (decodedData.isEmpty) {
+        throw HttpException("No Items");
+      }
       List<MaterialAvailable> loadedMaterials = [];
       decodedData.forEach((key, value) {
         loadedMaterials.add(

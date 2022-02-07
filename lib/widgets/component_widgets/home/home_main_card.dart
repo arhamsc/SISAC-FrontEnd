@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
@@ -21,8 +22,8 @@ class HomeMainCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: ScreenSize.screenWidth(context) * 0.76,
-      height: ScreenSize.screenHeight(context) * 0.2,
+      width: 76.w,
+      height: 20.h,
       margin: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),

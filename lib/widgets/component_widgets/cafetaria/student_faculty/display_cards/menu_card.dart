@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../../providers/cafetaria/cart_provider.dart';

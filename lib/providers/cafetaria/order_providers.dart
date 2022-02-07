@@ -91,6 +91,9 @@ class OrderProvider with ChangeNotifier {
       List<ReceivedOrderItem> loadedOrderItems = [];
       OrderedItems loadedOrderedItems =
           OrderedItems(id: '', name: '', imageUrl: '', isAvailable: true);
+      if (decodedData['message'] != null) {
+        throw HttpException(decodedData['message']);
+      }
       decodedData.forEach(
         (key, value) {
           loadedOrderItems = [];

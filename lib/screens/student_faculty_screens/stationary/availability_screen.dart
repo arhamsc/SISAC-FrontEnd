@@ -8,6 +8,7 @@ import '../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 import '../../../widgets/component_widgets/stationary/display_cards/available_card.dart';
 
 import '../../../utils/helpers/error_dialog.dart';
+import '../../../utils/helpers/loader.dart';
 import '../../../utils/general/screen_size.dart';
 
 /* Stationary - Screen to view Bluebooks/Records */
@@ -43,8 +44,8 @@ class _AvailabilityScreenState extends State<AvailabilityScreen> {
             .fetchAvailableItems(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: SISACLoader(),
             );
           } else if (dataSnapShot.error != null) {
             Future.delayed(

@@ -13,6 +13,7 @@ import '../../../../../utils/helpers/error_dialog.dart';
 import '../../../../../utils/general/screen_size.dart';
 import '../../../../../utils/helpers/http_exception.dart';
 import '../../../../utils/helpers/confirmation_dialog.dart';
+import '../../../../utils/helpers/loader.dart';
 
 /* Restaurant - Menu Item Availability Updation Screen */
 class IsAvailableScreen extends StatefulWidget {
@@ -83,7 +84,7 @@ class _IsAvailableScreenState extends State<IsAvailableScreen> {
             Provider.of<MenuItemProvider>(context, listen: false).fetchMenu(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: SISACLoader());
           } else if (dataSnapShot.error != null) {
             Future.delayed(
               Duration.zero,

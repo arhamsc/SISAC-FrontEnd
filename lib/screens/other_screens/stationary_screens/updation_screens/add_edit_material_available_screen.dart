@@ -17,6 +17,7 @@ import '../../../../widgets/ui_widgets/inputs/input_dropdown.dart';
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/themes.dart';
 import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/loader.dart';
 
 /* Stationary - Add/Edit Materials */
 class AddEditMaterialAvailableScreen extends StatefulWidget {
@@ -268,7 +269,7 @@ class _AddEditMaterialAvailableScreenState
         height: ScreenSize.usableHeight(context),
         child: Center(
           child: _isLoading
-              ? const CircularProgressIndicator()
+              ? SISACLoader()
               : Form(
                   key: _formKey1,
                   child: SizedBox(

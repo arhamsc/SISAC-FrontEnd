@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:sisac/utils/helpers/error_dialog.dart';
-import 'package:sisac/utils/helpers/http_exception.dart';
 
 import '../../../../../providers/cafetaria/cafetaria_providers.dart';
 
 import '../../../../../widgets/ui_widgets/cards/item_card.dart';
 
 import '../../../../../../utils/general/customColor.dart';
+import '../../../../../utils/helpers/error_dialog.dart';
+import '../../../../../utils/helpers/http_exception.dart';
+import '../../../../../utils/helpers/loader.dart';
 
 /* Cafetaria - Card to view and rate a menu item */
 class RatingCard extends StatefulWidget {
@@ -117,7 +118,9 @@ class _RatingCardState extends State<RatingCard> {
                     widget.setStateFunc();
                   },
                   child: _isLoading
-                      ? const CircularProgressIndicator()
+                      ? SISACLoader(
+                          size: 40,
+                        )
                       : const Text(
                           "Rate",
                         ),

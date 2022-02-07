@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:sisac/utils/general/customColor.dart';
+import 'package:sisac/utils/helpers/loader.dart';
 
 import '../../../../providers/cafetaria/cafetaria_providers.dart';
 
@@ -12,6 +13,7 @@ import '../../../../widgets/component_widgets/cafetaria/student_faculty/display_
 import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
+
 import '../../../../utils/general/screen_size.dart';
 
 /* Cafetaria - Screen to view all Menu Items and Adding Menu Items to cart */
@@ -77,7 +79,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
         future: menuP.fetchMenu(),
         builder: (ctx, dataSnapShot) {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: SISACLoader());
           } else if (dataSnapShot.error != null) {
             Future.delayed(
               Duration.zero,
@@ -104,7 +106,7 @@ class _CafetariaMenuState extends State<CafetariaMenu> {
                     /* Card to render Menu Items */
                     itemBuilder: (ctx, i) => MenuCard(
                       menu: menuData.items[i],
-                      preOrder: true,
+                      preOrder: availability,
                       showBadge: menuData.recommendations.any(
                           (element) => element.itemId == menuData.items[i].id),
                     ),

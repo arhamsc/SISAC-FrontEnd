@@ -36,16 +36,9 @@ class _TabScreenState extends State<TabScreen> {
   @override
   void initState() {
     _tabController = PageController(initialPage: _selectedPageIndex);
-   
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-
-    super.didChangeDependencies();
-  }
 
   void selectPage(int index) {
     _tabController!.animateToPage(index,

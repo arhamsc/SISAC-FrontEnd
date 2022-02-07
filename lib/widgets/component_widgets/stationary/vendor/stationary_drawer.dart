@@ -8,6 +8,9 @@ import '../../../../screens/other_screens/stationary_screens/parent_screens/mate
 import '../../../../screens/other_screens/stationary_screens/parent_screens/update_availability_screen.dart';
 
 import '../../../../utils/general/customColor.dart';
+import '../../../../utils/helpers/error_dialog.dart';
+import '../../../../utils/helpers/http_exception.dart';
+import '../../../../utils/helpers/loader.dart';
 
 /* Stationary - Vendor - App Drawer */
 class StationaryDrawer extends StatelessWidget {
@@ -152,17 +155,57 @@ class StationaryDrawer extends StatelessWidget {
                 height: 10,
               ),
               //Logout Button
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    authData.logout(context);
-                  },
-                  child: const Text("Logout"),
-                ),
+              LogoutButton(
+                authData: authData,
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class LogoutButton extends StatefulWidget {
+  const LogoutButton({
+    Key? key,
+    required this.authData,
+  }) : super(key: key);
+
+  final Auth authData;
+
+  @override
+  State<LogoutButton> createState() => _LogoutButtonState();
+}
+
+class _LogoutButtonState extends State<LogoutButton> {
+  bool _isLoading = false;
+
+  Future<void> _logoutHandler() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await widget.authData.logout(context);
+      _isLoading = false;
+    } on HttpException catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      await dialog(ctx: context, errorMessage: "Failed to logout");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: _logoutHandler,
+        child: _isLoading
+            ? SISACLoader(
+                size: 40,
+              )
+            : const Text("Logout"),
       ),
     );
   }

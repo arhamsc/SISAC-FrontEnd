@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../utils/general/customColor.dart';
 import '../../../../../utils/general/screen_size.dart';
+import '../../../../../utils/helpers/loader.dart';
 
 /* Cafetaria - Cart Overview Card to display overall cart amount/no of items and placing order */
 class CartOverViewCard extends StatefulWidget {
@@ -100,7 +101,7 @@ class _CartOverViewCardState extends State<CartOverViewCard> {
               });
             },
             child: widget.isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? SISACLoader(size: 40,)
                 : const Text("Proceed to Buy"),
           ),
         ],

@@ -39,7 +39,7 @@ class StationaryHomeScreen extends StatelessWidget {
                 ),
                 //Bluebook/Record Availability Updation Screen Widget
                 HomeMainCard(
-                  mainTitle: "Update Availability",
+                  mainTitle: "Availability",
                   buttonTitle: "Click to view",
                   buttonFunction: () {
                     Navigator.of(context).pushNamed(

@@ -10,6 +10,7 @@ import '../../../ui_widgets/cards/availability_card.dart';
 
 import '../../../../utils/helpers/error_dialog.dart';
 
+
 /* Restaurant - IsAvailable Card - To update availability and edit the menu Item */
 class IsAvailableCard extends StatefulWidget {
   const IsAvailableCard({

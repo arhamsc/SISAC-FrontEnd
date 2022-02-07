@@ -202,9 +202,7 @@ class Auth with ChangeNotifier {
         'Content-Type': 'application/json; charset=UTF-8',
         'secret_token': _token ?? '',
       });
-      final res = req_url.checkResponseError(response);
-
-      print(res);
+      req_url.checkResponseError(response);
 
       //After logout the app screen is navigated to the Login screen.
       Navigator.of(context).popUntil(ModalRoute.withName('/'));
