@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sisac/widgets/ui_widgets/buttons/small_button.dart';
 import 'package:sisac/widgets/ui_widgets/buttons/small_delete_button.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
@@ -42,7 +43,7 @@ class ItemCardV2 extends StatelessWidget {
               ? ScreenSize.screenHeight(context) * .16
               : ScreenSize.screenHeight(context) * .14
           : ScreenSize.screenHeight(context) * .14,
-      width: ScreenSize.screenWidth(context) * .85,
+      width: 85.w,
       decoration: BoxDecoration(
         color: SecondaryPallete.primary,
         borderRadius: BorderRadius.circular(10),

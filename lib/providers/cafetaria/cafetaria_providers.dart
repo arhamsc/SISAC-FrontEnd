@@ -19,15 +19,16 @@ class MenuItem {
   final String imageUrl;
   final String imageFileName;
   bool isAvailable = true;
-  MenuItem(
-      {required this.id,
-      required this.name,
-      required this.description,
-      required this.rating,
-      required this.price,
-      required this.imageUrl,
-      required this.isAvailable,
-      required this.imageFileName});
+  MenuItem({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.rating,
+    required this.price,
+    required this.imageUrl,
+    required this.isAvailable,
+    required this.imageFileName,
+  });
 }
 
 //to store the recommended dishes.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';

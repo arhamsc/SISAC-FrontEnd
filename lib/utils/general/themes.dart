@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import './customColor.dart';
-import './screen_size.dart';
 
 /* Custom Theme setting for Typography and Buttons */
 //Typography Themes
@@ -113,9 +112,9 @@ class ButtonThemes {
       TextThemes.customText.bodyText1?.copyWith(fontWeight: FontWeight.bold),
     ),
     padding: MaterialStateProperty.all(
-      const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 20,
+      EdgeInsets.symmetric(
+        vertical: 1.h,
+        horizontal: 2.w,
       ),
     ),
     shape: MaterialStateProperty.all(
