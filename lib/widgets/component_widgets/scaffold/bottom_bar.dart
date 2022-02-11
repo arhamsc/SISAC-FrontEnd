@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/customColor.dart';
-import '../../../utils/general/screen_size.dart';
 
 /* Scaffold - Bottom Navigation Bar for Tab Screen of Student / Faculty */
 class BottomNavBar extends StatefulWidget {
@@ -20,6 +22,59 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  final List<BottomNavigationBarItem> _navBarItems = [
+    BottomNavigationBarItem(
+      icon: Padding(
+        padding: EdgeInsets.only(
+          top: 2.h,
+        ),
+        child: const Icon(Icons.calendar_today),
+      ),
+      label: '',
+      backgroundColor: Palette.senaryDefault,
+    ),
+    BottomNavigationBarItem(
+      icon: Padding(
+        padding: EdgeInsets.only(
+          top: 2.h,
+        ),
+        child: const Icon(Icons.announcement_outlined),
+      ),
+      label: '',
+      backgroundColor: Palette.senaryDefault,
+    ),
+    BottomNavigationBarItem(
+      icon: Padding(
+        padding: EdgeInsets.only(
+          top: 2.h,
+        ),
+        child: const Icon(Icons.home),
+      ),
+      label: '',
+      backgroundColor: Palette.senaryDefault,
+    ),
+    BottomNavigationBarItem(
+      icon: Padding(
+        padding: EdgeInsets.only(
+          top: 2.h,
+        ),
+        child: const Icon(Icons.menu_book_outlined),
+      ),
+      label: '',
+      backgroundColor: Palette.senaryDefault,
+    ),
+    BottomNavigationBarItem(
+      icon: Padding(
+        padding: EdgeInsets.only(
+          top: 2.h,
+        ),
+        child: const Icon(Icons.coffee_outlined),
+      ),
+      label: '',
+      backgroundColor: Palette.senaryDefault,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,61 +86,34 @@ class _BottomNavBarState extends State<BottomNavBar> {
           topRight: Radius.circular(20),
           topLeft: Radius.circular(20),
         ),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(0),
-                padding: EdgeInsets.only(bottom: 2.h),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 0,
-                    color: Palette.senaryDefault,
+        child: !Platform.isIOS
+            ? Column(
+                children: [
+                  Expanded(
+                    child: BottomNavigationBar(
+                      items: _navBarItems,
+                      unselectedItemColor: Palette.tertiaryDefault,
+                      selectedItemColor: Palette.quinaryDefault,
+                      showUnselectedLabels: true,
+                      backgroundColor: Palette.senaryDefault,
+                      iconSize: 20.sp,
+                      onTap: widget.selectPage,
+                      currentIndex: widget.currentPageIndex,
+                      selectedIconTheme: IconThemeData(size: 24.sp),
+                      type: BottomNavigationBarType.fixed,
+                    ),
                   ),
-                  color: Palette.senaryDefault,
-                ),
+                ],
+              )
+            : CupertinoTabBar(
+                activeColor: Palette.quinaryDefault,
+                inactiveColor: Palette.tertiaryDefault,
+                items: _navBarItems,
+                backgroundColor: Palette.senaryDefault,
+                iconSize: 20.sp,
+                onTap: widget.selectPage,
+                currentIndex: widget.currentPageIndex,
               ),
-            ),
-            //Navigation Bar
-            BottomNavigationBar(
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today),
-                  label: '',
-                  backgroundColor: Palette.senaryDefault,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.announcement_outlined),
-                  label: '',
-                  backgroundColor: Palette.senaryDefault,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: '',
-                  backgroundColor: Palette.senaryDefault,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.menu_book_outlined),
-                  label: '',
-                  backgroundColor: Palette.senaryDefault,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.coffee_outlined),
-                  label: '',
-                  backgroundColor: Palette.senaryDefault,
-                ),
-              ],
-              unselectedItemColor: Palette.tertiaryDefault,
-              selectedItemColor: Palette.quinaryDefault,
-              showUnselectedLabels: true,
-              backgroundColor: Palette.senaryDefault,
-              iconSize: 20.sp,
-              onTap: widget.selectPage,
-              currentIndex: widget.currentPageIndex,
-              selectedIconTheme: const IconThemeData(size: 30),
-            ),
-          ],
-        ),
       ),
     );
   }

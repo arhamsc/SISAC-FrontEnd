@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../utils/general/customColor.dart';
 import '../../../../utils/general/screen_size.dart';
@@ -49,104 +50,66 @@ class _BottomNavState extends State<BottomNav> {
     return widget.showOnlyOne != null;
   }
 
+  void _iconOnPressHandler(int index) {
+    widget.pageController != null
+        ? {
+            Navigator.of(context).pop(),
+            widget.pageController!.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            )
+          }
+        : null;
+  }
+
+  Color _iconColor(String screenName) {
+    Color color = Palette.tertiaryDefault;
+    selectedIcon == screenName
+        ? color = Palette.quinaryDefault
+        : color = Palette.tertiaryDefault;
+    return color;
+  }
+
+  double _iconSize(String screenName) {
+    double size = 20.sp;
+    selectedIcon == screenName ? size = 24.sp : size;
+    return size;
+  }
+
   @override
   Widget build(BuildContext context) {
     //Widget map according to the current screen
     Map<String, Widget> widgetSelector = {
       'TimeTable': IconButton(
         icon: const Icon(Icons.calendar_today),
-        onPressed: () {
-          widget.pageController != null
-              ? {
-                  Navigator.of(context).pop(),
-                  widget.pageController!.animateToPage(
-                    0,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  )
-                }
-              : null;
-        },
-        color: selectedIcon == "TimeTable"
-            ? Palette.quinaryDefault
-            : Palette.tertiaryDefault,
-        iconSize: selectedIcon == "TimeTable" ? 30 : 24,
+        onPressed: () => _iconOnPressHandler(0),
+        color: _iconColor("TimeTable"),
+        iconSize: _iconSize("TimeTable"),
       ),
       'Announcements': IconButton(
         icon: const Icon(Icons.announcement_outlined),
-        onPressed: () {
-          widget.pageController != null
-              ? {
-                  Navigator.of(context).pop(),
-                  widget.pageController!.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  )
-                }
-              : null;
-        },
-        color: selectedIcon == "Announcements"
-            ? Palette.quinaryDefault
-            : Palette.tertiaryDefault,
-        iconSize: selectedIcon == "Announcements" ? 30 : 24,
+        onPressed: () => _iconOnPressHandler(1),
+        color: _iconColor("Announcements"),
+        iconSize: _iconSize("Announcements"),
       ),
       'Home': IconButton(
         icon: const Icon(Icons.home),
-        onPressed: () {
-          widget.pageController != null
-              ? {
-                  Navigator.of(context).pop(),
-                  widget.pageController!.animateToPage(
-                    2,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  )
-                }
-              : null;
-        },
-        color: selectedIcon == "Home"
-            ? Palette.quinaryDefault
-            : Palette.tertiaryDefault,
-        iconSize: selectedIcon == "Home" ? 30 : 24,
+        onPressed: () => _iconOnPressHandler(2),
+        color: _iconColor("Home"),
+        iconSize: _iconSize("Home"),
       ),
       'Stationary': IconButton(
         icon: const Icon(Icons.menu_book_outlined),
-        onPressed: () {
-          widget.pageController != null
-              ? {
-                  Navigator.of(context).pop(),
-                  widget.pageController!.animateToPage(
-                    3,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  )
-                }
-              : null;
-        },
-        color: selectedIcon == "Stationary"
-            ? Palette.quinaryDefault
-            : Palette.tertiaryDefault,
-        iconSize: selectedIcon == "Stationary" ? 30 : 24,
+        onPressed: () => _iconOnPressHandler(3),
+        color: _iconColor("Stationary"),
+        iconSize: _iconSize("Stationary"),
       ),
       'Cafetaria': IconButton(
         icon: const Icon(Icons.coffee_outlined),
-        onPressed: () {
-          widget.pageController != null
-              ? {
-                  Navigator.of(context).pop(),
-                  widget.pageController!.animateToPage(
-                    4,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  )
-                }
-              : null;
-        },
-        color: selectedIcon == "Cafetaria"
-            ? Palette.quinaryDefault
-            : Palette.tertiaryDefault,
-        iconSize: selectedIcon == "Cafetaria" ? 30 : 24,
+        onPressed: () => _iconOnPressHandler(4),
+        color: _iconColor("Cafetaria"),
+        iconSize: _iconSize("Cafetaria"),
       ),
     };
 
@@ -184,7 +147,7 @@ class _BottomNavState extends State<BottomNav> {
     }
 
     return Container(
-      height: ScreenSize.screenHeight(context) * 0.1,
+      height: 10.h,
       decoration: const BoxDecoration(
         color: Palette.senaryDefault,
         borderRadius: BorderRadius.only(
@@ -196,9 +159,7 @@ class _BottomNavState extends State<BottomNav> {
         mainAxisAlignment: !_showOnlyOne
             ? MainAxisAlignment.spaceAround
             : MainAxisAlignment.center,
-        children:
-            // TODO: Implement Navigation to the main screen in each buttons
-            showIcon(selectedIcon, _showOnlyOne)!.toList(),
+        children: showIcon(selectedIcon, _showOnlyOne)!.toList(),
       ),
     );
   }
