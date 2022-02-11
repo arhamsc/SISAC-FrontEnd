@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 
 /* Home Screen Small Row Cards */
@@ -23,13 +22,13 @@ class _HomeRowCardsState extends State<HomeRowCards> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          const SizedBox(width: 10),
+          SizedBox(width: 2.3.w),
           //Workshop Card
           RowCard(
             title: "Workshops/Seminars",
             gestureFunction: () {},
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 2.3.w),
           //Announcement Card
           RowCard(
             title: "Announcement",
@@ -39,13 +38,13 @@ class _HomeRowCardsState extends State<HomeRowCards> {
               curve: Curves.easeInOut,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 2.3.w),
           //Resources Card
           RowCard(
             title: "Resources",
             gestureFunction: () {},
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 2.3.w),
           //Stationary Card
           RowCard(
             title: "Stationary",
@@ -55,7 +54,7 @@ class _HomeRowCardsState extends State<HomeRowCards> {
               curve: Curves.easeInOut,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 2.3.w),
         ],
       ),
     );
@@ -81,9 +80,7 @@ class _RowCardState extends State<RowCard> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        widget.gestureFunction();
-      },
+      onPressed: () => widget.gestureFunction(),
       style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(0)),
       child: Container(
         width: 40.w,

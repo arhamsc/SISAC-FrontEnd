@@ -16,6 +16,7 @@ class LoginScreen extends StatelessWidget {
     void _showLoginModal(BuildContext ctx) {
       showModalBottomSheet(
         context: ctx,
+        isDismissible: false,
         isScrollControlled: true,
         builder: (_) {
           return const LoginModalScreen();

@@ -36,7 +36,7 @@ class _RatingScreenState extends State<RatingScreen> {
       appBar: BaseAppBar.getAppBar(
         title: "Cafetaria",
         context: context,
-        subtitle: "Orders",
+        subtitle: "Rating",
       ),
       body: FutureBuilder(
         future:
