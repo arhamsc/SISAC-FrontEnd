@@ -13,7 +13,6 @@ import '../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../widgets/component_widgets/scaffold/bottom_bar.dart';
 import '../../../widgets/component_widgets/scaffold/app_drawer.dart';
 
-
 /* Tab Screen - Contains the Scaffold and Bottom Navigation Bar for all the navigation pages(pages) */
 class TabScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -39,7 +38,6 @@ class _TabScreenState extends State<TabScreen> {
     super.initState();
   }
 
-
   void selectPage(int index) {
     _tabController!.animateToPage(index,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
@@ -58,7 +56,7 @@ class _TabScreenState extends State<TabScreen> {
       },
       {
         'page': AnnouncementScreen(
-          pageController: _tabController,
+          pageController: _tabController!,
         ),
         'title': 'Announcements'
       },

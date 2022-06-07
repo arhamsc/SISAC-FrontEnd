@@ -10,7 +10,7 @@ import '../../../utils/general/customColor.dart';
 class ItemCard extends StatefulWidget {
   const ItemCard({
     Key? key,
-    required this.imageUrl,
+    this.imageUrl,
     required this.itemName,
     required this.leftSubtitle,
     required this.rightSubtitle,
@@ -27,7 +27,7 @@ class ItemCard extends StatefulWidget {
     this.showSecondaryButtonTwoColor,
   }) : super(key: key);
 
-  final String imageUrl;
+  final String? imageUrl;
   final String itemName;
   final String leftSubtitle;
   final String rightSubtitle;
@@ -109,16 +109,18 @@ class _ItemCardState extends State<ItemCard> {
           ),
           child: Row(
             children: [
-              Container(
-                width: 25.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.imageUrl),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
+              widget.imageUrl != null
+                  ? Container(
+                      width: 25.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(widget.imageUrl!),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

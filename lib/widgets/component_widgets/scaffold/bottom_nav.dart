@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../utils/general/customColor.dart';
-import '../../../../utils/general/screen_size.dart';
 
 /* Bottom Navigation Bar for Any Child Screen */
 class BottomNav extends StatefulWidget {

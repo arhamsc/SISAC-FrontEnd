@@ -154,7 +154,7 @@ class MenuItemProvider with ChangeNotifier {
           },
         ),
       );
-      final decodedData = req_url.checkResponseError(response);
+      req_url.checkResponseError(response);
       if (response.statusCode >= 400) {
         currentStatus = oldStatus;
         notifyListeners();
@@ -169,7 +169,7 @@ class MenuItemProvider with ChangeNotifier {
     final url = cafetariaUrl(id);
     try {
       final response = await http.delete(url, headers: _headers);
-      final data = req_url.checkResponseError(response);
+      req_url.checkResponseError(response);
     } catch (error) {
       throw HttpException(error.toString());
     }

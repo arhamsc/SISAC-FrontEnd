@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../utils/general/screen_size.dart';
 import '../../../utils/general/customColor.dart';
 
 /* Home Screen Main/Big Cards Widget */

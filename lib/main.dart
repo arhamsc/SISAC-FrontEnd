@@ -7,6 +7,7 @@ import 'package:sisac/providers/cafetaria/cafetaria_providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sisac/screens/student_faculty_screens/nav_screens/announcements_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/services.dart';
 
@@ -37,6 +38,8 @@ import './screens/other_screens/stationary_screens/parent_screens/books_material
 import 'screens/other_screens/stationary_screens/updation_screens/add_edit_book_screen.dart';
 import './screens/other_screens/stationary_screens/parent_screens/material_available_screen.dart';
 import './screens/other_screens/stationary_screens/updation_screens/add_edit_material_available_screen.dart';
+//Announcement Screens
+import './screens/student_faculty_screens/announcement_screens/all_announcements_screen.dart';
 
 /* Utility imports */
 import './utils/general/customColor.dart';
@@ -51,6 +54,7 @@ import './providers/stationary/availability_providers.dart';
 import './providers/stationary/books_material_providers.dart';
 import './providers/stationary/material_available_providers.dart';
 import './providers/cafetaria/cart_provider.dart';
+import './providers/announcements/announcement_providers.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -138,6 +142,13 @@ class _MyAppState extends State<MyApp> {
               authData.token,
               authData.getUserId,
             ),
+        ),
+        ChangeNotifierProxyProvider<Auth, AnnouncementProvider>(
+          create: (ctx) => AnnouncementProvider(),
+          update: (ctx, authData, announcementData) => announcementData!
+            ..update(
+              authData.token,
+            ),
         )
       ],
       child: Consumer<Auth>(
@@ -193,6 +204,8 @@ class _MyAppState extends State<MyApp> {
                   const VendorMaterialAvailableScreen(),
               AddEditMaterialAvailableScreen.routeName: (ctx) =>
                   const AddEditMaterialAvailableScreen(),
+              AllAnnouncementScreen.routeName: (ctx) =>
+                  const AllAnnouncementScreen(),
             },
           ),
         ),
