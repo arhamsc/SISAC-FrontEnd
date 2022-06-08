@@ -30,25 +30,58 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
           Navigator.pushNamed(
             context,
             AllAnnouncementScreen.routeName,
-            arguments: widget.pageController,
+            arguments: {'controller': widget.pageController, 'level': 'All'},
           );
         },
       },
       {
         'title': 'College',
-        'function': () {},
+        'function': () {
+          Navigator.pushNamed(
+            context,
+            AllAnnouncementScreen.routeName,
+            arguments: {
+              'controller': widget.pageController,
+              'level': 'College'
+            },
+          );
+        },
       },
       {
         'title': 'Department',
-        'function': () {},
+        'function': () {
+          Navigator.pushNamed(
+            context,
+            AllAnnouncementScreen.routeName,
+            arguments: {
+              'controller': widget.pageController,
+              'level': 'Department'
+            },
+          );
+        },
       },
       {
         'title': 'Class',
-        'function': () {},
+        'function': () {
+          Navigator.pushNamed(
+            context,
+            AllAnnouncementScreen.routeName,
+            arguments: {'controller': widget.pageController, 'level': 'Class'},
+          );
+        },
       },
       {
         'title': 'Placements',
-        'function': () {},
+        'function': () {
+          Navigator.pushNamed(
+            context,
+            AllAnnouncementScreen.routeName,
+            arguments: {
+              'controller': widget.pageController,
+              'level': 'Placements'
+            },
+          );
+        },
       },
     ];
     final authP = Provider.of<Auth>(context, listen: false);

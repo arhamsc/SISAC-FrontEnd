@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:sisac/providers/announcements/announcement_providers.dart';
 
-import 'package:sisac/utils/general/customColor.dart';
-import 'package:sisac/utils/helpers/loader.dart';
+import '../../../providers/announcements/announcement_providers.dart';
+
+import './announcement_details_screen.dart';
+
+import '../../../utils/helpers/loader.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
-
-import '../../../../utils/helpers/error_dialog.dart';
 
 import '../../../widgets/ui_widgets/cards/item_card.dart';
 
@@ -46,13 +46,14 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pageController =
-        ModalRoute.of(context)?.settings.arguments as PageController;
+    final _arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    final pageController = _arguments['controller'] as PageController;
+    final pageLevel = _arguments['level'].toString();
     final announcementsP =
         Provider.of<AnnouncementProvider>(context, listen: false);
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
-        title: "All",
+        title: pageLevel,
         context: context,
       ),
       body: FutureBuilder(
@@ -64,62 +65,93 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
             return RefreshIndicator(
               onRefresh: () => _refreshItems(context),
               child: const Center(
-                child: Text("Error"),
+                child: Text("Error, Pull to Refresh."),
               ),
             );
           } else {
             return Consumer<AnnouncementProvider>(
-              builder: (ctx, announcementsData, child) => RefreshIndicator(
+                builder: (ctx, announcementsData, child) {
+              final int _announcementsLength = pageLevel != 'All'
+                  ? announcementsData.announcementByLevel(pageLevel).length
+                  : announcementsData.announcements.length;
+              return RefreshIndicator(
                 child: SizedBox(
                   height: ScreenSize.usableHeight(context),
-                  child: ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.w),
-                    itemBuilder: (ctx, i) {
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: 0.5.h,
+                  child: _announcementsLength != 0
+                      ? AnnouncementList(
+                          pageLevel: pageLevel,
+                          announcementsData: announcementsData,
+                        )
+                      : Center(
+                          child: Text(
+                            "There are no Announcements!",
+                            style: Theme.of(context).textTheme.headline5,
                           ),
-                          SizedBox(
-                            width: 90.w,
-                            child: ItemCard(
-                              itemName: announcementsData.announcements.values
-                                  .elementAt(i)
-                                  .title,
-                              leftSubtitle: announcementsData
-                                  .announcements.values
-                                  .elementAt(i)
-                                  .level,
-                              rightSubtitle: announcementsData
-                                  .announcements.values
-                                  .elementAt(i)
-                                  .level,
-                              showTwoButtons: false,
-                              buttonOneText: "View More",
-                              buttonOneFunction: () {},
-                              expanded: false,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 0.5.h,
-                          ),
-                        ],
-                      );
-                    },
-                    itemCount: announcementsData.announcements.length,
-                  ),
+                        ),
                 ),
                 onRefresh: () => _refreshItems(context),
-              ),
-            );
+              );
+            });
           }
         },
       ),
       bottomNavigationBar: BottomNav(
-        isSelected: "Cafetaria",
+        isSelected: "Announcements",
         pageController: pageController,
       ),
+    );
+  }
+}
+
+class AnnouncementList extends StatelessWidget {
+  const AnnouncementList(
+      {Key? key, required this.pageLevel, required this.announcementsData})
+      : super(key: key);
+
+  final String pageLevel;
+  final AnnouncementProvider announcementsData;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.w),
+      itemBuilder: (ctx, i) {
+        final Announcement _announcements = pageLevel != 'All'
+            ? announcementsData
+                .announcementByLevel(pageLevel)
+                .values
+                .elementAt(i)
+            : announcementsData.announcements.values.elementAt(i);
+        return Column(
+          children: [
+            SizedBox(
+              height: 0.5.h,
+            ),
+            SizedBox(
+              width: 90.w,
+              child: ItemCard(
+                itemName: _announcements.title,
+                leftSubtitle: _announcements.level,
+                rightSubtitle: _announcements.level,
+                showTwoButtons: false,
+                buttonOneText: "View More",
+                buttonOneFunction: () {
+                  Navigator.of(context).pushNamed(
+                    AnnouncementDetailsScreen.routeName,
+                    arguments: {'announcement': _announcements},
+                  );
+                },
+                expanded: false,
+              ),
+            ),
+            SizedBox(
+              height: 0.5.h,
+            ),
+          ],
+        );
+      },
+      itemCount: pageLevel != 'All'
+          ? announcementsData.announcementByLevel(pageLevel).length
+          : announcementsData.announcements.length,
     );
   }
 }

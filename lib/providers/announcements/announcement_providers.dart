@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 
 import '../../constants/request_url.dart' as req_url;
 import '../../utils/helpers/http_exception.dart';
+import '../user_provider.dart' show User;
 
 class Announcement {
   final String id;
-  final String byUser;
+  final User byUser;
   final String title;
   final String description;
   final String? posterUrl;
@@ -69,7 +70,12 @@ class AnnouncementProvider with ChangeNotifier {
       decodedData.forEach(
         (key, value) => receivedAnnouncements[key] = Announcement(
           id: value['_id'],
-          byUser: value['byUser'],
+          byUser: User(
+            id: value['byUser']['_id'],
+            name: value['byUser']['name'],
+            username: value['byUser']['username'],
+            role: value['byUser']['role'],
+          ),
           title: value['title'],
           description: value['description'],
           posterUrl: value['posterUrl'],
@@ -88,5 +94,11 @@ class AnnouncementProvider with ChangeNotifier {
     } catch (error) {
       throw HttpException(error.toString());
     }
+  }
+
+  Map<String, Announcement> announcementByLevel(String level) {
+    Map<String, Announcement> _filteredAnnouncements = _announcements;
+    _filteredAnnouncements.removeWhere((key, value) => value.level != level);
+    return _filteredAnnouncements; //this is due to the removeWhere method performing the iteration on the Map itself and not returning a new Map.
   }
 }

@@ -7,7 +7,6 @@ import 'package:sisac/providers/cafetaria/cafetaria_providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sisac/screens/student_faculty_screens/nav_screens/announcements_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/services.dart';
 
@@ -40,6 +39,7 @@ import './screens/other_screens/stationary_screens/parent_screens/material_avail
 import './screens/other_screens/stationary_screens/updation_screens/add_edit_material_available_screen.dart';
 //Announcement Screens
 import './screens/student_faculty_screens/announcement_screens/all_announcements_screen.dart';
+import './screens/student_faculty_screens/announcement_screens/announcement_details_screen.dart';
 
 /* Utility imports */
 import './utils/general/customColor.dart';
@@ -206,6 +206,8 @@ class _MyAppState extends State<MyApp> {
                   const AddEditMaterialAvailableScreen(),
               AllAnnouncementScreen.routeName: (ctx) =>
                   const AllAnnouncementScreen(),
+              AnnouncementDetailsScreen.routeName: (ctx) =>
+                  const AnnouncementDetailsScreen(),
             },
           ),
         ),
