@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart' as CafeP;
 import '../../../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
@@ -35,7 +35,7 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Provider.of<MenuItemProvider>(context, listen: false).fetchMenu();
+      Provider.of<CafeP.MenuItemProvider>(context, listen: false).fetchMenu();
     });
   }
 
@@ -112,7 +112,7 @@ class _ReceivedOrdersScreenState extends State<ReceivedOrdersScreen> {
               ),
             );
           } else {
-            return Consumer2<RestaurantProvider, MenuItemProvider>(
+            return Consumer2<RestaurantProvider, CafeP.MenuItemProvider>(
               builder: (ctx, restaurantProvider, menuData, child) =>
                   RefreshIndicator(
                 onRefresh: () => _refreshItems(context),

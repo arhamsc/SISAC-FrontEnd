@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 
-import '../../../../../providers/cafetaria/cafetaria_providers.dart';
-import '../../../../../providers/cafetaria/cart_provider.dart';
+import '../../../../../providers/cafetaria/cart_provider.dart' as CartP;
+import '../../../../../providers/cafetaria/cafetaria_providers.dart' as CafeP;
 
 import '../../../../../utils/general/screen_size.dart';
 import '../../../../../utils/general/customColor.dart';
@@ -18,7 +18,7 @@ class CartItemCard extends StatefulWidget {
     required this.qty,
   }) : super(key: key);
 
-  final MenuItem menuItem;
+  final CafeP.MenuItem menuItem;
   final int qty;
   final int amount;
 
@@ -29,11 +29,11 @@ class CartItemCard extends StatefulWidget {
 class _CartItemCardState extends State<CartItemCard> {
   TextEditingController qtyController = TextEditingController();
 
-  var _expanded = false;
+  final _expanded = false;
 
   @override
   Widget build(BuildContext context) {
-    final cartP = Provider.of<CartProvider>(context, listen: false);
+    final cartP = Provider.of<CartP.CartProvider>(context, listen: false);
     return Column(
       key: ValueKey(widget.menuItem.id),
       children: [

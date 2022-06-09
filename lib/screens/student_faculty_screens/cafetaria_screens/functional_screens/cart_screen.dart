@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sisac/utils/helpers/http_exception.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart' as CafeP;
 import '../../../../providers/cafetaria/cart_provider.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
@@ -12,7 +12,6 @@ import '../../../../widgets/component_widgets/cafetaria/student_faculty/cart/car
 import '../../../../widgets/component_widgets/cafetaria/student_faculty/cart/cart_item_card.dart';
 
 import '../../../../utils/general/screen_size.dart';
-import '../../../../utils/general/customColor.dart';
 import '../../../../utils/helpers/error_dialog.dart';
 import '../../../../utils/helpers/confirmation_dialog.dart';
 
@@ -41,8 +40,8 @@ class CartScreen extends StatelessWidget {
     //End********* */
 
     /* Function to find a Menu Item By Id */
-    MenuItem findMenuItem(String id) {
-      final menuP = Provider.of<MenuItemProvider>(context, listen: false);
+    CafeP.MenuItem findMenuItem(String id) {
+      final menuP = Provider.of<CafeP.MenuItemProvider>(context, listen: false);
       final item = menuP.items.firstWhere((element) => element.id == id);
       return item;
     }

@@ -40,6 +40,10 @@ import './screens/other_screens/stationary_screens/updation_screens/add_edit_mat
 //Announcement Screens
 import './screens/student_faculty_screens/announcement_screens/all_announcements_screen.dart';
 import './screens/student_faculty_screens/announcement_screens/announcement_details_screen.dart';
+import './screens/student_faculty_screens/announcement_screens/functional_screens/make_announcement.dart';
+
+//PDF Viewer
+import 'widgets/ui_widgets/pdf_view.dart';
 
 /* Utility imports */
 import './utils/general/customColor.dart';
@@ -208,6 +212,9 @@ class _MyAppState extends State<MyApp> {
                   const AllAnnouncementScreen(),
               AnnouncementDetailsScreen.routeName: (ctx) =>
                   const AnnouncementDetailsScreen(),
+              PDFView.routeName: (ctx) => const PDFView(),
+              MakeAnnouncementScreen.routeName: (ctx) =>
+                  const MakeAnnouncementScreen()
             },
           ),
         ),

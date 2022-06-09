@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sisac/utils/helpers/http_exception.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../providers/cafetaria/restaurant_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart' as CafeP;
 
 import '../../../../utils/general/screen_size.dart';
 import '../../../../utils/general/customColor.dart';
@@ -19,7 +17,7 @@ class RestaurantReceivedOrdersCard extends StatefulWidget {
     required this.deleteOrder,
   }) : super(key: key);
 
-  final List<MenuItem> menu;
+  final List<CafeP.MenuItem> menu;
   final ReceivedOrder order;
   final int index;
   final Function setStateFunc;

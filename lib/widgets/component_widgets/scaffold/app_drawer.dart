@@ -10,7 +10,7 @@ import '../../../utils/helpers/loader.dart';
 
 /* Scaffold - Custom AppDrawer for Student/faculty */
 class AppDrawer extends StatelessWidget {
-  AppDrawer({
+  const AppDrawer({
     Key? key,
     required this.pageController,
   }) : super(key: key);

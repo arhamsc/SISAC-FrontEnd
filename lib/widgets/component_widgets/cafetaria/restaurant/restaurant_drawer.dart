@@ -162,7 +162,7 @@ class _LogoutButtonState extends State<LogoutButton> {
     try {
       await widget.authData.logout(context);
       _isLoading = false;
-    } on HttpException catch (error) {
+    } on HttpException {
       setState(() {
         _isLoading = false;
       });

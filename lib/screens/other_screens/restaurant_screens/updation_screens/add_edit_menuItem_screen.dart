@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart' as CafeP;
 import '../../../../providers/cafetaria/restaurant_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
@@ -43,7 +43,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
   bool _editing = false;
 
   //Initial MenuItem
-  var _menuItem = MenuItem(
+  var _menuItem = CafeP.MenuItem(
     id: '',
     name: '',
     description: '',
@@ -54,7 +54,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     imageFileName: '',
   );
 
-  //Edited item to store newly created value 
+  //Edited item to store newly created value
   final _editedItem = {
     'name': '',
     'description': '',
@@ -69,7 +69,8 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
       final menuId = ModalRoute.of(context)?.settings.arguments as String;
       if (menuId.isNotEmpty) {
         _editing = true;
-        _menuItem = Provider.of<MenuItemProvider>(context).findMenuById(menuId);
+        _menuItem =
+            Provider.of<CafeP.MenuItemProvider>(context).findMenuById(menuId);
       } else {
         _editing = false;
       }
@@ -106,7 +107,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
     switch (fieldToSet) {
       case "Name":
         {
-          _menuItem = MenuItem(
+          _menuItem = CafeP.MenuItem(
             id: _menuItem.id,
             name: val,
             description: _menuItem.description,
@@ -120,7 +121,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         }
       case "Price":
         {
-          _menuItem = MenuItem(
+          _menuItem = CafeP.MenuItem(
             id: _menuItem.id,
             name: _menuItem.name,
             description: _menuItem.description,
@@ -134,7 +135,7 @@ class _AddEditMenuItemScreenState extends State<AddEditMenuItemScreen> {
         }
       case "Description":
         {
-          _menuItem = MenuItem(
+          _menuItem = CafeP.MenuItem(
             id: _menuItem.id,
             name: _menuItem.name,
             description: val,

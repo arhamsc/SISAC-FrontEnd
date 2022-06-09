@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sisac/utils/helpers/http_exception.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/cafetaria/cafetaria_providers.dart';
+import '../../../../providers/cafetaria/cafetaria_providers.dart' as CafeP;
 
 import '../../../../screens/other_screens/restaurant_screens/updation_screens/add_edit_menuItem_screen.dart';
 
@@ -20,7 +20,7 @@ class IsAvailableCard extends StatefulWidget {
     required this.deleteFunc,
   }) : super(key: key);
 
-  final MenuItem menu;
+  final CafeP.MenuItem menu;
   final Function setFunc;
   final Function deleteFunc;
 
@@ -36,7 +36,7 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
   }
 
   /* Menu Item Update Function */
-  Future<void> updateMenu(MenuItemProvider menuItemP, String id) async {
+  Future<void> updateMenu(CafeP.MenuItemProvider menuItemP, String id) async {
     try {
       setState(() {
         _isLoading = true;
@@ -58,7 +58,7 @@ class _IsAvailableCardState extends State<IsAvailableCard> {
 
   @override
   Widget build(BuildContext context) {
-    final menuP = Provider.of<MenuItemProvider>(context);
+    final menuP = Provider.of<CafeP.MenuItemProvider>(context);
     return Column(
       key: widget.key,
       children: [

@@ -42,7 +42,7 @@ class AnnouncementProvider with ChangeNotifier {
   Map<String, Announcement> _announcements = {};
 
   void update(token) {
-    token != "" ? _authToken = token : _authToken = "";
+    token != null ? _authToken = token : _authToken = "";
   }
 
   Map<String, Announcement> get announcements {
@@ -94,6 +94,7 @@ class AnnouncementProvider with ChangeNotifier {
     } catch (error) {
       throw HttpException(error.toString());
     }
+    notifyListeners();
   }
 
   Map<String, Announcement> announcementByLevel(String level) {

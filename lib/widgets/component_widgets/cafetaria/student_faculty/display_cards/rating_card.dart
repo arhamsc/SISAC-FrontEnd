@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../providers/cafetaria/cafetaria_providers.dart';
+import '../../../../../providers/cafetaria/cafetaria_providers.dart' as CartP;
 
 import '../../../../../widgets/ui_widgets/cards/item_card.dart';
 
@@ -16,7 +16,7 @@ class RatingCard extends StatefulWidget {
   const RatingCard({Key? key, required this.menu, required this.setStateFunc})
       : super(key: key);
 
-  final MenuItem menu;
+  final CartP.MenuItem menu;
   final Function setStateFunc;
 
   @override
@@ -84,7 +84,7 @@ class _RatingCardState extends State<RatingCard> {
               const SizedBox(
                 height: 20,
               ),
-              Consumer<MenuItemProvider>(
+              Consumer<CartP.MenuItemProvider>(
                 builder: (ctx, menuData, _) => ElevatedButton(
                   style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
                         padding: MaterialStateProperty.all(

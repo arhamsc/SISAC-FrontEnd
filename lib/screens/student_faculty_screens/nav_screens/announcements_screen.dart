@@ -5,6 +5,8 @@ import "package:sizer/sizer.dart";
 
 import '../../../providers/user_provider.dart';
 
+import '../announcement_screens/functional_screens/make_announcement.dart';
+
 import '../../../utils/general/themes.dart';
 import '../../../widgets/component_widgets/announcements/level_card.dart';
 
@@ -109,7 +111,8 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
               ? Padding(
                   padding: EdgeInsets.only(bottom: 2.h),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(MakeAnnouncementScreen.routeName),
                     child: Text(
                       "Make Announcement",
                       style: Theme.of(context).textTheme.headline5!.copyWith(

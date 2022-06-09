@@ -29,7 +29,7 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
     });
   }
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class _BooksMaterialScreenState extends State<BooksMaterialScreen> {
           if (dataSnapShot.connectionState == ConnectionState.waiting) {
             return Center(
               child: SISACLoader(),
-            );;
+            );
           } else if (dataSnapShot.error != null) {
             Future.delayed(
               Duration.zero,

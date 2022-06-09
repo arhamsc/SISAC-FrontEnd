@@ -23,7 +23,7 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   /* Getter to get the current selected screen */
   String get selectedIcon {
-    var selected;
+    String selected = "";
     switch (widget.isSelected) {
       case "TimeTable":
         selected = "TimeTable";

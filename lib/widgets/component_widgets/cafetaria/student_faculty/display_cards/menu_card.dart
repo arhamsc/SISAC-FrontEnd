@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
-import '../../../../../providers/cafetaria/cafetaria_providers.dart';
 import '../../../../../providers/cafetaria/cart_provider.dart';
+import '../../../../../providers/cafetaria/cafetaria_providers.dart' as CartP;
 
 import '../../../../ui_widgets/cards/item_card.dart';
 
@@ -20,7 +19,7 @@ class MenuCard extends StatefulWidget {
     required this.showBadge,
   }) : super(key: key);
 
-  final MenuItem menu;
+  final CartP.MenuItem menu;
   final bool preOrder;
   final bool showBadge;
   @override

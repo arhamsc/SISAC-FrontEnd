@@ -231,7 +231,7 @@ class _RoleRowState extends State<RoleRow> {
   final List<bool> _toggleSelections = List.generate(3, (_) => false);
   final List<String> _roleList = List.generate(
       Roles.values.length, (index) => Roles.values[index].enumToString());
-  Roles _selectedRole = Roles.Student;
+  final Roles _selectedRole = Roles.Student;
 
   @override
   void initState() {

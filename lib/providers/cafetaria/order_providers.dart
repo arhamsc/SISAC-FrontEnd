@@ -1,6 +1,5 @@
 //This provider contains all the methods related to Orders of a Student/Faculty
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -149,9 +148,9 @@ class OrderProvider with ChangeNotifier {
   //Getter to get the total order length or number of order items in all the user orders.
   int get totalOrderLength {
     var total = 0;
-    _userOrders.forEach((element) {
+    for (var element in _userOrders) {
       total += element.menuOrders.length;
-    });
+    }
     return total;
   }
 }

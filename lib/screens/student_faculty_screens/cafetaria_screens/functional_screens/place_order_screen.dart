@@ -30,7 +30,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   //to generate random string ********
   final _chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  Random _rnd = Random();
+  final Random _rnd = Random();
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
@@ -84,13 +84,13 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         subtitle: "Placing Order",
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: ScreenSize.screenHeight(context) -
               AppBar().preferredSize.height -
               61,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: ScreenSize.usableHeight(context),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -149,11 +149,11 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         ],
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: ScreenSize.screenWidth(context) * .6,
                       child: Column(
                         children: [
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: 40,
                             child: ElevatedButton(
@@ -174,7 +174,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: 40,
                             child: ElevatedButton(
@@ -200,7 +200,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   ],
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: BottomNav(
                   isSelected: "Cafetaria",
                 ),

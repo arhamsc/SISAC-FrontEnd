@@ -21,7 +21,7 @@ class AvailabilityCard extends StatefulWidget {
 }
 
 class _AvailabilityCardState extends State<AvailabilityCard> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   bool get presentIsAvailable {
     return widget.availableItems.isAvailable;
