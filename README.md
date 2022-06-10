@@ -26,7 +26,7 @@ will need.
 
 ## Tech Stack
 
-**Client:** Flutter 3.0.
+**Client:** Flutter 3.0.1
 
 **Server:** NodeJs, ExpressJs, MongoDB, Mongoose
 
