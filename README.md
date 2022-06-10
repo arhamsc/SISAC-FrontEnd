@@ -1,5 +1,7 @@
 # SISAC
+
 ![Dart](https://img.shields.io/badge/Flutter%20-Dart-brightgreen?style=flat-square&logo=dart)
+
 ### Student Information System And Cafeteria
 
 <p align = "center"><img src="./assets/images/SISAC.png" width="200"></p>
@@ -24,7 +26,7 @@ will need.
 
 ## Tech Stack
 
-**Client:** Flutter 2.0
+**Client:** Flutter 3.0.
 
 **Server:** NodeJs, ExpressJs, MongoDB, Mongoose
 
@@ -40,7 +42,7 @@ will need.
 
 ### KARS
 
--   Arham S C 1by20cs152@bmsit.in
--   Rayees Hussain 1by20cs48@bmsit.in
--   Subramanya Keshav 1by20cs192@bmsit.in
--   S Sagar 1by20cs156@bmsit.in
+- Arham S C 1by20cs152@bmsit.in
+- Rayees Hussain 1by20cs48@bmsit.in
+- Subramanya Keshav 1by20cs192@bmsit.in
+- S Sagar 1by20cs156@bmsit.in
