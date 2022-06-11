@@ -111,8 +111,12 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
               ? Padding(
                   padding: EdgeInsets.only(bottom: 2.h),
                   child: ElevatedButton(
-                    onPressed: () => Navigator.of(context)
-                        .pushNamed(MakeAnnouncementScreen.routeName),
+                    onPressed: () => Navigator.of(context).pushNamed(
+                      MakeAnnouncementScreen.routeName,
+                      arguments: {
+                        'pageController': widget.pageController,
+                      },
+                    ),
                     child: Text(
                       "Make Announcement",
                       style: Theme.of(context).textTheme.headline5!.copyWith(

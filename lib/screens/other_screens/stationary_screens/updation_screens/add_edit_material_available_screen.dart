@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../providers/stationary/material_available_providers.dart';
 
@@ -273,7 +274,7 @@ class _AddEditMaterialAvailableScreenState
               : Form(
                   key: _formKey1,
                   child: SizedBox(
-                    width: ScreenSize.screenWidth(context) * .76,
+                    width: 90.w,
                     child: ListView(
                       shrinkWrap: true,
                       children: [
