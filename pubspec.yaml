@@ -48,6 +48,7 @@ dependencies:
     flutter_spinkit: ^5.1.0
     sizer: ^2.0.15
     syncfusion_flutter_pdfviewer: ^20.1.59-beta
+    file_picker: ^4.6.1
 
 dev_dependencies:
     flutter_test:

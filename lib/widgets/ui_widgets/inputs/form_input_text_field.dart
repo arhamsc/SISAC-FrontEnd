@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../utils/general/customColor.dart';
 import '../../../utils/general/screen_size.dart';
@@ -47,7 +48,10 @@ class FormInputTextField extends StatelessWidget {
           child: TextFormField(
             initialValue: initialValue,
             textAlignVertical: TextAlignVertical.top,
-            style: const TextStyle(color: Palette.quinaryDefault),
+            style: Theme.of(context)
+                .textTheme
+                .headline5!
+                .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp),
             //For description
             maxLines: description != null && maxLines != null && description!
                 ? maxLines
