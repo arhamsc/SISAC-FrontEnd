@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -11,6 +14,8 @@ import '../../../../widgets/ui_widgets/inputs/input_dropdown.dart';
 
 import '../../../../utils/general/customColor.dart';
 import '../../../../utils/general/themes.dart';
+import '../../../../utils/helpers/loader.dart';
+import '../../../../utils/helpers/error_dialog.dart';
 
 class MakeAnnouncementScreen extends StatefulWidget {
   static const routeName = "/announcements/makeAnnouncement";
@@ -23,17 +28,12 @@ class MakeAnnouncementScreen extends StatefulWidget {
 class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
   final _announcementFormKey = GlobalKey<FormState>();
 
+  bool _isLoading = false;
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _levelController = TextEditingController();
   final TextEditingController _departmentController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  var _announcementFields = {
-    'title': '',
-    'level': '',
-    'department': '',
-    'description': '',
-    'links': [],
-  };
 
   @override
   void dispose() {
@@ -46,10 +46,12 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
   }
 
   String levelDropDownValue = 'College';
+  //TODO: Having to put null for dept
   String deptDropDownValue = 'CSE';
   String titleTextValue = '';
   String descriptionTextValue = '';
   FilePickerResult? _attachment;
+  File? _pickedAttachmentName;
 
   List<DropdownMenuItem<String>> get levelDropdownItems {
     List<DropdownMenuItem<String>> levelItems = const [
@@ -81,9 +83,8 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
     _attachment = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png']);
-    //File _pickedAttachmentName = File(_attachment?.files.single.name ?? "");
-    setState(() => {}); //to update the button text
-    //print(_pickedAttachmentName);
+    _pickedAttachmentName = File(_attachment?.files.single.path ?? "");
+    setState(() => {});
   }
 
   void setAnnouncement(String val, String fieldToSet) {
@@ -101,6 +102,39 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         descriptionTextValue = val;
         break;
     }
+    setState(() => {});
+  }
+
+  Future<void> submitForm() async {
+    final isValid = _announcementFormKey.currentState?.validate();
+    try {
+      if (isValid != null && !isValid) {
+        dialog(
+          ctx: context,
+          errorMessage: "Check the fields",
+        );
+        return;
+      }
+      setState(() => _isLoading = true);
+      await Provider.of<AnnouncementProvider>(context, listen: false)
+          .makeAnnouncement(
+        title: titleTextValue,
+        description: descriptionTextValue,
+        level: levelDropDownValue,
+        department: deptDropDownValue,
+        poster: _pickedAttachmentName,
+      );
+      await dialog(
+        ctx: context,
+        errorMessage: "Announcement Made Successfully!",
+        title: "Success",
+        pop2Pages: true,
+      );
+      setState(() => _isLoading = false);
+    } catch (e) {
+      await dialog(ctx: context, errorMessage: e.toString());
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -114,59 +148,57 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         subtitle: "Make an Announcement",
       ),
       body: Center(
-        child: Form(
-          key: _announcementFormKey,
-          child: SizedBox(
-            width: 90.w,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                FormInputTextField(
-                  title: "Title",
-                  controller: _titleController,
-                  setter: setAnnouncement,
+        child: _isLoading
+            ? SISACLoader()
+            : Form(
+                key: _announcementFormKey,
+                child: SizedBox(
+                  width: 90.w,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      FormInputTextField(
+                        title: "Title",
+                        controller: _titleController,
+                        setter: setAnnouncement,
+                      ),
+                      DropDownInputForm(
+                        title: "Level",
+                        dropDownMenuItems: levelDropdownItems,
+                        value: levelDropDownValue,
+                        setter: setAnnouncement,
+                      ),
+                      levelDropDownValue == 'Department'
+                          ? DropDownInputForm(
+                              title: "Department",
+                              dropDownMenuItems: deptDropdownItems,
+                              value: deptDropDownValue,
+                              setter: setAnnouncement,
+                            )
+                          : const SizedBox(),
+                      FormInputTextField(
+                        title: "Description",
+                        maxLines: 4,
+                        description: true,
+                        controller: _descriptionController,
+                        setter: setAnnouncement,
+                      ),
+                      AddAttachmentCard(
+                        title: _attachment == null
+                            ? "Pick Attachment"
+                            : _attachment?.files.single.name ?? "Pick",
+                        pickAttachment: _pickAttachment,
+                      ),
+                      SizedBox(height: 4.h),
+                      ElevatedButton(
+                        onPressed: submitForm,
+                        child: const Text("Confirm"),
+                        style: ButtonThemes.elevatedButtonConfirmation,
+                      )
+                    ],
+                  ),
                 ),
-                DropDownInputForm(
-                  title: "Level",
-                  dropDownMenuItems: levelDropdownItems,
-                  value: levelDropDownValue,
-                  setter: setAnnouncement,
-                ),
-                DropDownInputForm(
-                  title: "Department",
-                  dropDownMenuItems: deptDropdownItems,
-                  value: deptDropDownValue,
-                  setter: setAnnouncement,
-                ),
-                FormInputTextField(
-                  title: "Description",
-                  maxLines: 4,
-                  description: true,
-                  controller: _descriptionController,
-                  setter: setAnnouncement,
-                ),
-                AddAttachmentCard(
-                  title: _attachment == null
-                      ? "Pick Attachment"
-                      : _attachment?.files.single.name ?? "Pick",
-                  pickAttachment: _pickAttachment,
-                ),
-                SizedBox(height: 4.h),
-                ElevatedButton(
-                  onPressed: () {
-                    print(deptDropDownValue);
-                    print(levelDropDownValue);
-                    print(titleTextValue);
-                    print(descriptionTextValue);
-                    print(_attachment?.files.single.name);
-                  },
-                  child: const Text("Confirm"),
-                  style: ButtonThemes.elevatedButtonConfirmation,
-                )
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
       bottomNavigationBar: BottomNav(
         isSelected: "Announcements",
