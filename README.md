@@ -40,7 +40,7 @@ will need.
 
 ## Authors
 
-### KARS
+### KARS Company
 
 - Arham S C -> 1by20cs152@bmsit.in
 - Rayees Hussain -> 1by20cs48@bmsit.in
