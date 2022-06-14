@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../../constants/request_url.dart' as req_url;
 import '../../utils/helpers/http_exception.dart';
@@ -101,5 +104,57 @@ class AnnouncementProvider with ChangeNotifier {
     Map<String, Announcement> _filteredAnnouncements = _announcements;
     _filteredAnnouncements.removeWhere((key, value) => value.level != level);
     return _filteredAnnouncements; //this is due to the removeWhere method performing the iteration on the Map itself and not returning a new Map.
+  }
+
+  Future<void> makeAnnouncement({
+    required String title,
+    required String description,
+    required String level,
+    String? department,
+    File? poster,
+  }) async {
+    final url = _announcementUrl();
+    try {
+      if (poster == null) {
+        await http.post(
+          url,
+          headers: _headers,
+          body: jsonEncode({
+            'announcement': {
+              'title': title,
+              'description': description,
+              'level': level,
+              'department': department
+            },
+          }),
+        );
+      } else {
+        var req = http.MultipartRequest('POST', url);
+        req.files.add(
+          http.MultipartFile(
+            'poster',
+            poster.readAsBytes().asStream(),
+            poster.lengthSync(),
+            filename: poster.path,
+            contentType: MediaType('application', 'pdf'),
+          ),
+        );
+
+        req.headers.addAll(_headers);
+
+        req.fields.addAll(
+          {
+            'announcement[title]': title,
+            'announcement[description]': title,
+            'announcement[level]': level,
+            'announcement[department]': department ?? ""
+          },
+        );
+
+        await req.send();
+      }
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
   }
 }
