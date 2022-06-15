@@ -8,12 +8,14 @@ import './announcement_details_screen.dart';
 
 import '../../../utils/helpers/loader.dart';
 
-import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
+import '../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
 
 import '../../../widgets/ui_widgets/cards/item_card.dart';
 
-import '../../../../utils/general/screen_size.dart';
+import '../../../utils/helpers/http_exception.dart';
+import '../../../utils/general/screen_size.dart';
+import '../../../utils/helpers/confirmation_dialog.dart';
 
 class AllAnnouncementScreen extends StatefulWidget {
   static const routeName = 'announcements/all_announcements';
@@ -28,10 +30,12 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
   void initState() {
     /* Fetching the Menu Items at the time of initial Rendering */
     Future.delayed(Duration.zero, () {
-      final announcementP =
-          Provider.of<AnnouncementProvider>(context, listen: false);
-      announcementP.fetchAllAnnouncements();
-    }());
+      setState(() {
+        final announcementP =
+            Provider.of<AnnouncementProvider>(context, listen: false);
+        announcementP.fetchAllAnnouncements();
+      });
+    });
     super.initState();
   }
 
@@ -43,6 +47,21 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
       },
     );
   }
+
+  // Future<void> deleteAnnouncement(String id, Function annDelete) async {
+  //   try {
+  //     return showDialog(
+  //       context: context,
+  //       builder: (context) => ConfirmationDialog(
+  //         title: "Delete Announcement",
+  //         confirmationFunction: () => annDelete(id),
+  //         content: "Are you sure you want to delete it?",
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     throw HttpException(e.toString());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +101,8 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
                           pageLevel: pageLevel,
                           announcementsData: announcementsData,
                           isAuthor: announcementsData.isAnnouncementAuthor,
+                          providerDeleteFunc:
+                              announcementsData.deleteAnnouncement,
                         )
                       : Center(
                           child: Text(
@@ -109,12 +130,14 @@ class AnnouncementList extends StatelessWidget {
       {Key? key,
       required this.pageLevel,
       required this.announcementsData,
-      required this.isAuthor})
+      required this.isAuthor,
+      required this.providerDeleteFunc})
       : super(key: key);
 
   final String pageLevel;
   final AnnouncementProvider announcementsData;
   final Function isAuthor;
+  final Function providerDeleteFunc;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -144,7 +167,8 @@ class AnnouncementList extends StatelessWidget {
                     AnnouncementDetailsScreen.routeName,
                     arguments: {
                       'announcement': _announcements,
-                      'isAuthor': isAuthor(_announcements.id)
+                      'isAuthor': isAuthor(_announcements.id),
+                      'deleteFunc': providerDeleteFunc
                     },
                   );
                 },

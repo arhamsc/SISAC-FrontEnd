@@ -166,4 +166,67 @@ class AnnouncementProvider with ChangeNotifier {
     Announcement? _foundAnn = _announcements[announcementId];
     return _foundAnn?.byUser.id == _userId;
   }
+
+  Future<void> editAnnouncement(
+      {required String id,
+      required String title,
+      required String description,
+      required String level,
+      String? department,
+      File? poster}) async {
+    final url = _announcementUrl(id);
+    try {
+      if (poster == null) {
+        await http.patch(
+          url,
+          headers: _headers,
+          body: jsonEncode(
+            {
+              'announcement': {
+                'title': title,
+                'description': description,
+                'level': level,
+                'department': department
+              },
+            },
+          ),
+        );
+      } else {
+        var req = http.MultipartRequest('PATCH', url);
+        req.files.add(
+          http.MultipartFile(
+            'poster',
+            poster.readAsBytes().asStream(),
+            poster.lengthSync(),
+            filename: poster.path,
+            contentType: MediaType('application', 'pdf'),
+          ),
+        );
+
+        req.headers.addAll(_headers);
+
+        req.fields.addAll(
+          {
+            'announcement[title]': title,
+            'announcement[description]': title,
+            'announcement[level]': level,
+            'announcement[department]': department ?? ""
+          },
+        );
+
+        await req.send();
+      }
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
+
+  Future<void> deleteAnnouncement(String id) async {
+    final url = _announcementUrl(id);
+    try {
+      await http.delete(url, headers: _headers);
+    } catch (error) {
+      throw HttpException(error.toString());
+    }
+  }
 }

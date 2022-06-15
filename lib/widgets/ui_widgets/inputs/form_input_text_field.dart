@@ -90,6 +90,7 @@ class FormInputTextField extends StatelessWidget {
               controller != null ? controller!.text = val! : null;
             },
             onChanged: (val) {
+              //print("VAL " + val);
               setter != null ? setter!(val, title) : null;
             },
             keyboardType: numberKeyboard != null && numberKeyboard!

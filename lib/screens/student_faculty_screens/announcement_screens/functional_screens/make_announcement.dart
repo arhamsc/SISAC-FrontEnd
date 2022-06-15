@@ -40,30 +40,41 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
 
   String? levelDropDownValue;
   String? deptDropDownValue;
-  String? titleTextValue;
-  String? descriptionTextValue;
+  String titleTextValue = "";
+  String descriptionTextValue = "";
   FilePickerResult? _attachment;
   File? _pickedAttachmentName;
   String? _attachmentName;
+  String? _announcementId; //this is only if we are editing an announcement
   //to change the pdf card accordingly
   bool _editedAttachmentChanged = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final _arguments = ModalRoute.of(context)?.settings.arguments as Map;
-    _editing = _arguments['announcementToEdit'] != null;
-    _announcementToBeEdited = _arguments['announcementToEdit'];
-    if (_editing) {
-      titleTextValue = _announcementToBeEdited?.title;
-      descriptionTextValue = _announcementToBeEdited?.description;
-      _pickedAttachmentName = _announcementToBeEdited?.posterUrl != null
-          ? File(_announcementToBeEdited!.posterUrl!)
-          : null;
-      _attachmentName = _announcementToBeEdited?.posterFileName;
-      levelDropDownValue = _announcementToBeEdited?.level;
-      deptDropDownValue = _announcementToBeEdited?.department;
-    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    Future.delayed(Duration.zero, () {
+      var _arguments;
+      setState(() {
+        _arguments = ModalRoute.of(context)?.settings.arguments as Map;
+        _editing = _arguments['announcementToEdit'] != null;
+        _announcementToBeEdited = _arguments['announcementToEdit'];
+        if (_editing) {
+          titleTextValue = _announcementToBeEdited?.title ?? "";
+          descriptionTextValue = _announcementToBeEdited?.description ?? "";
+          _attachmentName = _announcementToBeEdited?.posterFileName;
+          levelDropDownValue = _announcementToBeEdited?.level;
+          deptDropDownValue = _announcementToBeEdited?.department;
+          _announcementId = _announcementToBeEdited?.id;
+        }
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -115,6 +126,7 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
   void setAnnouncement(String val, String fieldToSet) {
     switch (fieldToSet) {
       case "Level":
+        setState(() => {});
         levelDropDownValue = val;
         break;
       case "Department":
@@ -127,7 +139,6 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         descriptionTextValue = val;
         break;
     }
-    setState(() => {});
   }
 
   Future<void> submitForm() async {
@@ -141,20 +152,38 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         return;
       }
       setState(() => _isLoading = true);
-      await Provider.of<AnnouncementProvider>(context, listen: false)
-          .makeAnnouncement(
-        title: titleTextValue!,
-        description: descriptionTextValue!,
-        level: levelDropDownValue!,
-        department: deptDropDownValue,
-        poster: _pickedAttachmentName,
-      );
-      await dialog(
-        ctx: context,
-        errorMessage: "Announcement Made Successfully!",
-        title: "Success",
-        pop2Pages: true,
-      );
+      if (!_editing) {
+        await Provider.of<AnnouncementProvider>(context, listen: false)
+            .makeAnnouncement(
+          title: titleTextValue,
+          description: descriptionTextValue,
+          level: levelDropDownValue!,
+          department: deptDropDownValue,
+          poster: _pickedAttachmentName,
+        );
+        await dialog(
+          ctx: context,
+          errorMessage: "Announcement Made Successfully!",
+          title: "Success",
+          pop2Pages: true,
+        );
+      } else {
+        await Provider.of<AnnouncementProvider>(context, listen: false)
+            .editAnnouncement(
+          id: _announcementId ?? "",
+          title: titleTextValue,
+          description: descriptionTextValue,
+          level: levelDropDownValue!,
+          department: deptDropDownValue,
+          poster: _pickedAttachmentName,
+        );
+        await dialog(
+          ctx: context,
+          errorMessage: "Announcement Edited Successfully!",
+          title: "Success",
+          pop2Pages: true,
+        );
+      }
       setState(() => _isLoading = false);
     } catch (e) {
       await dialog(ctx: context, errorMessage: e.toString());
@@ -171,7 +200,7 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         subtitle: "Make an Announcement",
       ),
       body: Center(
-        child: _isLoading
+        child: _isLoading || titleTextValue.isEmpty
             ? SISACLoader()
             : Form(
                 key: _announcementFormKey,
@@ -181,10 +210,11 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
                     shrinkWrap: true,
                     children: [
                       FormInputTextField(
-                        initialValue: titleTextValue,
+                        initialValue:
+                            titleTextValue.isEmpty ? null : titleTextValue,
                         title: "Title",
                         controller:
-                            titleTextValue != null ? null : _titleController,
+                            titleTextValue.isNotEmpty ? null : _titleController,
                         setter: setAnnouncement,
                       ),
                       DropDownInputForm(
@@ -203,10 +233,12 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
                           : const SizedBox(),
                       FormInputTextField(
                         title: "Description",
-                        initialValue: descriptionTextValue,
+                        initialValue: descriptionTextValue.isEmpty
+                            ? null
+                            : descriptionTextValue,
                         maxLines: 4,
                         description: true,
-                        controller: descriptionTextValue != null
+                        controller: descriptionTextValue.isNotEmpty
                             ? null
                             : _descriptionController,
                         setter: setAnnouncement,
@@ -234,14 +266,16 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
                             ),
                       SizedBox(height: 4.h),
                       ElevatedButton(
-                        onPressed: //submitForm,
-                            () {
-                          print(titleTextValue);
-                          print(_pickedAttachmentName);
-                          print(deptDropDownValue);
-                          print(levelDropDownValue);
-                          print(descriptionTextValue);
-                        },
+                        onPressed: submitForm,
+                        //     () {
+                        //   // _announcementFormKey.currentState?.validate();
+                        //   print("CONT" + _titleController.text);
+                        //   print(titleTextValue);
+                        //   print(_pickedAttachmentName);
+                        //   print(deptDropDownValue);
+                        //   print(levelDropDownValue);
+                        //   print(descriptionTextValue);
+                        // },
                         child: const Text("Confirm"),
                         style: ButtonThemes.elevatedButtonConfirmation,
                       ),

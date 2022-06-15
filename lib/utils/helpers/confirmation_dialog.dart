@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import '../general/customColor.dart';
 
 class ConfirmationDialog extends StatelessWidget {
-  const ConfirmationDialog({
-    Key? key,
-    required this.title,
-    required this.content,
-    required this.confirmationFunction,
-  }) : super(key: key);
+  const ConfirmationDialog(
+      {Key? key,
+      required this.title,
+      required this.content,
+      required this.confirmationFunction,
+      this.pop2Pages})
+      : super(key: key);
   final String title;
   final String content;
   final Function confirmationFunction;
+  final bool? pop2Pages;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -38,10 +40,16 @@ class ConfirmationDialog extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            confirmationFunction();
-          },
+          onPressed: pop2Pages != null && pop2Pages!
+              ? () {
+                  confirmationFunction();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                }
+              : () {
+                  confirmationFunction();
+                  Navigator.of(context).pop();
+                },
           child: Text(
             "Confirm",
             style: Theme.of(context)

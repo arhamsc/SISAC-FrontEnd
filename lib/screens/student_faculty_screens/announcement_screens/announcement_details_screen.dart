@@ -9,6 +9,7 @@ import '../../../widgets/ui_widgets/tiles/pdf_tile.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
 import '../../../../utils/general/customColor.dart';
+import '../../../utils/helpers/confirmation_dialog.dart';
 
 class AnnouncementDetailsScreen extends StatefulWidget {
   static const routeName = '/announcements/announcement_details';
@@ -25,6 +26,7 @@ class _AnnouncementDetailsScreenState extends State<AnnouncementDetailsScreen> {
     final Announcement _announcement = _arguments[
         'announcement']; //This is because if we accept the argument as the constructor then we have to pass it inside the main.dart too.
     final bool _isAuthor = _arguments['isAuthor'];
+    final deleteFunc = _arguments['deleteFunc'];
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
         title: "Announcement",
@@ -154,7 +156,16 @@ class _AnnouncementDetailsScreenState extends State<AnnouncementDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) => ConfirmationDialog(
+                          title: "Delete Announcement",
+                          confirmationFunction: () =>
+                              deleteFunc(_announcement.id),
+                          content: "Are you sure you want to delete it?",
+                          pop2Pages: true,
+                        ),
+                      ),
                       child: const Icon(Icons.delete_rounded),
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(
