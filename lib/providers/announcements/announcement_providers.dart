@@ -41,11 +41,13 @@ class Announcement {
 
 class AnnouncementProvider with ChangeNotifier {
   String _authToken = "";
+  String _userId = "";
 
   Map<String, Announcement> _announcements = {};
 
-  void update(token) {
+  void update(token, username) {
     token != null ? _authToken = token : _authToken = "";
+    username != null ? _userId = username : _userId = "";
   }
 
   Map<String, Announcement> get announcements {
@@ -156,5 +158,12 @@ class AnnouncementProvider with ChangeNotifier {
     } catch (error) {
       throw HttpException(error.toString());
     }
+  }
+
+  //to check if author of the announcement
+
+  bool isAnnouncementAuthor(String announcementId) {
+    Announcement? _foundAnn = _announcements[announcementId];
+    return _foundAnn?.byUser.id == _userId;
   }
 }

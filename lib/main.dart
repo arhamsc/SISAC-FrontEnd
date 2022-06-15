@@ -152,6 +152,7 @@ class _MyAppState extends State<MyApp> {
           update: (ctx, authData, announcementData) => announcementData!
             ..update(
               authData.token,
+              authData.getUserId
             ),
         )
       ],

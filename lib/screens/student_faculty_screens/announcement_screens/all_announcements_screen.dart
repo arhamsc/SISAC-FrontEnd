@@ -81,6 +81,7 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
                       ? AnnouncementList(
                           pageLevel: pageLevel,
                           announcementsData: announcementsData,
+                          isAuthor: announcementsData.isAnnouncementAuthor,
                         )
                       : Center(
                           child: Text(
@@ -105,11 +106,15 @@ class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
 
 class AnnouncementList extends StatelessWidget {
   const AnnouncementList(
-      {Key? key, required this.pageLevel, required this.announcementsData})
+      {Key? key,
+      required this.pageLevel,
+      required this.announcementsData,
+      required this.isAuthor})
       : super(key: key);
 
   final String pageLevel;
   final AnnouncementProvider announcementsData;
+  final Function isAuthor;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -137,7 +142,10 @@ class AnnouncementList extends StatelessWidget {
                 buttonOneFunction: () {
                   Navigator.of(context).pushNamed(
                     AnnouncementDetailsScreen.routeName,
-                    arguments: {'announcement': _announcements},
+                    arguments: {
+                      'announcement': _announcements,
+                      'isAuthor': isAuthor(_announcements.id)
+                    },
                   );
                 },
                 expanded: false,

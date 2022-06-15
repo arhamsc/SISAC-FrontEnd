@@ -8,7 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import '../../../../providers/announcements/announcement_providers.dart';
 
 import '../../../../widgets/component_widgets/scaffold/app_bar.dart';
-import '../../../../widgets/component_widgets/scaffold/bottom_nav.dart';
+import '../../../../widgets/ui_widgets/tiles/pdf_tile.dart';
 import '../../../../widgets/ui_widgets/inputs/form_input_text_field.dart';
 import '../../../../widgets/ui_widgets/inputs/input_dropdown.dart';
 
@@ -35,6 +35,37 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
   final TextEditingController _departmentController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
+  bool _editing = false;
+  Announcement? _announcementToBeEdited;
+
+  String? levelDropDownValue;
+  String? deptDropDownValue;
+  String? titleTextValue;
+  String? descriptionTextValue;
+  FilePickerResult? _attachment;
+  File? _pickedAttachmentName;
+  String? _attachmentName;
+  //to change the pdf card accordingly
+  bool _editedAttachmentChanged = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final _arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    _editing = _arguments['announcementToEdit'] != null;
+    _announcementToBeEdited = _arguments['announcementToEdit'];
+    if (_editing) {
+      titleTextValue = _announcementToBeEdited?.title;
+      descriptionTextValue = _announcementToBeEdited?.description;
+      _pickedAttachmentName = _announcementToBeEdited?.posterUrl != null
+          ? File(_announcementToBeEdited!.posterUrl!)
+          : null;
+      _attachmentName = _announcementToBeEdited?.posterFileName;
+      levelDropDownValue = _announcementToBeEdited?.level;
+      deptDropDownValue = _announcementToBeEdited?.department;
+    }
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -44,14 +75,6 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
     _attachment = null;
     super.dispose();
   }
-
-  String levelDropDownValue = 'College';
-  //TODO: Having to put null for dept
-  String deptDropDownValue = 'CSE';
-  String titleTextValue = '';
-  String descriptionTextValue = '';
-  FilePickerResult? _attachment;
-  File? _pickedAttachmentName;
 
   List<DropdownMenuItem<String>> get levelDropdownItems {
     List<DropdownMenuItem<String>> levelItems = const [
@@ -80,10 +103,12 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
   }
 
   Future<void> _pickAttachment() async {
+    _editedAttachmentChanged = true;
     _attachment = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png']);
     _pickedAttachmentName = File(_attachment?.files.single.path ?? "");
+    _attachmentName = _attachment?.files.single.name;
     setState(() => {});
   }
 
@@ -118,9 +143,9 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
       setState(() => _isLoading = true);
       await Provider.of<AnnouncementProvider>(context, listen: false)
           .makeAnnouncement(
-        title: titleTextValue,
-        description: descriptionTextValue,
-        level: levelDropDownValue,
+        title: titleTextValue!,
+        description: descriptionTextValue!,
+        level: levelDropDownValue!,
         department: deptDropDownValue,
         poster: _pickedAttachmentName,
       );
@@ -139,8 +164,6 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _arguments = (ModalRoute.of(context)?.settings.arguments as Map);
-    final PageController _pageController = _arguments['pageController'];
     return Scaffold(
       appBar: BaseAppBar.getAppBar(
         title: "Announcement",
@@ -158,62 +181,89 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
                     shrinkWrap: true,
                     children: [
                       FormInputTextField(
+                        initialValue: titleTextValue,
                         title: "Title",
-                        controller: _titleController,
+                        controller:
+                            titleTextValue != null ? null : _titleController,
                         setter: setAnnouncement,
                       ),
                       DropDownInputForm(
                         title: "Level",
                         dropDownMenuItems: levelDropdownItems,
-                        value: levelDropDownValue,
+                        value: levelDropDownValue ?? 'College',
                         setter: setAnnouncement,
                       ),
                       levelDropDownValue == 'Department'
                           ? DropDownInputForm(
                               title: "Department",
                               dropDownMenuItems: deptDropdownItems,
-                              value: deptDropDownValue,
+                              value: deptDropDownValue ?? 'CSE',
                               setter: setAnnouncement,
                             )
                           : const SizedBox(),
                       FormInputTextField(
                         title: "Description",
+                        initialValue: descriptionTextValue,
                         maxLines: 4,
                         description: true,
-                        controller: _descriptionController,
+                        controller: descriptionTextValue != null
+                            ? null
+                            : _descriptionController,
                         setter: setAnnouncement,
                       ),
-                      AddAttachmentCard(
-                        title: _attachment == null
-                            ? "Pick Attachment"
-                            : _attachment?.files.single.name ?? "Pick",
-                        pickAttachment: _pickAttachment,
-                      ),
+                      _editedAttachmentChanged ||
+                              _announcementToBeEdited?.posterUrl == null
+                          ? _editing ||
+                                  _announcementToBeEdited?.posterUrl == null
+                              ? AddAttachmentCard(
+                                  title: _attachment == null &&
+                                          _attachmentName == null
+                                      ? "Pick Attachment"
+                                      : _attachmentName ?? "Pick",
+                                  attachmentFunc: _pickAttachment,
+                                )
+                              : PDFCard(
+                                  pdfUrl: _announcementToBeEdited!.posterUrl!,
+                                  showChangeButton: true,
+                                  changeFunction: _pickAttachment,
+                                )
+                          : PDFCard(
+                              pdfUrl: _announcementToBeEdited!.posterUrl!,
+                              showChangeButton: true,
+                              changeFunction: _pickAttachment,
+                            ),
                       SizedBox(height: 4.h),
                       ElevatedButton(
-                        onPressed: submitForm,
+                        onPressed: //submitForm,
+                            () {
+                          print(titleTextValue);
+                          print(_pickedAttachmentName);
+                          print(deptDropDownValue);
+                          print(levelDropDownValue);
+                          print(descriptionTextValue);
+                        },
                         child: const Text("Confirm"),
                         style: ButtonThemes.elevatedButtonConfirmation,
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
       ),
-      bottomNavigationBar: BottomNav(
-        isSelected: "Announcements",
-        pageController: _pageController,
-      ),
+      // bottomNavigationBar: BottomNav(
+      //   isSelected: "Announcements",
+      //   pageController: _pageController,
+      // ),
     );
   }
 }
 
 class AddAttachmentCard extends StatelessWidget {
   final String title;
-  final Function pickAttachment;
+  final Function attachmentFunc;
   const AddAttachmentCard({
     required this.title,
-    required this.pickAttachment,
+    required this.attachmentFunc,
     Key? key,
   }) : super(key: key);
 
@@ -243,7 +293,7 @@ class AddAttachmentCard extends StatelessWidget {
             overflow: TextOverflow.fade,
           ),
         ),
-        onTap: () => pickAttachment(),
+        onTap: () => attachmentFunc(),
       ),
     );
   }
