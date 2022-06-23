@@ -51,12 +51,7 @@ class BooksMaterialProvider with ChangeNotifier {
     return req_url.url('stationary/booksmaterial$end');
   }
 
-  Map<String, String> get _headers {
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'secret_token': _authToken,
-    };
-  }
+  late final Map<String, String> _headers = req_url.headers(_authToken);
 
   BooksMaterial findBookById(String id) {
     return _booksMaterial.firstWhere((element) => element.id == id);

@@ -61,7 +61,7 @@ class AnnouncementProvider with ChangeNotifier {
   Map<String, String> get _headers {
     return {
       'Content-Type': 'application/json; charset=UTF-8',
-      'secret_token': _authToken,
+      'Authorization': "Bearer $_authToken",
     };
   }
 

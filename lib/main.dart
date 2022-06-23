@@ -95,7 +95,6 @@ class _MyAppState extends State<MyApp> {
           update: (ctx, authProvider, menuItemProvider) => menuItemProvider!
             ..update(
               authProvider.token,
-              authProvider.getUserId,
             ),
         ),
         /* Other Providers but dependent on Auth Provider for Token */
@@ -149,11 +148,8 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProxyProvider<Auth, AnnouncementProvider>(
           create: (ctx) => AnnouncementProvider(),
-          update: (ctx, authData, announcementData) => announcementData!
-            ..update(
-              authData.token,
-              authData.getUserId
-            ),
+          update: (ctx, authData, announcementData) =>
+              announcementData!..update(authData.token, authData.getUserId),
         )
       ],
       child: Consumer<Auth>(

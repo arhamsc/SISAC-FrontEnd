@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import '../utils/helpers/http_exception.dart';
 
 Uri url(String endPoint) {
-  final url = Uri.parse('http://192.168.1.10:3000/$endPoint');
+  final url = Uri.parse('http://192.168.1.8:3000/$endPoint');
   // final url = Uri.parse('https://sisac.herokuapp.com/$endPoint');
   // final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
   //final url = Uri.parse('http://192.168.86.227:3000/$endPoint');
@@ -19,3 +19,11 @@ Map<String, dynamic> checkResponseError(Response response) {
   return decodedData;
 }
 
+Map<String, String> headers(String? authToken) {
+  final _header = {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'Authorization': "Bearer $authToken",
+  };
+
+  return _header;
+}

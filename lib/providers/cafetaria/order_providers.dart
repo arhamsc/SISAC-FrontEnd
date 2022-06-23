@@ -73,12 +73,7 @@ class OrderProvider with ChangeNotifier {
     return req_url.url('cafetaria/orders$end');
   }
 
-  Map<String, String> get _headers {
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'secret_token': _authToken,
-    };
-  }
+  late final Map<String, String> _headers = req_url.headers(_authToken);
 
   //Method to fetch Orders of the logged in User from the server.
   Future<void> fetchUserOrders() async {

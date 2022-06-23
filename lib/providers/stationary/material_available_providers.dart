@@ -49,12 +49,7 @@ class MaterialAvailableProvider with ChangeNotifier {
     return req_url.url('stationary/availablematerial$end');
   }
 
-  Map<String, String> get _headers {
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'secret_token': _authToken,
-    };
-  }
+  late final Map<String, String> _headers = req_url.headers(_authToken);
 
   MaterialAvailable findMaterialById(String id) {
     return _materialAvailable.firstWhere((element) => element.id == id);

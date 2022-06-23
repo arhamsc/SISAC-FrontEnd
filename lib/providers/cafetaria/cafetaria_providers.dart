@@ -45,16 +45,16 @@ class Recommendations {
 
 //This is the main provider which handles all the logic and Provider package makes use of change notifier built in flutter, to notify the changes to all the listeners.
 class MenuItemProvider with ChangeNotifier {
-  late String _authToken;
-  late String _userId;
+  String? _authToken;
   List<MenuItem> _menuItems = [];
   List<Recommendations> _recommendations = [];
   //These are the required details we receive from the auth provider in main dart file.
-  void update(token, userId) {
+  void update(token) {
     token != null ? _authToken = token : _authToken = '';
-    userId != null ? _userId = userId : _userId = '';
     notifyListeners();
   }
+
+  late final Map<String, String> _headers = req_url.headers(_authToken);
 
   //The main list shouldn't change in case something happens so we define a getter here for the private List to access it outside. It is a good practice.
   List<MenuItem> get items {
@@ -72,12 +72,6 @@ class MenuItemProvider with ChangeNotifier {
   }
 
 //the headers which are required by the backend-server are stores in this Map.
-  Map<String, String> get _headers {
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'secret_token': _authToken,
-    };
-  }
 
 //The Future (similar to promises in JS) function to fetch the menu items from out data base by sending a request to our server
   Future<void> fetchMenu() async {
