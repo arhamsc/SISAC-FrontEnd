@@ -8,7 +8,7 @@ Uri url(String endPoint) {
   // final url = Uri.parse('https://sisac.herokuapp.com/$endPoint');
   final url = Uri.parse('http://172.20.10.3:3000/$endPoint');
   //final url = Uri.parse('http://192.168.86.227:3000/$endPoint');
-  // final url = Uri.parse('http://192.168.143.227:3000/$endPoint'); //Sagar
+  // final url = Uri.parse('http://192.168.79.227:3000/$endPoint'); //Sagar
   return url;
 }
 

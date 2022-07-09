@@ -92,7 +92,9 @@ class RestaurantProvider with ChangeNotifier {
     return [..._receivedOrderItem];
   }
 
- late final Map<String, String> _headers = req_url.headers(_authToken);
+ Map<String, String> get _headers {
+    return req_url.headers(_authToken);
+  }
 
   //Method to fetch ALL orders from the server
   Future<void> getReceivedOrders() async {

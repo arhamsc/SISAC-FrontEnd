@@ -40,8 +40,8 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
 
   String? levelDropDownValue;
   String? deptDropDownValue;
-  String titleTextValue = "";
-  String descriptionTextValue = "";
+  String? titleTextValue;
+  String? descriptionTextValue;
   FilePickerResult? _attachment;
   File? _pickedAttachmentName;
   String? _attachmentName;
@@ -52,17 +52,11 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    Future.delayed(Duration.zero, () {
-      var _arguments;
-      setState(() {
-        _arguments = ModalRoute.of(context)?.settings.arguments as Map;
-        _editing = _arguments['announcementToEdit'] != null;
+    var _arguments = {};
+    setState(() {
+      _arguments = ModalRoute.of(context)?.settings.arguments as Map;
+      _editing = _arguments['announcementToEdit'] != null;
+      if (_editing) {
         _announcementToBeEdited = _arguments['announcementToEdit'];
         if (_editing) {
           titleTextValue = _announcementToBeEdited?.title ?? "";
@@ -72,9 +66,8 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
           deptDropDownValue = _announcementToBeEdited?.department;
           _announcementId = _announcementToBeEdited?.id;
         }
-      });
+      }
     });
-    super.initState();
   }
 
   @override
@@ -143,6 +136,13 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
 
   Future<void> submitForm() async {
     final isValid = _announcementFormKey.currentState?.validate();
+    if (titleTextValue == null) {
+      dialog(
+        ctx: context,
+        errorMessage: "Check the fields",
+      );
+      return;
+    }
     try {
       if (isValid != null && !isValid) {
         dialog(
@@ -155,8 +155,8 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
       if (!_editing) {
         await Provider.of<AnnouncementProvider>(context, listen: false)
             .makeAnnouncement(
-          title: titleTextValue,
-          description: descriptionTextValue,
+          title: titleTextValue ?? "Default",
+          description: descriptionTextValue ?? "No Description",
           level: levelDropDownValue!,
           department: deptDropDownValue,
           poster: _pickedAttachmentName,
@@ -171,8 +171,8 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         await Provider.of<AnnouncementProvider>(context, listen: false)
             .editAnnouncement(
           id: _announcementId ?? "",
-          title: titleTextValue,
-          description: descriptionTextValue,
+          title: titleTextValue ?? "Default",
+          description: descriptionTextValue ?? "No Description",
           level: levelDropDownValue!,
           department: deptDropDownValue,
           poster: _pickedAttachmentName,
@@ -200,7 +200,7 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
         subtitle: "Make an Announcement",
       ),
       body: Center(
-        child: _isLoading || titleTextValue.isEmpty
+        child: _isLoading
             ? SISACLoader()
             : Form(
                 key: _announcementFormKey,
@@ -210,11 +210,17 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
                     shrinkWrap: true,
                     children: [
                       FormInputTextField(
-                        initialValue:
-                            titleTextValue.isEmpty ? null : titleTextValue,
+                        initialValue: titleTextValue != null
+                            ? titleTextValue!.isEmpty
+                                ? null
+                                : titleTextValue
+                            : null,
                         title: "Title",
-                        controller:
-                            titleTextValue.isNotEmpty ? null : _titleController,
+                        controller: titleTextValue != null
+                            ? titleTextValue!.isNotEmpty
+                                ? null
+                                : _titleController
+                            : null,
                         setter: setAnnouncement,
                       ),
                       DropDownInputForm(
@@ -233,14 +239,18 @@ class _MakeAnnouncementScreenState extends State<MakeAnnouncementScreen> {
                           : const SizedBox(),
                       FormInputTextField(
                         title: "Description",
-                        initialValue: descriptionTextValue.isEmpty
-                            ? null
-                            : descriptionTextValue,
+                        initialValue: descriptionTextValue != null
+                            ? descriptionTextValue!.isEmpty
+                                ? null
+                                : descriptionTextValue
+                            : null,
                         maxLines: 4,
                         description: true,
-                        controller: descriptionTextValue.isNotEmpty
-                            ? null
-                            : _descriptionController,
+                        controller: descriptionTextValue != null
+                            ? descriptionTextValue!.isNotEmpty
+                                ? null
+                                : _descriptionController
+                            : null,
                         setter: setAnnouncement,
                       ),
                       _editedAttachmentChanged ||

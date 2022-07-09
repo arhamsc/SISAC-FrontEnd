@@ -49,7 +49,9 @@ class MaterialAvailableProvider with ChangeNotifier {
     return req_url.url('stationary/availablematerial$end');
   }
 
-  late final Map<String, String> _headers = req_url.headers(_authToken);
+  Map<String, String> get _headers {
+    return req_url.headers(_authToken);
+  }
 
   MaterialAvailable findMaterialById(String id) {
     return _materialAvailable.firstWhere((element) => element.id == id);

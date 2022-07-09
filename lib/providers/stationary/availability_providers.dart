@@ -41,7 +41,9 @@ class AvailabilityProvider with ChangeNotifier {
     return req_url.url('stationary/availability$end');
   }
 
-  late final Map<String, String> _headers = req_url.headers(_authToken);
+  Map<String, String> get _headers {
+    return req_url.headers(_authToken);
+  }
 
   //method to fetch the items along with their availability.
   Future<void> fetchAvailableItems() async {

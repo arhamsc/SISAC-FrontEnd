@@ -26,7 +26,9 @@ class CartProvider with ChangeNotifier {
     return req_url.url('cafetaria/orders$end');
   }
 
-  late final Map<String, String> _headers = req_url.headers(_authToken);
+  Map<String, String> get _headers {
+    return req_url.headers(_authToken);
+  }
 
   //we are the cart items as a map with its ID as a key.
   Map<String, MenuOrder> get cartItems {

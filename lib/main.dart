@@ -41,6 +41,8 @@ import './screens/other_screens/stationary_screens/updation_screens/add_edit_mat
 import './screens/student_faculty_screens/announcement_screens/all_announcements_screen.dart';
 import './screens/student_faculty_screens/announcement_screens/announcement_details_screen.dart';
 import './screens/student_faculty_screens/announcement_screens/functional_screens/make_announcement.dart';
+//TimeTable Screens
+import 'screens/student_faculty_screens/timetable_screens/time_table_list.dart';
 
 //PDF Viewer
 import 'widgets/ui_widgets/pdf_view.dart';
@@ -59,6 +61,7 @@ import './providers/stationary/books_material_providers.dart';
 import './providers/stationary/material_available_providers.dart';
 import './providers/cafetaria/cart_provider.dart';
 import './providers/announcements/announcement_providers.dart';
+import 'providers/timetable/timetable_provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -150,7 +153,11 @@ class _MyAppState extends State<MyApp> {
           create: (ctx) => AnnouncementProvider(),
           update: (ctx, authData, announcementData) =>
               announcementData!..update(authData.token, authData.getUserId),
-        )
+        ),
+        ChangeNotifierProxyProvider<Auth, TimeTableProvider>(
+            create: (ctx) => TimeTableProvider(),
+            update: (ctx, authData, timeTableData) =>
+                timeTableData!..update(authData.token))
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => Sizer(
@@ -211,7 +218,9 @@ class _MyAppState extends State<MyApp> {
                   const AnnouncementDetailsScreen(),
               PDFView.routeName: (ctx) => const PDFView(),
               MakeAnnouncementScreen.routeName: (ctx) =>
-                  const MakeAnnouncementScreen()
+                  const MakeAnnouncementScreen(),
+              TimeTableListScreen.routeName: (ctx) =>
+                  const TimeTableListScreen(),
             },
           ),
         ),

@@ -59,10 +59,7 @@ class AnnouncementProvider with ChangeNotifier {
   }
 
   Map<String, String> get _headers {
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': "Bearer $_authToken",
-    };
+    return req_url.headers(_authToken);
   }
 
   Future<void> fetchAllAnnouncements() async {
@@ -71,6 +68,8 @@ class AnnouncementProvider with ChangeNotifier {
       final response = await http.get(url, headers: _headers);
       var decodedData = req_url.checkResponseError(response);
       Map<String, Announcement> receivedAnnouncements = {};
+
+      
 
       decodedData.forEach(
         (key, value) => receivedAnnouncements[key] = Announcement(
