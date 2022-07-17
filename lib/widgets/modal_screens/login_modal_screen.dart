@@ -82,7 +82,7 @@ class _InputColumnState extends State<InputColumn> {
           _isLoading = true;
         });
         InputColumn._formKey.currentState?.save();
-        await authProvider.login(_username, _password, context);
+        await authProvider.login(_username?.trim(), _password, context);
         setState(
           () {
             _isLoading = false;
